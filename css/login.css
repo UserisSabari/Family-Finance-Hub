@@ -237,3 +237,19 @@ form{ width: 100%; }
 
     .toggle-panel h1{font-size: 30px; }
 }
+
+.toggle-panel.toggle-left {
+    text-align: center;
+    color: #fff;
+    padding: 20px;
+  }
+  
+  .toggle-panel.toggle-left h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  .toggle-panel.toggle-left p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
