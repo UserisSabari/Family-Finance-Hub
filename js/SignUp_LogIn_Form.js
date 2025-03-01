@@ -1,6 +1,6 @@
 // SignUp_LogIn_Form.js
 import { signInWithGoogle,signUpWithEmailPassword,
-  loginWithEmailPassword } from "../firebase.js";
+  loginWithEmailPassword } from "./firebase.js";
 
 const container = document.querySelector('.container');
 const registerBtn = document.querySelector('.register-btn');
