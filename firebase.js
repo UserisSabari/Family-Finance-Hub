@@ -28,3 +28,32 @@ export const signInWithGoogle = () => {
       console.error("Error during login:", error);
     });
 };
+// Email/Password Sign-Up
+export const signUpWithEmailPassword = (email, password) => {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      console.log("User signed up:", userCredential.user);
+      alert("Registration successful!");
+      localStorage.setItem("user", JSON.stringify(userCredential.user));
+      window.location.href = "dashboard.html";
+    })
+    .catch((error) => {
+      console.error("Error during sign-up:", error);
+      alert(`Error: ${error.message}`);
+    });
+};
+
+// Email/Password Login
+export const loginWithEmailPassword = (email, password) => {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      console.log("User logged in:", userCredential.user);
+      alert("Login successful!");
+      localStorage.setItem("user", JSON.stringify(userCredential.user));
+      window.location.href = "dashboard.html";
+    })
+    .catch((error) => {
+      console.error("Error during login:", error);
+      alert(`Error: ${error.message}`);
+    });
+};
