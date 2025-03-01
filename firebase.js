@@ -61,3 +61,5 @@ export const loginWithEmailPassword = (email, password) => {
       alert(`Error: ${error.message}`);
     });
 };
+
+export { auth };
