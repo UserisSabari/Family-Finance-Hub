@@ -24,7 +24,7 @@ export const signInWithGoogle = () => {
         .then((result) => {
             console.log("User signed in:", result.user);
             localStorage.setItem("user", JSON.stringify(result.user));
-            window.location.href = "./dashboard.html";
+            window.location.href = "frontend\dashboard.htmll";
         })
         .catch((error) => {
             console.error("Error during login:", error);
@@ -50,7 +50,7 @@ export const signUpWithEmailPassword = async (email, password, name) => {
 
         console.log("User signed up:", user);
         localStorage.setItem("user", JSON.stringify(user));
-        window.location.href = "./dashboard.html";
+        window.location.href = "frontend\dashboard.html";
     } catch (error) {
         console.error("Error during sign-up:", error);
         alert(`Error: ${error.message}`);
@@ -63,7 +63,7 @@ export const loginWithEmailPassword = (email, password) => {
         .then((userCredential) => {
             console.log("User logged in:", userCredential.user);
             localStorage.setItem("user", JSON.stringify(userCredential.user));
-            window.location.href = "dashboard.html";
+            window.location.href = "frontend\dashboard.html";
         })
         .catch((error) => {
             console.error("Error during login:", error);
