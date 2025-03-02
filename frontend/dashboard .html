@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Finance Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">Family Finance</div>
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item active">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-users"></i> Family Members
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-chart-pie"></i> Budget Overview
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-bullseye"></i> Financial Goals
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-file-alt"></i> Reports
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="userDisplayName">Loading...</div>
+                <div class="user-role" id="userRole">Family Admin</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="breadcrumb">Home</div>
+        <h1 class="page-title" id="welcomeMessage">Welcome back!</h1>
+
+        <!-- Financial Summary -->
+        <div class="financial-summary">
+            <h2 class="summary-title">Financial Summary</h2>
+            <div class="summary-cards">
+                <div class="summary-card income-card">
+                    <div class="card-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="card-label">Total Income</div>
+                    <div class="card-value" id="totalIncome">$0.00</div>
+                    <div class="card-meta" id="incomeChange">-</div>
+                </div>
+                <div class="summary-card expenses-card">
+                    <div class="card-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="card-label">Total Expenses</div>
+                    <div class="card-value" id="totalExpenses">$0.00</div>
+                    <div class="card-meta" id="expensesChange">-</div>
+                </div>
+                <div class="summary-card savings-card">
+                    <div class="card-icon">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <div class="card-label">Savings</div>
+                    <div class="card-value" id="savings">$0.00</div>
+                    <div class="card-meta" id="savingsPercentage">-</div>
+                </div>
+                <div class="summary-card budget-card">
+                    <div class="card-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="card-label">Remaining Budget</div>
+                    <div class="card-value" id="remainingBudget">$0.00</div>
+                    <div class="card-meta">Available to spend</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="addExpenseBtn">
+                <i class="fas fa-plus"></i> Add Expense
+            </button>
+            <button class="btn btn-success" id="addIncomeBtn">
+                <i class="fas fa-plus"></i> Add Income
+            </button>
+        </div>
+
+        <!-- Spending Categories -->
+        <div class="section">
+            <h2 class="section-title">Spending Categories</h2>
+            <div class="chart-container">
+                <div class="chart-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="chart-title">Monthly Spending Breakdown</div>
+                <div id="spendingChart">Pie chart showing spending by category would appear here</div>
+            </div>
+        </div>
+
+        <!-- Income Trends -->
+        <div class="section">
+            <h2 class="section-title">Income Trends</h2>
+            <div class="chart-container">
+                <div class="chart-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="chart-title">6-Month Income History</div>
+                <div id="incomeChart">Bar chart showing income trends would appear here</div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="section">
+            <h2 class="section-title">Recent Transactions</h2>
+            <table class="transactions-table" id="transactionsTable">
+                <tbody>
+                    <!-- Transactions will be loaded dynamically -->
+                    <tr>
+                        <td colspan="5" style="text-align: center;">Loading transactions...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="frontend/js/dashboard.js"></script>
+</body>
+</html>
