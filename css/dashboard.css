@@ -1,0 +1,306 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 220px;
+    background-color: #f5fafa;
+    padding: 20px 0;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-brand {
+    font-weight: bold;
+    font-size: 18px;
+    padding: 0 20px 20px 20px;
+    color: #333;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 5px;
+    border-radius: 0 20px 20px 0;
+    font-size: 15px;
+    transition: background-color 0.2s;
+}
+
+.menu-item.active {
+    background-color: #daf0eb;
+    border-left: 4px solid #00a389;
+}
+
+.menu-item:hover:not(.active) {
+    background-color: #f0f0f0;
+}
+
+.menu-item i {
+    margin-right: 10px;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    color: #555;
+}
+
+.user-profile {
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #333;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.user-info {
+    font-size: 14px;
+}
+
+.user-info .user-name {
+    font-weight: 500;
+}
+
+.user-info .user-role {
+    font-size: 12px;
+    color: #777;
+}
+
+/* Main content styles */
+.main-content {
+    flex-grow: 1;
+    padding: 20px 30px;
+    background-color: #fff;
+}
+
+.breadcrumb {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Financial summary cards */
+.financial-summary {
+    margin-bottom: 30px;
+}
+
+.summary-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.summary-card {
+    background-color: #f5fafa;
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card-value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.card-meta {
+    font-size: 14px;
+    color: #666;
+}
+
+.card-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: #00a389;
+    opacity: 0.2;
+    font-size: 20px;
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: none;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #00a389;
+}
+
+.btn-success {
+    background-color: #4CAF50;
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+/* Charts and data sections */
+.section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.chart-container {
+    background-color: #f5fafa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    position: relative;
+    overflow: hidden;
+}
+
+.chart-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.chart-icon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #00a389;
+    opacity: 0.2;
+    font-size: 20px;
+}
+
+/* Transactions table */
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.transactions-table tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.transactions-table td {
+    padding: 15px 5px;
+}
+
+.transaction-category {
+    display: flex;
+    align-items: center;
+}
+
+.transaction-category i {
+    margin-right: 10px;
+    color: #555;
+}
+
+.transaction-amount {
+    font-weight: 500;
+    text-align: right;
+}
+
+.transaction-user {
+    color: #555;
+}
+
+.transaction-date {
+    color: #777;
+    text-align: right;
+}
+
+.transaction-actions {
+    text-align: right;
+}
+
+.transaction-actions i {
+    cursor: pointer;
+    color: #777;
+}
+
+/* Card colors */
+.income-card {
+    border-top: 4px solid #36cfc9;
+}
+
+.expenses-card {
+    border-top: 4px solid #ff7875;
+}
+
+.savings-card {
+    border-top: 4px solid #73d13d;
+}
+
+.budget-card {
+    border-top: 4px solid #597ef7;
+}
