@@ -63,7 +63,7 @@ export const loginWithEmailPassword = (email, password) => {
         .then((userCredential) => {
             console.log("User logged in:", userCredential.user);
             localStorage.setItem("user", JSON.stringify(userCredential.user));
-            window.location.href = "./dashboard.html";
+            window.location.href = "./frontend/dashboard.html";
         })
         .catch((error) => {
             console.error("Error during login:", error);
