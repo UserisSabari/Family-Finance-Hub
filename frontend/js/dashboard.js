@@ -6,6 +6,7 @@ auth.onAuthStateChanged(async (user) => {
     if (user) {
         // User is signed in
         const userDisplayName = document.getElementById('userDisplayName');
+        const userRole = document.getElementById('userRole'); // Add this line
         const welcomeMessage = document.getElementById('welcomeMessage');
 
         // Fetch user details from Firestore
@@ -15,13 +16,14 @@ auth.onAuthStateChanged(async (user) => {
 
             // Update user info
             userDisplayName.textContent = userData.name || user.email;
+            userRole.textContent = userData.role || "User"; // Default to "User" if role is not set
             welcomeMessage.textContent = `Welcome back, ${userData.name || user.email}!`;
 
             // Update financial summary
-            document.getElementById('totalIncome').textContent = `$${userData.totalIncome.toFixed(2)}`;
-            document.getElementById('totalExpenses').textContent = `$${userData.totalExpenses.toFixed(2)}`;
-            document.getElementById('savings').textContent = `$${userData.savings.toFixed(2)}`;
-            document.getElementById('remainingBudget').textContent = `$${userData.remainingBudget.toFixed(2)}`;
+            document.getElementById('totalIncome').textContent = `$${userData.totalIncome?.toFixed(2) || "0.00"}`;
+            document.getElementById('totalExpenses').textContent = `$${userData.totalExpenses?.toFixed(2) || "0.00"}`;
+            document.getElementById('savings').textContent = `$${userData.savings?.toFixed(2) || "0.00"}`;
+            document.getElementById('remainingBudget').textContent = `$${userData.remainingBudget?.toFixed(2) || "0.00"}`;
         }
 
         // Fetch recent transactions
@@ -35,9 +37,9 @@ auth.onAuthStateChanged(async (user) => {
                     <td class="transaction-category">
                         <i class="fas fa-shopping-cart"></i> ${transaction.category}
                     </td>
-                    <td class="transaction-amount">$${transaction.amount.toFixed(2)}</td>
-                    <td class="transaction-user">${transaction.user}</td>
-                    <td class="transaction-date">${transaction.date}</td>
+                    <td class="transaction-amount">$${transaction.amount?.toFixed(2) || "0.00"}</td>
+                    <td class="transaction-user">${transaction.user || "N/A"}</td>
+                    <td class="transaction-date">${transaction.date || "N/A"}</td>
                 </tr>
             `;
         }).join('');

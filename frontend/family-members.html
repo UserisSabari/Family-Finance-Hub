@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Finance - Family Members</title>
+    <link rel="stylesheet" href="css/family-members.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">Family Finance</div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="family-members.html" class="menu-item active">
+                <i class="fas fa-users"></i> Family Members
+            </a>
+            <a href="budget-overview.html" class="menu-item">
+                <i class="fas fa-chart-pie"></i> Budget Overview
+            </a>
+            <a href="financial-goals.html" class="menu-item">
+                <i class="fas fa-bullseye"></i> Financial Goals
+            </a>
+            <a href="reports.html" class="menu-item">
+                <i class="fas fa-file-alt"></i> Reports
+            </a>
+            <a href="settings.html" class="menu-item">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="userDisplayName">Loading...</div>
+                <div class="user-role" id="userRole">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span class="breadcrumb-arrow">›</span>
+            <span>Family Members</span>
+        </div>
+        <h1 class="page-title">Family Members</h1>
+
+        <!-- Add Member Button -->
+        <button class="add-member-btn" id="addMemberBtn">
+            <i class="fas fa-plus"></i> Add Family Member
+        </button>
+
+        <!-- Member Tabs -->
+        <div class="member-tabs">
+            <div class="tab active" data-filter="all">All Members</div>
+            <div class="tab" data-filter="adults">Adults</div>
+            <div class="tab" data-filter="children">Children</div>
+        </div>
+
+        <!-- Member List -->
+        <div class="member-list" id="memberList">
+            <!-- Members will be loaded here dynamically -->
+            <div class="loading-message">Loading family members...</div>
+        </div>
+
+        <!-- Family Spending Overview -->
+        <h2 class="spending-section-title">Family Spending Overview</h2>
+        <div class="spending-cards" id="spendingCards">
+            <!-- Spending cards will be loaded here dynamically -->
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div class="modal-overlay" id="addMemberModal">
+        <div class="modal">
+            <h3 class="modal-title" id="modalTitle">Add Family Member</h3>
+            
+            <!-- No Family Section -->
+            <div id="noFamilySection" style="display: none;">
+                <p>You haven't created a family yet. Create one to start adding members.</p>
+                <div class="modal-form-group">
+                    <label class="modal-label">Family Name</label>
+                    <input type="text" class="modal-input" id="familyNameInput" placeholder="Enter family name">
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-cancel" id="cancelCreateFamily">Cancel</button>
+                    <button class="modal-btn modal-btn-submit" id="createFamilyBtn">Create Family</button>
+                </div>
+            </div>
+            
+            <!-- Add Member Section -->
+            <div id="addMemberSection">
+                <div class="modal-form-group">
+                    <label class="modal-label">Invitation Method</label>
+                    <select class="modal-input" id="invitationMethod">
+                        <option value="email">Send Email Invitation</option>
+                        <option value="link">Generate Invitation Link</option>
+                    </select>
+                </div>
+                
+                <div id="emailInviteSection">
+                    <div class="modal-form-group">
+                        <label class="modal-label">Email Address</label>
+                        <input type="email" class="modal-input" id="inviteEmail" placeholder="Enter email address">
+                    </div>
+                    <div class="modal-form-group">
+                        <label class="modal-label">Member Type</label>
+                        <select class="modal-input" id="memberType">
+                            <option value="adult">Adult</option>
+                            <option value="child">Child</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="linkInviteSection" style="display: none;">
+                    <p>Generate an invitation link to share with family members:</p>
+                    <div class="invite-link-container" id="inviteLinkContainer">
+                        <div class="invite-link" id="inviteLink"></div>
+                        <button class="copy-btn" id="copyLinkBtn">Copy Link</button>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-cancel" id="cancelAddMember">Cancel</button>
+                    <button class="modal-btn modal-btn-submit" id="generateInviteBtn">Send Invitation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/family-members.js"></script>
+</body>
+</html>

@@ -1,0 +1,386 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 220px;
+    background-color: #f5fafa;
+    padding: 20px 0;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-brand {
+    font-weight: bold;
+    font-size: 18px;
+    padding: 0 20px 20px 20px;
+    color: #333;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 5px;
+    border-radius: 0 20px 20px 0;
+    font-size: 15px;
+    transition: background-color 0.2s;
+}
+
+.menu-item.active {
+    background-color: #daf0eb;
+    border-left: 4px solid #00a389;
+}
+
+.menu-item:hover:not(.active) {
+    background-color: #f0f0f0;
+}
+
+.menu-item i {
+    margin-right: 10px;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    color: #555;
+}
+
+.user-profile {
+    padding: 15px 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #333;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.user-info {
+    font-size: 14px;
+}
+
+.user-info .user-name {
+    font-weight: 500;
+}
+
+.user-info .user-role {
+    font-size: 12px;
+    color: #777;
+}
+
+/* Main content styles */
+.main-content {
+    flex-grow: 1;
+    padding: 20px 30px;
+    background-color: #fff;
+}
+
+.breadcrumb {
+    margin-bottom: 20px;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb a {
+    color: #666;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-arrow {
+    margin: 0 10px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Add member button */
+.add-member-btn {
+    background-color: #00a389;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.add-member-btn i {
+    margin-right: 8px;
+}
+
+/* Tabs */
+.member-tabs {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 30px;
+}
+
+.tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #555;
+    position: relative;
+}
+
+.tab.active {
+    color: #333;
+    font-weight: 500;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #00a389;
+}
+
+/* Member list */
+.member-list {
+    margin-bottom: 40px;
+}
+
+.member-card {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    margin-right: 15px;
+    overflow: hidden;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-info {
+    flex-grow: 1;
+}
+
+.member-name {
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.member-role {
+    font-size: 14px;
+    color: #666;
+}
+
+.member-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Spending overview */
+.spending-section-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.spending-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.spending-card {
+    background-color: #f5fafa;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.spending-user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.spending-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.spending-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.spending-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Modal styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    display: none;
+}
+
+.modal {
+    background-color: white;
+    border-radius: 12px;
+    width: 500px;
+    max-width: 90%;
+    padding: 25px;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.modal-form-group {
+    margin-bottom: 20px;
+}
+
+.modal-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: #00a389;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-btn {
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.modal-btn-cancel {
+    background-color: #f0f0f0;
+    border: none;
+    color: #333;
+}
+
+.modal-btn-submit {
+    background-color: #00a389;
+    border: none;
+    color: white;
+}
+
+.invite-link-container {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 15px;
+    display: none;
+}
+
+.invite-link {
+    word-break: break-all;
+    font-size: 14px;
+    color: #333;
+}
+
+.copy-btn {
+    background-color: #00a389;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 10px;
+}
