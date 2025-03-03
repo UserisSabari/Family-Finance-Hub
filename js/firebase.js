@@ -23,8 +23,7 @@ export const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
         .then((result) => {
             console.log("User signed in:", result.user);
-            localStorage.setItem("user", JSON.stringify(result.user));
-            window.location.href = "frontend/dashboard.html";
+            window.location.href = "dashboard.html"; // Redirect to dashboard
         })
         .catch((error) => {
             console.error("Error during login:", error);
@@ -46,10 +45,10 @@ export const signUpWithEmailPassword = async (email, password, name) => {
 
         // Save user details in Firestore
         await setDoc(doc(db, "users", user.uid), {
-            name: name || "", // Default to empty string if name is undefined
-            email: email || "", // Default to empty string if email is undefined
+            name: name || "", 
+            email: email,
             role: "Family Admin", // Default role for the first user
-            familyId: familyRef.id, // Link user to the family
+            familyId: familyRef.id,
             totalIncome: 0,
             totalExpenses: 0,
             savings: 0,
@@ -57,8 +56,7 @@ export const signUpWithEmailPassword = async (email, password, name) => {
         });
 
         console.log("User signed up:", user);
-        localStorage.setItem("user", JSON.stringify({ uid: user.uid, email: user.email }));
-        window.location.href = "frontend/dashboard.html"; // Use forward slash
+        window.location.href = "dashboard.html"; // Redirect to dashboard
     } catch (error) {
         console.error("Error during sign-up:", error);
         if (error.code === "auth/email-already-in-use") {
@@ -85,6 +83,19 @@ export const addFamilyMember = async (familyId, email, memberType) => {
         console.error("Error sending invitation:", error);
         alert(`Error: ${error.message}`);
     }
+};
+
+// Email/Password Login
+export const loginWithEmailPassword = (email, password) => {
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            console.log("User logged in:", userCredential.user);
+            window.location.href = "dashboard.html"; // Redirect to dashboard
+        })
+        .catch((error) => {
+            console.error("Error during login:", error);
+            alert(`Error: ${error.message}`);
+        });
 };
 
 // Fetch family members
