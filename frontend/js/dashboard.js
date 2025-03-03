@@ -6,7 +6,7 @@ auth.onAuthStateChanged(async (user) => {
     if (user) {
         // User is signed in
         const userDisplayName = document.getElementById('userDisplayName');
-        const userRole = document.getElementById('userRole'); // Add this line
+        const userRole = document.getElementById('userRole');
         const welcomeMessage = document.getElementById('welcomeMessage');
 
         // Fetch user details from Firestore
