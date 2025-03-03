@@ -24,7 +24,7 @@ export const signInWithGoogle = () => {
         .then((result) => {
             console.log("User signed in:", result.user);
             localStorage.setItem("user", JSON.stringify(result.user));
-            window.location.href = "dashboard.html";
+            window.location.href = "frontend/dashboard.html";
         })
         .catch((error) => {
             console.error("Error during login:", error);
@@ -37,11 +37,19 @@ export const signUpWithEmailPassword = async (email, password, name) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        // Create a family for the first user
+        const familyRef = await addDoc(collection(db, "families"), {
+            name: `${name}'s Family`, // Default family name
+            createdBy: user.uid,
+            createdAt: new Date()
+        });
+
         // Save user details in Firestore
         await setDoc(doc(db, "users", user.uid), {
-            name: name || "", 
-            email: email,
-            role: "Family Member", // Default role
+            name: name || "", // Default to empty string if name is undefined
+            email: email || "", // Default to empty string if email is undefined
+            role: "Family Admin", // Default role for the first user
+            familyId: familyRef.id, // Link user to the family
             totalIncome: 0,
             totalExpenses: 0,
             savings: 0,
@@ -49,26 +57,50 @@ export const signUpWithEmailPassword = async (email, password, name) => {
         });
 
         console.log("User signed up:", user);
-        localStorage.setItem("user", JSON.stringify(user));
-        window.location.href = "dashboard.html";
+        localStorage.setItem("user", JSON.stringify({ uid: user.uid, email: user.email }));
+        window.location.href = "frontend/dashboard.html"; // Use forward slash
     } catch (error) {
         console.error("Error during sign-up:", error);
+        if (error.code === "auth/email-already-in-use") {
+            alert("This email is already registered. Please use a different email.");
+        } else {
+            alert(`Error: ${error.message}`);
+        }
+    }
+};
+
+// Add a family member
+export const addFamilyMember = async (familyId, email, memberType) => {
+    try {
+        // Save the invitation in Firestore
+        await addDoc(collection(db, "families", familyId, "members"), {
+            email: email,
+            role: memberType,
+            status: "pending" // Pending until the member accepts the invitation
+        });
+
+        console.log("Invitation sent to:", email);
+        alert("Invitation sent successfully!");
+    } catch (error) {
+        console.error("Error sending invitation:", error);
         alert(`Error: ${error.message}`);
     }
 };
 
-// Email/Password Login
-export const loginWithEmailPassword = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            console.log("User logged in:", userCredential.user);
-            localStorage.setItem("user", JSON.stringify(userCredential.user));
-            window.location.href = "dashboard.html";
-        })
-        .catch((error) => {
-            console.error("Error during login:", error);
-            alert(`Error: ${error.message}`);
+// Fetch family members
+export const fetchFamilyMembers = async (familyId) => {
+    try {
+        const membersQuery = query(collection(db, "families", familyId, "members"));
+        const membersSnapshot = await getDocs(membersQuery);
+        const members = [];
+        membersSnapshot.forEach((doc) => {
+            members.push({ id: doc.id, ...doc.data() });
         });
+        return members;
+    } catch (error) {
+        console.error("Error fetching family members:", error);
+        return [];
+    }
 };
 
 export { auth, db }; // Export Firestore instance
