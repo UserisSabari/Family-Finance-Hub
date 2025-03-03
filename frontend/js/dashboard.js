@@ -45,6 +45,6 @@ auth.onAuthStateChanged(async (user) => {
         }).join('');
     } else {
         // No user is signed in, redirect to login
-        window.location.href = '../index.html';
+        window.location.href = './index.html';
     }
 });
