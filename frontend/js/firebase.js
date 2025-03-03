@@ -23,7 +23,7 @@ export const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
         .then((result) => {
             console.log("User signed in:", result.user);
-            window.location.href = ".dashboard.html"; // Redirect to dashboard
+            window.location.href = "dashboard.html"; // Redirect to dashboard
         })
         .catch((error) => {
             console.error("Error during login:", error);
