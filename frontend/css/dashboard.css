@@ -22,6 +22,7 @@ body {
     position: fixed; /* Make sidebar fixed */
     height: 100vh; /* Full height of the viewport */
     overflow-y: auto; /* Enable scrolling if content overflows */
+    z-index: 1000; /* Ensure sidebar is above other content */
 }
 
 .sidebar-brand {
@@ -307,4 +308,72 @@ body {
 
 .budget-card {
     border-top: 4px solid #597ef7;
+}
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 180px; /* Reduce sidebar width */
+    }
+
+    .main-content {
+        margin-left: 180px; /* Adjust margin for smaller sidebar */
+    }
+
+    .summary-cards {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px; /* Collapse sidebar to icon-only mode */
+    }
+
+    .sidebar-brand,
+    .menu-item span,
+    .user-info {
+        display: none; /* Hide text in collapsed sidebar */
+    }
+
+    .main-content {
+        margin-left: 60px; /* Adjust margin for collapsed sidebar */
+    }
+
+    .summary-cards {
+        grid-template-columns: 1fr; /* 1 column for mobile */
+    }
+
+    .action-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+    }
+
+    .chart-container {
+        height: auto; /* Allow charts to resize */
+    }
+
+    .transactions-table td {
+        padding: 10px 5px; /* Reduce padding for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        display: none; /* Hide sidebar on very small screens */
+    }
+
+    .main-content {
+        margin-left: 0; /* Remove margin when sidebar is hidden */
+    }
+
+    .page-title {
+        font-size: 20px; /* Reduce font size for smaller screens */
+    }
+
+    .card-value {
+        font-size: 20px; /* Reduce font size for smaller screens */
+    }
+
+    .chart-container {
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
 }
