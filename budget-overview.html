@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Overview</title>
+    <link rel="stylesheet" href="css/budget-overview.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-brand">Family Finance</div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="family-members.html" class="menu-item">
+                <i class="fas fa-users"></i> Family Members
+            </a>
+            <a href="#" class="menu-item  active">
+                <i class="fas fa-chart-pie"></i> Budget Overview
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-bullseye"></i> Financial Goals
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-file-alt"></i> Reports
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="userDisplayName">Loading...</div>
+                <div class="user-role" id="userRole">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="index.html">Home</a> <span>></span> <a href="#" class="active">Budget Overview</a>
+        </div>
+
+        <!-- Page Title -->
+        <h1 class="page-title">Budget Overview</h1>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-primary" id="addBudgetBtn"><i class="fas fa-plus"></i> Add Budget Item</button>
+            <button class="btn-secondary" id="adjustBudgetBtn">Adjust Budget</button>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <div class="tab-item active" data-period="monthly">Monthly</div>
+            <div class="tab-item" data-period="quarterly">Quarterly</div>
+            <div class="tab-item" data-period="yearly">Yearly</div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards" id="summaryCards"></div>
+
+        <!-- Expense Categories -->
+        <h2 class="section-title">Expense Categories</h2>
+        <div class="expense-categories" id="expenseCategories"></div>
+
+        <!-- Recent Transactions -->
+        <h2 class="section-title">Recent Transactions</h2>
+        <table class="transactions-table" id="transactionsTable">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>User</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button class="btn-view-all">View All Transactions</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
