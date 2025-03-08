@@ -9,7 +9,6 @@ const addMemberSection = document.getElementById('addMemberSection');
 const familyNameInput = document.getElementById('familyNameInput');
 const createFamilyBtn = document.getElementById('createFamilyBtn');
 const inviteEmail = document.getElementById('inviteEmail');
-const generateInviteBtn = document.getElementById('generateInviteBtn');
 const memberList = document.getElementById('memberList');
 const inviteLinkContainer = document.getElementById('inviteLinkContainer');
 
