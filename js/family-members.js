@@ -308,11 +308,11 @@ memberTabs.addEventListener('click', async (e) => {
 
 
 // Update Profile Icon
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        userAvatar.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/32'}" alt="Profile" class="profile-icon">`;
-    }
-});
+// auth.onAuthStateChanged((user) => {
+//     if (user) {
+//         userAvatar.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/32'}" alt="Profile" class="profile-icon">`;
+//     }
+// });
 // Open the "Add Member" modal
 addMemberBtn.addEventListener('click', () => {
     addMemberModal.style.display = "flex";
