@@ -77,14 +77,19 @@ body {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: #333;
-    margin-right: 10px;
+    overflow: hidden; /* Ensure the image is clipped to the circular boundary */
+    background-color: #333; /* Fallback background color */
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
 }
 
+.user-avatar img {
+    width: 100%; /* Ensure the image fills the container */
+    height: 100%; /* Ensure the image fills the container */
+    object-fit: cover; /* Ensure the image covers the container without distortion */
+    border-radius: 50%; /* Ensure the image itself is circular */
+}
 .user-info {
     font-size: 14px;
 }
