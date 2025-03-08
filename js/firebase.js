@@ -37,6 +37,12 @@ export const signInWithGoogle = () => {
                     savings: 0,
                     remainingBudget: 0,
                     createdAt: new Date()
+                }); 
+                // Create a family for the first user
+                const familyRef = await addDoc(collection(db, "families"), {
+                    name: `${name}'s Family`, // Default family name
+                    createdBy: user.uid,
+                    createdAt: new Date()
                 });
 
                 console.log("New user created in Firestore:", user.uid);
