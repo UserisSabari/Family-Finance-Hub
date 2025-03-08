@@ -44,37 +44,60 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <div class="breadcrumb">
-            <a href="dashboard.html">Home</a>
-            <span class="breadcrumb-arrow">›</span>
-            <span>Family Members</span>
-        </div>
-        <h1 class="page-title">Family Members</h1>
+<div class="main-content">
+    <div class="breadcrumb">
+        <a href="dashboard.html">Home</a>
+        <span class="breadcrumb-arrow">›</span>
+        <span>Family Members</span>
+    </div>
+    <h1 class="page-title">Family Members</h1>
 
-        <!-- Add Member Button -->
-        <button class="add-member-btn" id="addMemberBtn">
-            <i class="fas fa-plus"></i> Add Family Member
+    <!-- No Family Message -->
+    <div id="noFamilyMessage" class="no-family-message">
+        <p>You haven't created a family yet.</p>
+        <button class="create-family-btn" id="createFamilyBtn">
+            <i class="fas fa-plus"></i> Create Family
         </button>
+    </div>
 
-        <!-- Member Tabs -->
-        <div class="member-tabs">
-            <div class="tab active" data-filter="all">All Members</div>
-            <div class="tab" data-filter="adults">Adults</div>
-            <div class="tab" data-filter="children">Children</div>
-        </div>
+    <!-- Add Member Button (Hidden by Default) -->
+    <button class="add-member-btn" id="addMemberBtn" hidden>
+        <i class="fas fa-plus"></i> Add Family Member
+    </button>
 
-        <!-- Member List -->
-        <div class="member-list" id="memberList">
-            <!-- Members will be loaded here dynamically -->
-            <div class="loading-message">Loading family members...</div>
-        </div>
+    <!-- Member Tabs (Hidden by Default) -->
+    <div class="member-tabs" id="memberTabs" hidden>
+        <div class="tab active" data-filter="all">All Members</div>
+        <div class="tab" data-filter="adults">Adults</div>
+        <div class="tab" data-filter="children">Children</div>
+    </div>
 
-        <!-- Family Spending Overview -->
-        <h2 class="spending-section-title">Family Spending Overview</h2>
-        <div class="spending-cards" id="spendingCards">
-            <!-- Spending cards will be loaded here dynamically -->
+    <!-- Member List (Hidden by Default) -->
+    <div class="member-list" id="memberList" hidden>
+        <!-- Members will be loaded here dynamically -->
+        <div class="loading-message">Loading family members...</div>
+    </div>
+
+    <!-- Family Spending Overview (Hidden by Default) -->
+    <h2 class="spending-section-title" id="spendingSectionTitle" hidden>Family Spending Overview</h2>
+    <div class="spending-cards" id="spendingCards" hidden>
+        <!-- Spending cards will be loaded here dynamically -->
+    </div>
+</div>
+
+    <!-- Family Name Modal -->
+    <div class="modal-overlay" id="familyNameModal">
+    <div class="modal">
+        <h3 class="modal-title">Create a Family</h3>
+        <div class="modal-form-group">
+            <label class="modal-label">Family Name</label>
+            <input type="text" class="modal-input" id="familyNameInput" placeholder="Enter family name">
         </div>
+        <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" id="cancelFamilyName">Cancel</button>
+            <button class="modal-btn modal-btn-submit" id="submitFamilyName">Create Family</button>
+        </div>
+    </div>
     </div>
 
     <!-- Add Member Modal -->
@@ -83,7 +106,7 @@
             <h3 class="modal-title" id="modalTitle">Add Family Member</h3>
             
             <!-- No Family Section -->
-            <div id="noFamilySection" style="display: none;">
+            <!-- <div id="noFamilySection" style="display: none;">
                 <p>You haven't created a family yet. Create one to start adding members.</p>
                 <div class="modal-form-group">
                     <label class="modal-label">Family Name</label>
@@ -93,7 +116,7 @@
                     <button class="modal-btn modal-btn-cancel" id="cancelCreateFamily">Cancel</button>
                     <button class="modal-btn modal-btn-submit" id="createFamilyBtn">Create Family</button>
                 </div>
-            </div>
+            </div> -->
             
             <!-- Add Member Section -->
             <div id="addMemberSection">
