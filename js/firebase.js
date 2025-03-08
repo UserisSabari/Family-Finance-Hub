@@ -20,12 +20,34 @@ const provider = new GoogleAuthProvider();
 // Sign in with Google
 export const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
-        .then((result) => {
+        .then(async (result) => {
             console.log("User signed in:", result.user);
-            window.location.href = "dashboard.html"; // Redirect to dashboard
+            const user = result.user;
+
+            // Check if the user already exists in Firestore
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (!userDoc.exists()) {
+                // User is new, create a new document in Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    name: user.displayName || "", // Use Google display name
+                    email: user.email || "", // Use Google email
+                    role: "Family Admin", // Default role for the first user
+                    totalIncome: 0,
+                    totalExpenses: 0,
+                    savings: 0,
+                    remainingBudget: 0,
+                    createdAt: new Date()
+                });
+
+                console.log("New user created in Firestore:", user.uid);
+            }
+
+            // Redirect to dashboard
+            window.location.href = "dashboard.html";
         })
         .catch((error) => {
-            console.error("Error during login:", error);
+            console.error("Error during Google sign-in:", error);
+            alert(`Error: ${error.message}`);
         });
 };
 
