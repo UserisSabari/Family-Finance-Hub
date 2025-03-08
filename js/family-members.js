@@ -2,7 +2,6 @@ import { auth, db, addFamilyMember, fetchFamilyMembers } from './firebase.js';
 import { doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // DOM Elements
-// DOM Elements
 const addMemberBtn = document.getElementById('addMemberBtn');
 const addMemberModal = document.getElementById('addMemberModal');
 const cancelAddMember = document.getElementById('cancelAddMember');
@@ -22,15 +21,22 @@ const noFamilyMessage = document.getElementById('noFamilyMessage');
 const memberTabs = document.getElementById('memberTabs');
 const spendingSectionTitle = document.getElementById('spendingSectionTitle');
 const spendingCards = document.getElementById('spendingCards');
+const menuToggle = document.getElementById('menuToggle');
+const sidebar = document.querySelector('.sidebar');
 
 // Check if the user has a family
 auth.onAuthStateChanged(async (user) => {
     if (user) {
+        const userDisplayName = document.getElementById('userDisplayName');
+        const userRole = document.getElementById('userRole');
         const userDoc = await getDoc(doc(db, "users", user.uid));
-       
+        
         if (userDoc.exists()) {
             const userData = userDoc.data();
             console.log(userData)
+            // Update user info
+            userDisplayName.textContent = userData.name || user.email;
+            userRole.textContent = userData.role || "User"; // Default to "User" if role is not set
             if (userData.familyId) {
                 console.log("🟢 Family Exists! Showing 'Add Member' button.");
                 // User has a family, fetch and display members
@@ -247,4 +253,15 @@ copyLinkBtn.addEventListener('click', () => {
     }).catch(() => {
         alert("Failed to copy the link. Please try again.");
     });
+});
+// Toggle Sidebar Visibility
+menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+});
+
+// Close Sidebar When Clicking Outside (Optional)
+document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+        sidebar.classList.remove('active');
+    }
 });
