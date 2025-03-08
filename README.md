@@ -1,5 +1,5 @@
 # Family Finance Hub
-###A simple Micro project including Backend and database connectivity
+### simple Micro project including Backend and database connectivity
 
 A web application to manage family finances, track expenses, and set budgets.
 
