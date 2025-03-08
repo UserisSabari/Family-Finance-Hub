@@ -83,6 +83,10 @@ export const loginWithEmailPassword = (email, password) => {
 export const addFamilyMember = async (familyId, email, memberType) => {
     try {
         // Save the invitation in Firestore
+        console.log("Attempting to add family member...");
+        console.log("Family ID:", familyId);
+        console.log("Email:", email);
+        console.log("Member Type:", memberType);
         await addDoc(collection(db, "families", familyId, "members"), {
             email: email,
             role: memberType,
