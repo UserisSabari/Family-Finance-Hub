@@ -275,6 +275,9 @@ body {
 .add-member-btn i {
     margin-right: 8px;
 }
+.add-member-btn:hover {
+    background-color: #008c7a;
+}
 
 /* Tabs */
 .member-tabs {

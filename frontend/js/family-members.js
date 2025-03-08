@@ -20,7 +20,7 @@ auth.onAuthStateChanged(async (user) => {
             const userData = userDoc.data();
             console.log(userData)
             if (userData.familyId) {
-                console.log("family Exists")
+                console.log("🟢 Family Exists! Showing 'Add Member' button.");
                 // User has a family, fetch and display members
                 showAddMemberSection();
                 const members = await fetchFamilyMembers(userData.familyId);
@@ -28,7 +28,7 @@ auth.onAuthStateChanged(async (user) => {
                 // noFamilySection.style.display = "none"; // Hide "Create Family" section
                 // addMemberSection.style.display = "block"; // Show "Add Member" section
             } else {
-                console.log("Family not exist")
+                console.log("🔴 No Family Found. Hiding 'Add Member' button.");
                 // User doesn't have a family, show the "Create Family" section
                 // noFamilySection.style.display = "block";
                 // addMemberSection.style.display = "none";
@@ -122,6 +122,7 @@ document.getElementById('createFamilyBtn').addEventListener('click', async () =>
 
 // Show the "Create Family" section
 function showCreateFamilySection() {
+    console.log("🔴 No family exists → Hiding 'Add Member' button.");
     document.getElementById('noFamilyMessage').hidden = false; // Show the "Create Family" message
     document.getElementById('createFamilyBtn').hidden = false; // Show the "Create Family" button
     document.getElementById('addMemberBtn').hidden = true; // Hide the "Add Member" button
@@ -133,6 +134,7 @@ function showCreateFamilySection() {
 
 // Show the "Add Family Members" section
 function showAddMemberSection() {
+    console.log("🟢 Family exists → Showing 'Add Member' button.");
     document.getElementById('noFamilyMessage').hidden = true; // Hide the "Create Family" message
     document.getElementById('createFamilyBtn').hidden = true; // Hide the "Create Family" button
     document.getElementById('addMemberBtn').hidden = false; // Show the "Add Member" button
