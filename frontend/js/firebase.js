@@ -39,11 +39,11 @@ export const signInWithGoogle = () => {
                     createdAt: new Date()
                 }); 
                 // Create a family for the first user
-                const familyRef = await addDoc(collection(db, "families"), {
-                    name: `${name}'s Family`, // Default family name
-                    createdBy: user.uid,
-                    createdAt: new Date()
-                });
+                // const familyRef = await addDoc(collection(db, "families"), {
+                //     name: `${name}'s Family`, // Default family name
+                //     createdBy: user.uid,
+                //     createdAt: new Date()
+                // });
 
                 console.log("New user created in Firestore:", user.uid);
             }
@@ -64,18 +64,18 @@ export const signUpWithEmailPassword = async (email, password, name) => {
         const user = userCredential.user;
 
         // Create a family for the first user
-        const familyRef = await addDoc(collection(db, "families"), {
-            name: `${name}'s Family`, // Default family name
-            createdBy: user.uid,
-            createdAt: new Date()
-        });
+        // const familyRef = await addDoc(collection(db, "families"), {
+        //     name: `${name}'s Family`, // Default family name
+        //     createdBy: user.uid,
+        //     createdAt: new Date()
+        // });
 
         // Save user details in Firestore
         await setDoc(doc(db, "users", user.uid), {
             name: name || "", 
             email: email,
             role: "Family Admin", // Default role for the first user
-            familyId: familyRef.id,
+            // familyId: familyRef.id,
             totalIncome: 0,
             totalExpenses: 0,
             savings: 0,
