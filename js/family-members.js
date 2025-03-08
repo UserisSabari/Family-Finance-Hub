@@ -4,7 +4,7 @@ import { doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com
 // DOM Elements
 const addMemberBtn = document.getElementById('addMemberBtn');
 const addMemberModal = document.getElementById('addMemberModal');
-const noFamilySection = document.getElementById('noFamilySection');
+const cancelAddMember = document.getElementById('cancelAddMember');
 const addMemberSection = document.getElementById('addMemberSection');
 const familyNameInput = document.getElementById('familyNameInput');
 const createFamilyBtn = document.getElementById('createFamilyBtn');
@@ -15,9 +15,10 @@ const inviteLinkContainer = document.getElementById('inviteLinkContainer');
 auth.onAuthStateChanged(async (user) => {
     if (user) {
         const userDoc = await getDoc(doc(db, "users", user.uid));
-        console.log(userData)
+       
         if (userDoc.exists()) {
             const userData = userDoc.data();
+            console.log(userData)
             if (userData.familyId) {
                 // User has a family, fetch and display members
                 showAddMemberSection();
@@ -275,6 +276,9 @@ addMemberModal.addEventListener('click', (e) => {
     if (e.target === addMemberModal) {
         addMemberModal.style.display = "none";
     }
+});
+cancelAddMember.addEventListener('click', () => {
+    addMemberModal.style.display = "none";
 });
 
 // Handle the invitation method selection
