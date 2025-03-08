@@ -60,27 +60,27 @@
         </button>
     </div>
 
-    <!-- Add Member Button -->
-    <button class="add-member-btn" id="addMemberBtn" >
+    <!-- Add Member Button (Hidden by Default) -->
+    <button class="add-member-btn" id="addMemberBtn" hidden>
         <i class="fas fa-plus"></i> Add Family Member
     </button>
 
     <!-- Member Tabs (Hidden by Default) -->
-    <div class="member-tabs" id="memberTabs">
+    <div class="member-tabs" id="memberTabs" hidden>
         <div class="tab active" data-filter="all">All Members</div>
         <div class="tab" data-filter="adults">Adults</div>
         <div class="tab" data-filter="children">Children</div>
     </div>
 
     <!-- Member List (Hidden by Default) -->
-    <div class="member-list" id="memberList" >
+    <div class="member-list" id="memberList" hidden>
         <!-- Members will be loaded here dynamically -->
         <div class="loading-message">Loading family members...</div>
     </div>
 
     <!-- Family Spending Overview (Hidden by Default) -->
-    <h2 class="spending-section-title" id="spendingSectionTitle" >Family Spending Overview</h2>
-    <div class="spending-cards" id="spendingCards" >
+    <h2 class="spending-section-title" id="spendingSectionTitle" hidden>Family Spending Overview</h2>
+    <div class="spending-cards" id="spendingCards" hidden>
         <!-- Spending cards will be loaded here dynamically -->
     </div>
 </div>
