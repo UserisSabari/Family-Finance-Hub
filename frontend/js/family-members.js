@@ -8,7 +8,6 @@ const noFamilySection = document.getElementById('noFamilySection');
 const addMemberSection = document.getElementById('addMemberSection');
 const familyNameInput = document.getElementById('familyNameInput');
 const createFamilyBtn = document.getElementById('createFamilyBtn');
-const inviteEmail = document.getElementById('inviteEmail');
 const memberList = document.getElementById('memberList');
 const inviteLinkContainer = document.getElementById('inviteLinkContainer');
 
@@ -72,14 +71,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const generateInviteBtn = document.getElementById('generateInviteBtn');
     if (generateInviteBtn) {
         generateInviteBtn.addEventListener('click', async () => {
-            const invitationMethod = document.getElementById('invitationMethod').value;
             console.log("Generate Invite Button clicked!");
+
+            const invitationMethod = document.getElementById('invitationMethod').value;
             console.log("Selected invitation method:", invitationMethod);
-            console.log("Email entered:", email);
-            console.log("User Data:", userData);
-            
+
             if (invitationMethod === "email") {
-                const email = inviteEmail.value.trim();
+                const emailInput = document.getElementById('inviteEmail'); // Ensure input exists
+                const memberTypeInput = document.getElementById('memberType'); // Get memberType dropdown
+
+                if (!emailInput || !memberTypeInput) {
+                    console.error("Invite email input or member type selection not found in the DOM.");
+                    return;
+                }
+
+                const email = emailInput.value.trim();
+                const memberType = memberTypeInput.value; // Get the selected member type
+
                 if (!email) {
                     alert("Please enter an email address.");
                     return;
@@ -90,11 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const userDoc = await getDoc(doc(db, "users", user.uid));
                     if (userDoc.exists()) {
                         const userData = userDoc.data();
+                        console.log("User data:", userData);
+
                         if (userData.familyId) {
                             try {
-                                await addFamilyMember(userData.familyId, email, "adult");
+                                await addFamilyMember(userData.familyId, email, memberType);
                                 alert("Invitation sent successfully!");
-                                addMemberModal.style.display = "none"; // Close the modal
+                                addMemberModal.style.display = "none";
                             } catch (error) {
                                 console.error("Error sending invitation:", error);
                                 alert(`Error: ${error.message}`);
@@ -102,15 +112,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else {
                             alert("You don't have a family yet. Please create one first.");
                         }
+                    } else {
+                        alert("User data not found.");
                     }
+                } else {
+                    alert("No authenticated user found.");
                 }
             } else if (invitationMethod === "link") {
-                // Handle link invitation logic
                 const user = auth.currentUser;
                 if (user) {
                     const userDoc = await getDoc(doc(db, "users", user.uid));
                     if (userDoc.exists()) {
                         const userData = userDoc.data();
+                        console.log("User data:", userData);
+
                         if (userData.familyId) {
                             const inviteLink = `${window.location.origin}/join-family.html?familyId=${userData.familyId}`;
                             document.getElementById('inviteLink').textContent = inviteLink;
@@ -126,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Generate Invite Button not found in the DOM.");
     }
 });
+
 
 // Display family members
 function displayFamilyMembers(members) {
