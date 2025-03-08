@@ -1,4 +1,3 @@
-// firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -67,26 +66,6 @@ export const signUpWithEmailPassword = async (email, password, name) => {
     }
 };
 
-// Add a family member
-export const addFamilyMember = async (familyId, email, memberType) => {
-    try {
-        // Save the invitation in Firestore
-        await addDoc(collection(db, "families", familyId, "members"), {
-            email: email,
-            role: memberType,
-            status: "pending", // Pending until the member accepts the invitation
-            createdAt: new Date()
-
-        });
-
-        console.log("Invitation sent to:", email);
-        alert("Invitation sent successfully!");
-    } catch (error) {
-        console.error("Error sending invitation:", error);
-        alert(`Error: ${error.message}`);
-    }
-};
-
 // Email/Password Login
 export const loginWithEmailPassword = (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
@@ -98,6 +77,25 @@ export const loginWithEmailPassword = (email, password) => {
             console.error("Error during login:", error);
             alert(`Error: ${error.message}`);
         });
+};
+
+// Add a family member
+export const addFamilyMember = async (familyId, email, memberType) => {
+    try {
+        // Save the invitation in Firestore
+        await addDoc(collection(db, "families", familyId, "members"), {
+            email: email,
+            role: memberType,
+            status: "pending", // Pending until the member accepts the invitation
+            createdAt: new Date()
+        });
+
+        console.log("Invitation sent to:", email);
+        alert("Invitation sent successfully!");
+    } catch (error) {
+        console.error("Error sending invitation:", error);
+        alert(`Error: ${error.message}`);
+    }
 };
 
 // Fetch family members
