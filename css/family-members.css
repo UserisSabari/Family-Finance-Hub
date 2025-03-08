@@ -133,6 +133,39 @@ body {
     color: #333;
 }
 
+/* No Family Message */
+.no-family-message {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 18px;
+    color: #666;
+}
+
+.no-family-message p {
+    margin-bottom: 20px;
+}
+
+.create-family-btn {
+    background-color: #00a389;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.create-family-btn i {
+    margin-right: 8px;
+}
+
+.create-family-btn:hover {
+    background-color: #008c7a;
+}
+
 /* Family Name Modal Styles */
 .modal-overlay {
     position: fixed;
