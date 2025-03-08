@@ -11,6 +11,7 @@ const createFamilyBtn = document.getElementById('createFamilyBtn');
 const inviteEmail = document.getElementById('inviteEmail');
 const generateInviteBtn = document.getElementById('generateInviteBtn');
 const memberList = document.getElementById('memberList');
+const inviteLinkContainer = document.getElementById('inviteLinkContainer');
 
 // Check if the user has a family
 auth.onAuthStateChanged(async (user) => {
@@ -22,6 +23,8 @@ auth.onAuthStateChanged(async (user) => {
                 // User has a family, fetch and display members
                 const members = await fetchFamilyMembers(userData.familyId);
                 displayFamilyMembers(members);
+                noFamilySection.style.display = "none"; // Hide "Create Family" section
+                addMemberSection.style.display = "block"; // Show "Add Member" section
             } else {
                 // User doesn't have a family, show the "Create Family" section
                 noFamilySection.style.display = "block";
@@ -66,21 +69,48 @@ createFamilyBtn.addEventListener('click', async () => {
 
 // Add a family member
 generateInviteBtn.addEventListener('click', async () => {
-    const email = inviteEmail.value.trim();
-    if (!email) {
-        alert("Please enter an email address.");
-        return;
-    }
+    const invitationMethod = document.getElementById('invitationMethod').value;
 
-    const user = auth.currentUser;
-    if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            if (userData.familyId) {
-                await addFamilyMember(userData.familyId, email, "adult");
-            } else {
-                alert("You don't have a family yet. Please create one first.");
+    if (invitationMethod === "email") {
+        const email = inviteEmail.value.trim();
+        if (!email) {
+            alert("Please enter an email address.");
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (user) {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                if (userData.familyId) {
+                    try {
+                        await addFamilyMember(userData.familyId, email, "adult");
+                        alert("Invitation sent successfully!");
+                        addMemberModal.style.display = "none"; // Close the modal
+                    } catch (error) {
+                        console.error("Error sending invitation:", error);
+                        alert(`Error: ${error.message}`);
+                    }
+                } else {
+                    alert("You don't have a family yet. Please create one first.");
+                }
+            }
+        }
+    } else if (invitationMethod === "link") {
+        // Handle link invitation logic
+        const user = auth.currentUser;
+        if (user) {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                if (userData.familyId) {
+                    const inviteLink = `${window.location.origin}/join-family.html?familyId=${userData.familyId}`;
+                    document.getElementById('inviteLink').textContent = inviteLink;
+                    inviteLinkContainer.style.display = "block";
+                } else {
+                    alert("You don't have a family yet. Please create one first.");
+                }
             }
         }
     }
@@ -121,8 +151,8 @@ addMemberModal.addEventListener('click', (e) => {
 const invitationMethod = document.getElementById('invitationMethod');
 const emailInviteSection = document.getElementById('emailInviteSection');
 const linkInviteSection = document.getElementById('linkInviteSection');
-const inviteLinkContainer = document.getElementById('inviteLinkContainer');
 const copyLinkBtn = document.getElementById('copyLinkBtn');
+
 
 invitationMethod.addEventListener('change', (e) => {
     if (e.target.value === "email") {
@@ -134,23 +164,6 @@ invitationMethod.addEventListener('change', (e) => {
     }
 });
 
-// Generate an invitation link
-generateInviteBtn.addEventListener('click', async () => {
-    const user = auth.currentUser;
-    if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
-            if (userData.familyId) {
-                const inviteLink = `${window.location.origin}/join-family.html?familyId=${userData.familyId}`;
-                document.getElementById('inviteLink').textContent = inviteLink;
-                inviteLinkContainer.style.display = "block";
-            } else {
-                alert("You don't have a family yet. Please create one first.");
-            }
-        }
-    }
-});
 
 // Copy the invitation link to the clipboard
 copyLinkBtn.addEventListener('click', () => {
