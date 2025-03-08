@@ -20,6 +20,7 @@ auth.onAuthStateChanged(async (user) => {
             const userData = userDoc.data();
             console.log(userData)
             if (userData.familyId) {
+                console.log("family Exists")
                 // User has a family, fetch and display members
                 showAddMemberSection();
                 const members = await fetchFamilyMembers(userData.familyId);
@@ -27,6 +28,7 @@ auth.onAuthStateChanged(async (user) => {
                 // noFamilySection.style.display = "none"; // Hide "Create Family" section
                 // addMemberSection.style.display = "block"; // Show "Add Member" section
             } else {
+                console.log("Family not exist")
                 // User doesn't have a family, show the "Create Family" section
                 // noFamilySection.style.display = "block";
                 // addMemberSection.style.display = "none";
