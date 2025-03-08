@@ -81,6 +81,10 @@ document.getElementById('familyNameModal').addEventListener('click', (e) => {
     }
 });
 // Create a family
+document.getElementById('createFamilyBtn').addEventListener('click', async () => {
+    document.getElementById('familyNameModal').style.display = "flex";
+});
+
 // createFamilyBtn.addEventListener('click', async () => {
 //     const familyName = familyNameInput.value.trim();
 //     if (!familyName) {
