@@ -22,7 +22,9 @@ const memberTabs = document.getElementById('memberTabs');
 const spendingSectionTitle = document.getElementById('spendingSectionTitle');
 const spendingCards = document.getElementById('spendingCards');
 const menuToggle = document.getElementById('menuToggle');
-const sidebar = document.querySelector('.sidebar');
+const sidebar = document.querySelector('.sidebar')
+const familyNameDisplay = document.getElementById('familyNameDisplay');
+const familyNameSpan = document.getElementById('familyName');;
 
 // Check if the user has a family
 auth.onAuthStateChanged(async (user) => {
@@ -41,10 +43,17 @@ auth.onAuthStateChanged(async (user) => {
                 console.log("🟢 Family Exists! Showing 'Add Member' button.");
                 // User has a family, fetch and display members
                 showAddMemberSection();
+            // Fetch and display the family name
+             const familyDoc = await getDoc(doc(db, "families", userData.familyId));
+             if (familyDoc.exists()) {
+                 const familyData = familyDoc.data();
+                 familyNameSpan.textContent = familyData.name; // Display the family name
+                 familyNameDisplay.style.display = "block"; // Show the family name display
+             }
+
                 const members = await fetchFamilyMembers(userData.familyId);
                 displayFamilyMembers(members);
-                // noFamilySection.style.display = "none"; // Hide "Create Family" section
-                // addMemberSection.style.display = "block"; // Show "Add Member" section
+                
             } else {
                 console.log("🔴 No Family Found. Hiding 'Add Member' button.");
                 // User doesn't have a family, show the "Create Family" section

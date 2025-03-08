@@ -133,6 +133,19 @@ body {
     color: #333;
 }
 
+/* Family Name Display */
+.family-name-display {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.family-name-display span {
+    color: #00a389;
+    font-weight: 600;
+}
+
 /* No Family Message */
 .no-family-message {
     text-align: center;
