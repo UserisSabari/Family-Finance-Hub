@@ -16,6 +16,7 @@ const inviteLinkContainer = document.getElementById('inviteLinkContainer');
 auth.onAuthStateChanged(async (user) => {
     if (user) {
         const userDoc = await getDoc(doc(db, "users", user.uid));
+        console.log(userData)
         if (userDoc.exists()) {
             const userData = userDoc.data();
             if (userData.familyId) {
@@ -72,7 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (generateInviteBtn) {
         generateInviteBtn.addEventListener('click', async () => {
             const invitationMethod = document.getElementById('invitationMethod').value;
-
+            console.log("Generate Invite Button clicked!");
+            console.log("Selected invitation method:", invitationMethod);
+            console.log("Email entered:", email);
+            console.log("User Data:", userData);
+            
             if (invitationMethod === "email") {
                 const email = inviteEmail.value.trim();
                 if (!email) {
