@@ -2,14 +2,26 @@ import { auth, db, addFamilyMember, fetchFamilyMembers } from './firebase.js';
 import { doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // DOM Elements
+// DOM Elements
 const addMemberBtn = document.getElementById('addMemberBtn');
 const addMemberModal = document.getElementById('addMemberModal');
 const cancelAddMember = document.getElementById('cancelAddMember');
-const addMemberSection = document.getElementById('addMemberSection');
 const familyNameInput = document.getElementById('familyNameInput');
 const createFamilyBtn = document.getElementById('createFamilyBtn');
 const memberList = document.getElementById('memberList');
 const inviteLinkContainer = document.getElementById('inviteLinkContainer');
+const createFamilyModal = document.getElementById('createFamilyModal');
+const cancelCreateFamily = document.getElementById('cancelCreateFamily');
+const submitFamilyName = document.getElementById('submitFamilyName');
+const generateInviteBtn = document.getElementById('generateInviteBtn');
+const invitationMethod = document.getElementById('invitationMethod');
+const emailInviteSection = document.getElementById('emailInviteSection');
+const linkInviteSection = document.getElementById('linkInviteSection');
+const copyLinkBtn = document.getElementById('copyLinkBtn');
+const noFamilyMessage = document.getElementById('noFamilyMessage');
+const memberTabs = document.getElementById('memberTabs');
+const spendingSectionTitle = document.getElementById('spendingSectionTitle');
+const spendingCards = document.getElementById('spendingCards');
 
 // Check if the user has a family
 auth.onAuthStateChanged(async (user) => {
@@ -40,8 +52,8 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 // Handle Family Name Submission
-document.getElementById('submitFamilyName').addEventListener('click', async () => {
-    const familyName = document.getElementById('familyNameInput').value.trim();
+submitFamilyName.addEventListener('click', async () => {
+    const familyName = familyNameInput.value.trim();
     if (!familyName) {
         alert("Please enter a family name.");
         return;
@@ -63,7 +75,7 @@ document.getElementById('submitFamilyName').addEventListener('click', async () =
             }, { merge: true });
 
             alert("Family created successfully!");
-            document.getElementById('familyNameModal').style.display = "none"; // Hide the modal
+            createFamilyModal.style.display = "none"; // Hide the modal
             showAddMemberSection(); // Show the "Add Family Members" section
         } catch (error) {
             console.error("Error creating family:", error);
@@ -73,183 +85,114 @@ document.getElementById('submitFamilyName').addEventListener('click', async () =
 });
 
 // Handle Modal Cancellation
-document.getElementById('cancelFamilyName').addEventListener('click', () => {
-    document.getElementById('familyNameModal').style.display = "none";
+cancelCreateFamily.addEventListener('click', () => {
+    createFamilyModal.style.display = "none";
 });
 
 // Close the modal when clicking outside of it
-document.getElementById('familyNameModal').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('familyNameModal')) {
-        document.getElementById('familyNameModal').style.display = "none";
+createFamilyModal.addEventListener('click', (e) => {
+    if (e.target === createFamilyModal) {
+        createFamilyModal.style.display = "none";
     }
 });
+
 // Create a family
-document.getElementById('createFamilyBtn').addEventListener('click', async () => {
-    document.getElementById('familyNameModal').style.display = "flex";
+createFamilyBtn.addEventListener('click', () => {
+    createFamilyModal.style.display = "flex";
 });
-
-// createFamilyBtn.addEventListener('click', async () => {
-//     const familyName = familyNameInput.value.trim();
-//     if (!familyName) {
-//         alert("Please enter a family name.");
-//         return;
-//     }
-
-//     const user = auth.currentUser;
-//     if (user) {
-//         try {
-//             // Create a family in Firestore
-//             const familyRef = await addDoc(collection(db, "families"), {
-//                 name: familyName,
-//                 createdBy: user.uid,
-//                 createdAt: new Date()
-//             });
-
-//             // Update the user's document with the family ID
-//             await setDoc(doc(db, "users", user.uid), {
-//                 familyId: familyRef.id
-//             }, { merge: true });
-
-//             alert("Family created successfully!");
-//             noFamilySection.style.display = "none";
-//             addMemberSection.style.display = "block";
-//         } catch (error) {
-//             console.error("Error creating family:", error);
-//             alert(`Error: ${error.message}`);
-//         }
-//     }
-// });
 
 // Show the "Create Family" section
 function showCreateFamilySection() {
     console.log("🔴 No family exists → Hiding 'Add Member' button.");
-    document.getElementById('noFamilyMessage').hidden = false; // Show the "Create Family" message
-    document.getElementById('createFamilyBtn').hidden = false; // Show the "Create Family" button
-    document.getElementById('addMemberBtn').hidden = true; // Hide the "Add Member" button
-    document.getElementById('memberTabs').hidden = true; // Hide the member tabs
-    document.getElementById('memberList').hidden = true; // Hide the member list
-    document.getElementById('spendingSectionTitle').hidden = true; // Hide the spending section
-    document.getElementById('spendingCards').hidden = true; // Hide the spending cards
+    noFamilyMessage.hidden = false; // Show the "Create Family" message
+    createFamilyBtn.hidden = false; // Show the "Create Family" button
+    addMemberBtn.hidden = true; // Hide the "Add Member" button
+    memberTabs.hidden = true; // Hide the member tabs
+    memberList.hidden = true; // Hide the member list
+    spendingSectionTitle.hidden = true; // Hide the spending section
+    spendingCards.hidden = true; // Hide the spending cards
 }
 
 // Show the "Add Family Members" section
 function showAddMemberSection() {
     console.log("🟢 Family exists → Showing 'Add Member' button.");
-    document.getElementById('noFamilyMessage').hidden = true; // Hide the "Create Family" message
-    document.getElementById('createFamilyBtn').hidden = true; // Hide the "Create Family" button
-    document.getElementById('addMemberBtn').hidden = false; // Show the "Add Member" button
-    document.getElementById('memberTabs').hidden = false; // Show the member tabs
-    document.getElementById('memberList').hidden = false; // Show the member list
-    document.getElementById('spendingSectionTitle').hidden = false; // Show the spending section
-    document.getElementById('spendingCards').hidden = false; // Show the spending cards
+    noFamilyMessage.hidden = true; // Hide the "Create Family" message
+    createFamilyBtn.hidden = true; // Hide the "Create Family" button
+    addMemberBtn.hidden = false; // Show the "Add Member" button
+    memberTabs.hidden = false; // Show the member tabs
+    memberList.hidden = false; // Show the member list
+    spendingSectionTitle.hidden = false; // Show the spending section
+    spendingCards.hidden = false; // Show the spending cards
 }
-// document.getElementById('createFamilyBtn').addEventListener('click', async () => {
-//     const familyName = prompt("Enter your family name:"); // Prompt for family name
-//     if (!familyName) {
-//         alert("Please enter a family name.");
-//         return;
-//     }
-
-//     const user = auth.currentUser;
-//     if (user) {
-//         try {
-//             // Create a family in Firestore
-//             const familyRef = await addDoc(collection(db, "families"), {
-//                 name: familyName,
-//                 createdBy: user.uid,
-//                 createdAt: new Date()
-//             });
-
-//             // Update the user's document with the family ID
-//             await setDoc(doc(db, "users", user.uid), {
-//                 familyId: familyRef.id
-//             }, { merge: true });
-
-//             alert("Family created successfully!");
-//             showAddMemberSection(); // Show the "Add Family Members" section
-//         } catch (error) {
-//             console.error("Error creating family:", error);
-//             alert(`Error: ${error.message}`);
-//         }
-//     }
-// });
 
 // Handle "Send Invitation" button
-document.addEventListener('DOMContentLoaded', () => {
-    const generateInviteBtn = document.getElementById('generateInviteBtn');
-    if (generateInviteBtn) {
-        generateInviteBtn.addEventListener('click', async () => {
-            console.log("Generate Invite Button clicked!");
+generateInviteBtn.addEventListener('click', async () => {
+    console.log("Generate Invite Button clicked!");
 
-            const invitationMethod = document.getElementById('invitationMethod').value;
-            console.log("Selected invitation method:", invitationMethod);
+    const invitationMethodValue = invitationMethod.value;
+    console.log("Selected invitation method:", invitationMethodValue);
 
-            if (invitationMethod === "email") {
-                const emailInput = document.getElementById('inviteEmail'); // Ensure input exists
-                const memberTypeInput = document.getElementById('memberType'); // Get memberType dropdown
+    if (invitationMethodValue === "email") {
+        const emailInput = document.getElementById('inviteEmail'); // Ensure input exists
+        const memberTypeInput = document.getElementById('memberType'); // Get memberType dropdown
 
-                if (!emailInput || !memberTypeInput) {
-                    console.error("Invite email input or member type selection not found in the DOM.");
-                    return;
-                }
+        if (!emailInput || !memberTypeInput) {
+            console.error("Invite email input or member type selection not found in the DOM.");
+            return;
+        }
 
-                const email = emailInput.value.trim();
-                const memberType = memberTypeInput.value; // Get the selected member type
+        const email = emailInput.value.trim();
+        const memberType = memberTypeInput.value; // Get the selected member type
 
-                if (!email) {
-                    alert("Please enter an email address.");
-                    return;
-                }
+        if (!email) {
+            alert("Please enter an email address.");
+            return;
+        }
 
-                const user = auth.currentUser;
-                if (user) {
-                    const userDoc = await getDoc(doc(db, "users", user.uid));
-                    if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        console.log("User data:", userData);
+        const user = auth.currentUser;
+        if (user) {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                console.log("User data:", userData);
 
-                        if (userData.familyId) {
-                            try {
-                                await addFamilyMember(userData.familyId, email, memberType);
-                                alert("Invitation sent successfully!");
-                                addMemberModal.style.display = "none";
-                            } catch (error) {
-                                console.error("Error sending invitation:", error);
-                                alert(`Error: ${error.message}`);
-                            }
-                        } else {
-                            alert("You don't have a family yet. Please create one first.");
-                        }
-                    } else {
-                        alert("User data not found.");
+                if (userData.familyId) {
+                    try {
+                        await addFamilyMember(userData.familyId, email, memberType);
+                        alert("Invitation sent successfully!");
+                        addMemberModal.style.display = "none";
+                    } catch (error) {
+                        console.error("Error sending invitation:", error);
+                        alert(`Error: ${error.message}`);
                     }
                 } else {
-                    alert("No authenticated user found.");
+                    alert("You don't have a family yet. Please create one first.");
                 }
-            } else if (invitationMethod === "link") {
-                const user = auth.currentUser;
-                if (user) {
-                    const userDoc = await getDoc(doc(db, "users", user.uid));
-                    if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        console.log("User data:", userData);
+            } else {
+                alert("User data not found.");
+            }
+        } else {
+            alert("No authenticated user found.");
+        }
+    } else if (invitationMethodValue === "link") {
+        const user = auth.currentUser;
+        if (user) {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                console.log("User data:", userData);
 
-                        if (userData.familyId) {
-                            const inviteLink = `${window.location.origin}/join-family.html?familyId=${userData.familyId}`;
-                            document.getElementById('inviteLink').textContent = inviteLink;
-                            inviteLinkContainer.style.display = "block";
-                        } else {
-                            alert("You don't have a family yet. Please create one first.");
-                        }
-                    }
+                if (userData.familyId) {
+                    const inviteLink = `${window.location.origin}/join-family.html?familyId=${userData.familyId}`;
+                    document.getElementById('inviteLink').textContent = inviteLink;
+                    inviteLinkContainer.style.display = "block";
+                } else {
+                    alert("You don't have a family yet. Please create one first.");
                 }
             }
-        });
-    } else {
-        console.error("Generate Invite Button not found in the DOM.");
+        }
     }
 });
-
 
 // Display family members
 function displayFamilyMembers(members) {
@@ -286,11 +229,6 @@ cancelAddMember.addEventListener('click', () => {
 });
 
 // Handle the invitation method selection
-const invitationMethod = document.getElementById('invitationMethod');
-const emailInviteSection = document.getElementById('emailInviteSection');
-const linkInviteSection = document.getElementById('linkInviteSection');
-const copyLinkBtn = document.getElementById('copyLinkBtn');
-
 invitationMethod.addEventListener('change', (e) => {
     if (e.target.value === "email") {
         emailInviteSection.style.display = "block";
@@ -309,14 +247,4 @@ copyLinkBtn.addEventListener('click', () => {
     }).catch(() => {
         alert("Failed to copy the link. Please try again.");
     });
-});
-
-// Cancel creating a family
-document.getElementById('cancelCreateFamily').addEventListener('click', () => {
-    addMemberModal.style.display = "none";
-});
-
-// Cancel adding a member
-document.getElementById('cancelAddMember').addEventListener('click', () => {
-    addMemberModal.style.display = "none";
 });

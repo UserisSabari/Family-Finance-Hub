@@ -19,9 +19,9 @@ body {
     border-right: 1px solid #e0e0e0;
     display: flex;
     flex-direction: column;
-    position: fixed; /* Make sidebar fixed */
-    height: 100vh; /* Full height of the viewport */
-    overflow-y: auto; /* Enable scrolling if content overflows */
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar-brand {
@@ -103,7 +103,7 @@ body {
     flex-grow: 1;
     padding: 20px 30px;
     background-color: #fff;
-    margin-left: 220px; /* Add margin to avoid overlap with the fixed sidebar */
+    margin-left: 220px;
 }
 
 .breadcrumb {
@@ -166,7 +166,7 @@ body {
     background-color: #008c7a;
 }
 
-/* Family Name Modal Styles */
+/* Shared Modal Styles */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -197,18 +197,18 @@ body {
     color: #333;
 }
 
-.modal-form-group {
+.form-group {
     margin-bottom: 20px;
 }
 
-.modal-label {
+.form-label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
     color: #555;
 }
 
-.modal-input {
+.form-input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -217,7 +217,7 @@ body {
     color: #333;
 }
 
-.modal-input:focus {
+.form-input:focus {
     outline: none;
     border-color: #00a389;
 }
@@ -229,7 +229,7 @@ body {
     margin-top: 20px;
 }
 
-.modal-btn {
+.btn {
     padding: 10px 15px;
     border-radius: 6px;
     font-weight: 500;
@@ -237,24 +237,50 @@ body {
     transition: background-color 0.2s;
 }
 
-.modal-btn-cancel {
+.btn-cancel {
     background-color: #f0f0f0;
     border: none;
     color: #333;
 }
 
-.modal-btn-cancel:hover {
+.btn-cancel:hover {
     background-color: #e0e0e0;
 }
 
-.modal-btn-submit {
+.btn-submit {
     background-color: #00a389;
     border: none;
     color: white;
 }
 
-.modal-btn-submit:hover {
+.btn-submit:hover {
     background-color: #008c7a;
+}
+
+/* Specific styles for the Add Member Modal */
+#addMemberModal .invite-link-container {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 15px;
+    display: none;
+}
+
+#addMemberModal .invite-link {
+    word-break: break-all;
+    font-size: 14px;
+    color: #333;
+}
+
+#addMemberModal .copy-btn {
+    background-color: #00a389;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
 /* Add member button */
@@ -275,6 +301,7 @@ body {
 .add-member-btn i {
     margin-right: 8px;
 }
+
 .add-member-btn:hover {
     background-color: #008c7a;
 }
@@ -411,107 +438,4 @@ body {
     font-size: 20px;
     font-weight: 700;
     color: #333;
-}
-
-/* Modal styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    display: none;
-}
-
-.modal {
-    background-color: white;
-    border-radius: 12px;
-    width: 500px;
-    max-width: 90%;
-    padding: 25px;
-}
-
-.modal-title {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-
-.modal-form-group {
-    margin-bottom: 20px;
-}
-
-.modal-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.modal-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.modal-input:focus {
-    outline: none;
-    border-color: #00a389;
-}
-
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.modal-btn {
-    padding: 10px 15px;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.modal-btn-cancel {
-    background-color: #f0f0f0;
-    border: none;
-    color: #333;
-}
-
-.modal-btn-submit {
-    background-color: #00a389;
-    border: none;
-    color: white;
-}
-
-.invite-link-container {
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 6px;
-    margin-top: 15px;
-    display: none;
-}
-
-.invite-link {
-    word-break: break-all;
-    font-size: 14px;
-    color: #333;
-}
-
-.copy-btn {
-    background-color: #00a389;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    font-size: 13px;
-    cursor: pointer;
-    margin-top: 10px;
 }
