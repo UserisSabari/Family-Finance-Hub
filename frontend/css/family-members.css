@@ -492,3 +492,52 @@ body {
         margin-left: 0; /* Remove the margin when the sidebar is hidden */
     }
 }
+/* Spending Cards */
+.spending-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.spending-card {
+    background-color: #f5fafa;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.spending-user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.spending-details {
+    flex-grow: 1;
+}
+
+.spending-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.spending-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.spending-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+}

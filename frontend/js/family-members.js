@@ -359,3 +359,58 @@ document.addEventListener('click', (e) => {
         sidebar.classList.remove('active');
     }
 });
+// Fetch and display family spending overview
+async function displayFamilySpendingOverview() {
+    const user = auth.currentUser;
+    if (user) {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.familyId) {
+                // Fetch family members
+                const members = await fetchFamilyMembers(userData.familyId);
+
+                // Fetch monthly spending for each member
+                const spendingData = await Promise.all(members.map(async (member) => {
+                    const spending = await fetchMonthlySpending(member.id); // Fetch spending for each member
+                    return {
+                        name: member.email,
+                        amount: spending.amount || 0 // Default to 0 if no spending data is found
+                    };
+                }));
+
+                // Display the spending data
+                displaySpendingCards(spendingData);
+            }
+        }
+    }
+}
+
+// Display spending cards
+function displaySpendingCards(spendingData) {
+    spendingCards.innerHTML = spendingData.map(member => `
+        <div class="spending-card">
+            <div class="spending-user-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="spending-details">
+                <div class="spending-label">Monthly Spending</div>
+                <div class="spending-name">${member.name}</div>
+                <div class="spending-amount">$${member.amount.toFixed(2)}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Fetch monthly spending for a member
+async function fetchMonthlySpending(memberId) {
+    const spendingDoc = await getDoc(doc(db, "monthlySpending", memberId));
+    if (spendingDoc.exists()) {
+        return spendingDoc.data();
+    } else {
+        return { amount: 0 }; // Default to 0 if no spending data is found
+    }
+}
+
+// Call the function to display family spending overview
+displayFamilySpendingOverview();
