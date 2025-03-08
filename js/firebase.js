@@ -74,7 +74,9 @@ export const addFamilyMember = async (familyId, email, memberType) => {
         await addDoc(collection(db, "families", familyId, "members"), {
             email: email,
             role: memberType,
-            status: "pending" // Pending until the member accepts the invitation
+            status: "pending", // Pending until the member accepts the invitation
+            createdAt: new Date()
+
         });
 
         console.log("Invitation sent to:", email);
