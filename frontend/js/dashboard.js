@@ -8,6 +8,7 @@ auth.onAuthStateChanged(async (user) => {
         const userDisplayName = document.getElementById('userDisplayName');
         const userRole = document.getElementById('userRole');
         const welcomeMessage = document.getElementById('welcomeMessage');
+        const userAvatar = document.querySelector('.user-avatar');
 
         // Fetch user details from Firestore
         const userDoc = await getDoc(doc(db, "users", user.uid));
@@ -18,6 +19,7 @@ auth.onAuthStateChanged(async (user) => {
             userDisplayName.textContent = userData.name || user.email;
             userRole.textContent = userData.role || "User"; // Default to "User" if role is not set
             welcomeMessage.textContent = `Welcome back, ${userData.name || user.email}!`;
+            userAvatar.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/32'}" alt="Profile" class="profile-icon">`;
 
             // Update financial summary
             document.getElementById('totalIncome').textContent = `$${userData.totalIncome?.toFixed(2) || "0.00"}`;
