@@ -377,3 +377,43 @@ body {
         padding: 10px; /* Reduce padding for smaller screens */
     }
 }
+/* Menu Toggle Button */
+.menu-toggle {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    z-index: 1000;
+    background-color: #f5fafa;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Sidebar */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Show the toggle button on smaller screens */
+    }
+
+    .sidebar {
+        width: 220px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: -220px; /* Hide the sidebar by default */
+        transition: left 0.3s ease;
+        z-index: 999;
+    }
+
+    .sidebar.active {
+        left: 0; /* Show the sidebar when active */
+    }
+
+    .main-content {
+        margin-left: 0; /* Remove the margin when the sidebar is hidden */
+    }
+}
