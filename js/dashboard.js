@@ -22,10 +22,10 @@ auth.onAuthStateChanged(async (user) => {
             userAvatar.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/32'}" alt="Profile" class="profile-icon">`;
 
             // Update financial summary
-            document.getElementById('totalIncome').textContent = `$${userData.totalIncome?.toFixed(2) || "0.00"}`;
-            document.getElementById('totalExpenses').textContent = `$${userData.totalExpenses?.toFixed(2) || "0.00"}`;
-            document.getElementById('savings').textContent = `$${userData.savings?.toFixed(2) || "0.00"}`;
-            document.getElementById('remainingBudget').textContent = `$${userData.remainingBudget?.toFixed(2) || "0.00"}`;
+            document.getElementById('totalIncome').textContent = `₹${userData.totalIncome?.toFixed(2) || "0.00"}`;
+            document.getElementById('totalExpenses').textContent = `₹${userData.totalExpenses?.toFixed(2) || "0.00"}`;
+            document.getElementById('savings').textContent = `₹${userData.savings?.toFixed(2) || "0.00"}`;
+            document.getElementById('remainingBudget').textContent = `₹${userData.remainingBudget?.toFixed(2) || "0.00"}`;
         }
 
         // Fetch recent transactions
@@ -39,7 +39,7 @@ auth.onAuthStateChanged(async (user) => {
                     <td class="transaction-category">
                         <i class="fas fa-shopping-cart"></i> ${transaction.category}
                     </td>
-                    <td class="transaction-amount">$${transaction.amount?.toFixed(2) || "0.00"}</td>
+                    <td class="transaction-amount">₹${transaction.amount?.toFixed(2) || "0.00"}</td>
                     <td class="transaction-user">${transaction.user || "N/A"}</td>
                     <td class="transaction-date">${transaction.date || "N/A"}</td>
                 </tr>
