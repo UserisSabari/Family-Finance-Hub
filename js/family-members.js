@@ -1,5 +1,5 @@
 import { auth, db, addFamilyMember, fetchFamilyMembers } from './firebase.js';
-import { doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { doc, getDoc, setDoc, collection, addDoc,deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // DOM Elements
 const addMemberBtn = document.getElementById('addMemberBtn');
@@ -269,17 +269,22 @@ async function editMember(memberId) {
 // Delete Member Functionality (Family Admin Only)
 async function deleteMember(memberId) {
     if (confirm("Are you sure you want to delete this member?")) {
-        await deleteDoc(doc(db, "familyMembers", memberId));
-        alert("Member deleted successfully!");
-        // Refresh the member list
-        const user = auth.currentUser;
-        if (user) {
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (userDoc.exists()) {
-                const userData = userDoc.data();
-                const members = await fetchFamilyMembers(userData.familyId);
-                displayFamilyMembers(members);
+        try {
+            await deleteDoc(doc(db, "familyMembers", memberId)); // Use deleteDoc to delete the member
+            alert("Member deleted successfully!");
+            // Refresh the member list
+            const user = auth.currentUser;
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const members = await fetchFamilyMembers(userData.familyId);
+                    displayFamilyMembers(members);
+                }
             }
+        } catch (error) {
+            console.error("Error deleting member:", error);
+            alert(`Error: ${error.message}`);
         }
     }
 }
