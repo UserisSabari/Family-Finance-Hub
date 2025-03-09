@@ -93,6 +93,14 @@ submitFamilyName.addEventListener('click', async () => {
                 createdAt: new Date()
             });
 
+            // Add the Family Admin as a member
+            await addDoc(collection(db, "families", familyRef.id, "members"), {
+                email: user.email, // Use the Family Admin's email
+                role: "Family Admin", // Use the user's role
+                status: "active", // Set the status as "active"
+                createdAt: new Date()
+            });
+
             // Update the user's document with the family ID
             await setDoc(doc(db, "users", user.uid), {
                 familyId: familyRef.id
@@ -276,6 +284,12 @@ async function deleteMember(memberId) {
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     if (userData.familyId) {
+                        // Prevent deleting the Family Admin
+                        if (memberId === familyAdminId) {
+                            alert("You cannot delete the Family Admin.");
+                            return;
+                        }
+
                         // Delete the member from Firestore
                         await deleteDoc(doc(db, "families", userData.familyId, "members", memberId));
 
