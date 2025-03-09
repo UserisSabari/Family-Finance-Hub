@@ -311,9 +311,14 @@ memberTabs.addEventListener('click', async (e) => {
         let filteredMembers = [];
         if (filter === "all") {
             filteredMembers = allMembers; // Show all members
-        } else {
-            filteredMembers = allMembers.filter(member => member.role === filter); // Filter by role
+        } else if (filter === "adults") {
+            filteredMembers = allMembers.filter(member => member.role === "Adult"); // Filter by role
+        } else if (filter === "children") {
+            filteredMembers = allMembers.filter(member => member.role === "Child"); // Filter by role
         }
+
+        console.log("Filter:", filter);
+        console.log("Filtered Members:", filteredMembers);
 
         // Display the filtered members
         displayFamilyMembers(filteredMembers);
