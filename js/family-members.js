@@ -270,14 +270,25 @@ async function editMember(memberId) {
 async function deleteMember(memberId) {
     if (confirm("Are you sure you want to delete this member?")) {
         try {
-            await deleteDoc(doc(db, "familyMembers", memberId)); // Delete the member from Firestore
-            alert("Member deleted successfully!");
+            const user = auth.currentUser;
+            if (user) {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    if (userData.familyId) {
+                        // Delete the member from Firestore
+                        await deleteDoc(doc(db, "families", userData.familyId, "members", memberId));
 
-            // Remove the deleted member from the allMembers array
-            allMembers = allMembers.filter(member => member.id !== memberId);
+                        // Remove the deleted member from the allMembers array
+                        allMembers = allMembers.filter(member => member.id !== memberId);
 
-            // Refresh the member list
-            displayFamilyMembers(allMembers);
+                        // Refresh the member list
+                        displayFamilyMembers(allMembers);
+
+                        alert("Member deleted successfully!");
+                    }
+                }
+            }
         } catch (error) {
             console.error("Error deleting member:", error);
             alert(`Error: ${error.message}`);
