@@ -1,13 +1,13 @@
 // Main JavaScript file for Budget Overview Page
 
 // DOM elements
-const tabItems = document.querySelectorAll('.tab-nav .tab-item');
-const addBudgetBtn = document.querySelector('.btn-primary');
-const adjustBudgetBtn = document.querySelector('.btn-secondary');
-const viewDetailsButtons = document.querySelectorAll('.btn-view');
-const editButtons = document.querySelectorAll('.btn-edit');
-const deleteButtons = document.querySelectorAll('.btn-delete');
-const viewAllTransactionsBtn = document.querySelector('.btn-view-all');
+const tabItems = document.querySelectorAll('.time-period-tabs .tab');
+const addBudgetBtn = document.querySelector('.add-budget-btn');
+const adjustBudgetBtn = document.querySelector('.adjust-budget-btn');
+const viewDetailsButtons = document.querySelectorAll('.view-details-btn');
+const editButtons = document.querySelectorAll('.edit-transaction-btn');
+const deleteButtons = document.querySelectorAll('.delete-transaction-btn');
+const viewAllTransactionsBtn = document.querySelector('.view-all-transactions-btn');
 
 // Current view state
 let currentView = 'monthly';
@@ -15,20 +15,54 @@ let currentData = {};
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
+    // Set up Firebase
+    initializeFirebase();
+    
     // Fetch initial data based on default view (monthly)
     fetchBudgetData('monthly');
     
     // Set up event listeners
     setupEventListeners();
+    
+    // Load user info
+    loadUserInfo();
 });
+
+// Initialize Firebase
+function initializeFirebase() {
+    // This is a placeholder for Firebase initialization
+    // You would add your Firebase configuration here
+    console.log('Firebase initialized');
+}
+
+// Load user info from Firestore
+function loadUserInfo() {
+    // This is a placeholder - you would fetch user info from Firestore
+    const userDisplayName = document.getElementById('userDisplayName');
+    const userRole = document.getElementById('userRole');
+    
+    // Simulating fetch from Firestore
+    setTimeout(() => {
+        userDisplayName.textContent = 'Smith Family';
+        userRole.textContent = 'Admin';
+    }, 500);
+}
 
 // Set up all event listeners
 function setupEventListeners() {
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+    
     // Tab navigation
     tabItems.forEach(tab => {
         tab.addEventListener('click', () => {
             // Get selected view
-            const view = tab.textContent.toLowerCase();
+            const view = tab.getAttribute('data-period');
             
             // Update active tab
             tabItems.forEach(item => item.classList.remove('active'));
@@ -50,79 +84,114 @@ function setupEventListeners() {
         openAdjustBudgetModal();
     });
     
-    // View details buttons
-    viewDetailsButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            // Get the expense category from parent element
-            const expenseCard = event.target.closest('.expense-card');
-            const category = expenseCard.querySelector('.expense-category').textContent;
-            
-            // Navigate to detailed view for this category
+    // Set up event delegation for dynamically added elements
+    document.addEventListener('click', (event) => {
+        // View details buttons
+        if (event.target.closest('.view-details-btn')) {
+            const button = event.target.closest('.view-details-btn');
+            const category = button.getAttribute('data-category');
             navigateToCategoryDetails(category);
-        });
-    });
-    
-    // Edit transaction buttons
-    editButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            const row = event.target.closest('tr');
-            const transactionId = row.dataset.id; // Assuming you add data-id attribute to rows
-            
+        }
+        
+        // Edit transaction buttons
+        if (event.target.closest('.edit-transaction-btn')) {
+            const button = event.target.closest('.edit-transaction-btn');
+            const row = button.closest('tr');
+            const transactionId = row.getAttribute('data-id');
             openEditTransactionModal(transactionId);
-        });
-    });
-    
-    // Delete transaction buttons
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            const row = event.target.closest('tr');
-            const transactionId = row.dataset.id; // Assuming you add data-id attribute to rows
-            
+        }
+        
+        // Delete transaction buttons
+        if (event.target.closest('.delete-transaction-btn')) {
+            const button = event.target.closest('.delete-transaction-btn');
+            const row = button.closest('tr');
+            const transactionId = row.getAttribute('data-id');
             confirmDeleteTransaction(transactionId);
-        });
+        }
     });
     
     // View all transactions button
     viewAllTransactionsBtn.addEventListener('click', () => {
-        window.location.href = '/transactions';
+        window.location.href = 'transactions.html';
     });
 }
 
-// Fetch budget data from backend
+// Fetch budget data from Firestore
 function fetchBudgetData(view) {
     // Show loading state
     showLoading();
     
-    // Endpoint URL based on view (monthly, quarterly, yearly)
-    const endpoint = `/api/budget/${view}`;
+    // In a real implementation, you would fetch from Firestore here
+    // For now, we'll simulate a fetch with a timeout
     
-    // Fetch data from backend
-    fetch(endpoint)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Store data for later use
-            currentData = data;
-            
-            // Update UI with fetched data
-            updateDashboard(data);
-            
-            // Hide loading state
-            hideLoading();
-        })
-        .catch(error => {
-            console.error('Error fetching budget data:', error);
-            
-            // Show error message to user
-            showErrorMessage('Failed to load budget data. Please try again later.');
-            
-            // Hide loading state
-            hideLoading();
+    setTimeout(() => {
+        // This is where you would normally query Firestore
+        // const db = firebase.firestore();
+        // db.collection('budgets').doc(view).get().then((doc) => {
+        //     if (doc.exists) {
+        //         const data = doc.data();
+        //         updateDashboard(data);
+        //     }
+        // }).catch((error) => {
+        //     console.error('Error fetching budget data:', error);
+        //     showErrorMessage('Failed to load budget data. Please try again later.');
+        // }).finally(() => {
+        //     hideLoading();
+        // });
+        
+        // Simulate data for demonstration
+        const mockData = getMockData(view);
+        currentData = mockData;
+        updateDashboard(mockData);
+        hideLoading();
+    }, 500);
+}
+
+// Get mock data for demonstration
+function getMockData(view) {
+    // Base data
+    const baseData = {
+        summary: {
+            totalIncome: 5250.00,
+            totalExpenses: 3450.75,
+            remainingBudget: 1799.25,
+            savings: 850.00
+        },
+        categories: [
+            { id: 1, name: 'Housing', percentage: 35, amount: 1200.00 },
+            { id: 2, name: 'Food', percentage: 25, amount: 850.50 },
+            { id: 3, name: 'Transportation', percentage: 13, amount: 450.25 },
+            { id: 4, name: 'Utilities', percentage: 10, amount: 350.00 }
+        ],
+        transactions: [
+            { id: 1, description: 'Grocery Shopping', category: 'Food', amount: 125.50, member: 'John Smith', date: '2023-07-15' },
+            { id: 2, description: 'Electricity Bill', category: 'Utilities', amount: 85.25, member: 'Sarah Smith', date: '2023-07-14' },
+            { id: 3, description: 'School Supplies', category: 'Education', amount: 65.00, member: 'Emma Smith', date: '2023-07-12' },
+            { id: 4, description: 'Gas', category: 'Transportation', amount: 45.75, member: 'John Smith', date: '2023-07-10' },
+            { id: 5, description: 'Internet Bill', category: 'Utilities', amount: 75.00, member: 'Sarah Smith', date: '2023-07-8' }
+        ]
+    };
+    
+    // Adjust values based on view
+    if (view === 'quarterly') {
+        baseData.summary.totalIncome *= 3;
+        baseData.summary.totalExpenses *= 3;
+        baseData.summary.remainingBudget *= 3;
+        baseData.summary.savings *= 3;
+        baseData.categories.forEach(category => {
+            category.amount *= 3;
         });
+    } else if (view === 'yearly') {
+        baseData.summary.totalIncome *= 12;
+        baseData.summary.totalExpenses *= 12;
+        baseData.summary.remainingBudget *= 12;
+        baseData.summary.savings *= 12;
+        baseData.categories.forEach(category => {
+            category.amount *= 12;
+        });
+    }
+    
+    return baseData;
 }
 
 // Update dashboard UI with data
@@ -140,47 +209,38 @@ function updateDashboard(data) {
 // Update summary cards with data
 function updateSummaryCards(summary) {
     // Total Income
-    const totalIncomeElement = document.querySelector('.summary-cards .summary-card:nth-child(1) .card-amount');
-    totalIncomeElement.textContent = formatCurrency(summary.totalIncome);
+    document.querySelector('.income-amount').textContent = formatCurrency(summary.totalIncome);
     
     // Total Expenses
-    const totalExpensesElement = document.querySelector('.summary-cards .summary-card:nth-child(2) .card-amount');
-    totalExpensesElement.textContent = formatCurrency(summary.totalExpenses);
+    document.querySelector('.expenses-amount').textContent = formatCurrency(summary.totalExpenses);
     
     // Remaining Budget
-    const remainingBudgetElement = document.querySelector('.summary-cards .summary-card:nth-child(3) .card-amount');
-    remainingBudgetElement.textContent = formatCurrency(summary.remainingBudget);
+    document.querySelector('.budget-amount').textContent = formatCurrency(summary.remainingBudget);
     
     // Monthly Savings
-    const monthlySavingsElement = document.querySelector('.summary-cards .summary-card:nth-child(4) .card-amount');
-    monthlySavingsElement.textContent = formatCurrency(summary.savings);
+    document.querySelector('.savings-amount').textContent = formatCurrency(summary.savings);
 }
 
 // Update expense categories with data
 function updateExpenseCategories(categories) {
-    const categoryCards = document.querySelectorAll('.expense-categories .expense-card');
+    const expenseCategoriesContainer = document.querySelector('.expense-categories');
     
-    // Loop through each category and update the corresponding card
-    categories.forEach((category, index) => {
-        if (index < categoryCards.length) {
-            const card = categoryCards[index];
-            
-            // Update category name
-            const categoryNameElement = card.querySelector('.expense-category');
-            categoryNameElement.textContent = category.name;
-            
-            // Update percentage
-            const percentageElement = card.querySelector('.expense-percentage');
-            percentageElement.textContent = `${category.percentage}% of expenses`;
-            
-            // Update amount
-            const amountElement = card.querySelector('.expense-amount');
-            amountElement.textContent = formatCurrency(category.amount);
-            
-            // Add data-id attribute for the view details button
-            const viewDetailsBtn = card.querySelector('.btn-view');
-            viewDetailsBtn.dataset.id = category.id;
-        }
+    // Clear existing cards
+    expenseCategoriesContainer.innerHTML = '';
+    
+    // Add category cards
+    categories.forEach(category => {
+        const categoryCard = document.createElement('div');
+        categoryCard.className = 'category-card';
+        
+        categoryCard.innerHTML = `
+            <div class="category-percentage">${category.percentage}% of expenses</div>
+            <div class="category-name">${category.name}</div>
+            <div class="category-amount">${formatCurrency(category.amount)}</div>
+            <button class="view-details-btn" data-category="${category.name.toLowerCase()}">View Details</button>
+        `;
+        
+        expenseCategoriesContainer.appendChild(categoryCard);
     });
 }
 
@@ -194,42 +254,22 @@ function updateTransactions(transactions) {
     // Add new rows
     transactions.forEach(transaction => {
         const row = document.createElement('tr');
-        row.dataset.id = transaction.id;
+        row.setAttribute('data-id', transaction.id);
         
         row.innerHTML = `
-            <td>${transaction.description}</td>
-            <td>${transaction.category}</td>
-            <td>${formatCurrency(transaction.amount)}</td>
-            <td>${transaction.member}</td>
-            <td>${formatDate(transaction.date)}</td>
-            <td>
-                <button class="btn-edit">edit</button>
-                <button class="btn-delete">delete</button>
+            <td class="transaction-icon-cell"><i class="fas fa-receipt"></i></td>
+            <td class="transaction-description">${transaction.description}</td>
+            <td class="transaction-category">${transaction.category}</td>
+            <td class="transaction-amount">${formatCurrency(transaction.amount)}</td>
+            <td class="transaction-member">${transaction.member}</td>
+            <td class="transaction-date">${formatDate(transaction.date)}</td>
+            <td class="transaction-actions">
+                <button class="edit-transaction-btn"><i class="fas fa-edit"></i></button>
+                <button class="delete-transaction-btn"><i class="fas fa-trash"></i></button>
             </td>
         `;
         
         tableBody.appendChild(row);
-    });
-    
-    // Reattach event listeners to new buttons
-    const newEditButtons = tableBody.querySelectorAll('.btn-edit');
-    newEditButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            const row = event.target.closest('tr');
-            const transactionId = row.dataset.id;
-            
-            openEditTransactionModal(transactionId);
-        });
-    });
-    
-    const newDeleteButtons = tableBody.querySelectorAll('.btn-delete');
-    newDeleteButtons.forEach(button => {
-        button.addEventListener('click', (event) => {
-            const row = event.target.closest('tr');
-            const transactionId = row.dataset.id;
-            
-            confirmDeleteTransaction(transactionId);
-        });
     });
 }
 
@@ -238,8 +278,9 @@ function openAddBudgetModal() {
     // This is a placeholder - you would implement a modal in your UI
     console.log('Opening add budget modal');
     
-    // Example: redirect to add budget page
-    // window.location.href = '/budget/add';
+    // Example: show modal
+    // const modal = document.getElementById('addBudgetModal');
+    // modal.style.display = 'block';
 }
 
 // Open modal for adjusting budget
@@ -247,8 +288,9 @@ function openAdjustBudgetModal() {
     // This is a placeholder - you would implement a modal in your UI
     console.log('Opening adjust budget modal');
     
-    // Example: redirect to adjust budget page
-    // window.location.href = '/budget/adjust';
+    // Example: show modal
+    // const modal = document.getElementById('adjustBudgetModal');
+    // modal.style.display = 'block';
 }
 
 // Navigate to detailed view for a category
@@ -257,7 +299,7 @@ function navigateToCategoryDetails(category) {
     const categorySlug = category.toLowerCase().replace(' ', '-');
     
     // Navigate to category details page
-    window.location.href = `/budget/category/${categorySlug}`;
+    window.location.href = `category-details.html?category=${categorySlug}`;
 }
 
 // Open modal for editing a transaction
@@ -265,12 +307,25 @@ function openEditTransactionModal(transactionId) {
     // This is a placeholder - you would implement a modal in your UI
     console.log(`Opening edit modal for transaction ${transactionId}`);
     
-    // Example: redirect to edit transaction page
-    // window.location.href = `/transactions/edit/${transactionId}`;
+    // Find transaction in current data
+    const transaction = currentData.transactions.find(t => t.id == transactionId);
+    
+    if (transaction) {
+        // Example: show modal and populate with data
+        // const modal = document.getElementById('editTransactionModal');
+        // document.getElementById('editTransactionId').value = transaction.id;
+        // document.getElementById('editTransactionDescription').value = transaction.description;
+        // document.getElementById('editTransactionCategory').value = transaction.category;
+        // document.getElementById('editTransactionAmount').value = transaction.amount;
+        // document.getElementById('editTransactionMember').value = transaction.member;
+        // document.getElementById('editTransactionDate').value = formatDateForInput(transaction.date);
+        // modal.style.display = 'block';
+    }
 }
 
 // Confirm and delete a transaction
 function confirmDeleteTransaction(transactionId) {
+    // This is where you'd normally show a confirmation dialog
     const confirmed = confirm('Are you sure you want to delete this transaction?');
     
     if (confirmed) {
@@ -278,40 +333,40 @@ function confirmDeleteTransaction(transactionId) {
     }
 }
 
-// Delete transaction from backend
+// Delete transaction from Firestore
 function deleteTransaction(transactionId) {
     // Show loading state
     showLoading();
     
-    // Delete request to backend
-    fetch(`/api/transactions/${transactionId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Show success message
-            showSuccessMessage('Transaction deleted successfully');
-            
-            // Refresh data
-            fetchBudgetData(currentView);
-        })
-        .catch(error => {
-            console.error('Error deleting transaction:', error);
-            
-            // Show error message
-            showErrorMessage('Failed to delete transaction. Please try again.');
-            
-            // Hide loading state
-            hideLoading();
-        });
+    // In a real implementation, you would delete from Firestore
+    // const db = firebase.firestore();
+    // db.collection('transactions').doc(transactionId).delete()
+    //   .then(() => {
+    //     showSuccessMessage('Transaction deleted successfully');
+    //     fetchBudgetData(currentView);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error deleting transaction:', error);
+    //     showErrorMessage('Failed to delete transaction. Please try again.');
+    //   })
+    //   .finally(() => {
+    //     hideLoading();
+    //   });
+    
+    // Simulate delete for demonstration
+    setTimeout(() => {
+        // Remove transaction from current data
+        currentData.transactions = currentData.transactions.filter(t => t.id != transactionId);
+        
+        // Update UI
+        updateTransactions(currentData.transactions);
+        
+        // Show success message
+        showSuccessMessage('Transaction deleted successfully');
+        
+        // Hide loading state
+        hideLoading();
+    }, 500);
 }
 
 // Helper function to format currency
@@ -322,56 +377,70 @@ function formatCurrency(amount) {
 // Helper function to format date
 function formatDate(dateString) {
     const date = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
+}
+
+// Helper function to format date for input fields (YYYY-MM-DD)
+function formatDateForInput(dateString) {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
 }
 
 // Show loading state
 function showLoading() {
-    // This is a placeholder - you would implement loading state in your UI
-    console.log('Loading...');
+    // Check if loading overlay already exists
+    if (document.querySelector('.loading-overlay')) return;
     
-    // Example: add loading overlay
-    // const overlay = document.createElement('div');
-    // overlay.className = 'loading-overlay';
-    // overlay.innerHTML = '<div class="spinner"></div>';
-    // document.body.appendChild(overlay);
+    // Create loading overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'loading-overlay';
+    
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner';
+    
+    overlay.appendChild(spinner);
+    document.body.appendChild(overlay);
 }
 
 // Hide loading state
 function hideLoading() {
-    // This is a placeholder - you would implement loading state in your UI
-    console.log('Loading complete');
-    
-    // Example: remove loading overlay
-    // const overlay = document.querySelector('.loading-overlay');
-    // if (overlay) {
-    //     overlay.remove();
-    // }
+    const overlay = document.querySelector('.loading-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
 }
 
 // Show success message
 function showSuccessMessage(message) {
-    // This is a placeholder - you would implement notification in your UI
-    console.log('Success:', message);
-    
-    // Example: show toast notification
-    // const toast = document.createElement('div');
-    // toast.className = 'toast toast-success';
-    // toast.textContent = message;
-    // document.body.appendChild(toast);
-    // setTimeout(() => toast.remove(), 3000);
+    showNotification(message, 'success');
 }
 
 // Show error message
 function showErrorMessage(message) {
-    // This is a placeholder - you would implement notification in your UI
-    console.error('Error:', message);
+    showNotification(message, 'error');
+}
+
+// Show notification
+function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
     
-    // Example: show toast notification
-    // const toast = document.createElement('div');
-    // toast.className = 'toast toast-error';
-    // toast.textContent = message;
-    // document.body.appendChild(toast);
-    // setTimeout(() => toast.remove(), 3000);
+    // Add to DOM
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Remove after delay
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
 }

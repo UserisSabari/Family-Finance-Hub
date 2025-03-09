@@ -71,28 +71,116 @@
         </div>
 
         <!-- Summary Cards -->
-        <div class="summary-cards" id="summaryCards"></div>
+        <div class="summary-cards" id="summaryCards">
+            <!-- Income Card -->
+            <div class="summary-card">
+                <div class="card-icon income-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="card-label">Total Income</div>
+                <div class="card-amount" id="totalIncome">$5,250.00</div>
+                <div class="card-description">Total monthly income across all family members</div>
+            </div>
+            
+            <!-- Expenses Card -->
+            <div class="summary-card">
+                <div class="card-icon expenses-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div class="card-label">Total Expenses</div>
+                <div class="card-amount" id="totalExpenses">$3,450.75</div>
+                <div class="card-description">Total monthly expenses across all categories</div>
+            </div>
+            
+            <!-- Remaining Budget Card -->
+            <div class="summary-card">
+                <div class="card-icon budget-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="card-label">Remaining Budget</div>
+                <div class="card-amount" id="remainingBudget">$1,799.25</div>
+                <div class="card-description">Remaining budget for this month</div>
+            </div>
+            
+            <!-- Savings Card -->
+            <div class="summary-card">
+                <div class="card-icon savings-icon">
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+                <div class="card-label">Monthly Savings</div>
+                <div class="card-amount" id="monthlySavings">$850.00</div>
+                <div class="card-description">Amount saved this month</div>
+            </div>
+        </div>
 
         <!-- Expense Categories -->
         <h2 class="section-title">Expense Categories</h2>
-        <div class="expense-categories" id="expenseCategories"></div>
+        <div class="expense-categories" id="expenseCategories">
+            <!-- Housing Category -->
+            <div class="expense-card" data-category="housing">
+                <div class="expense-percentage">35% of expenses</div>
+                <div class="category-icon house-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="expense-category">Housing</div>
+                <div class="expense-amount">$1,200.00</div>
+                <button class="view-details-btn">View Details</button>
+            </div>
+            
+            <!-- Food Category -->
+            <div class="expense-card" data-category="food">
+                <div class="expense-percentage">25% of expenses</div>
+                <div class="category-icon food-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="expense-category">Food</div>
+                <div class="expense-amount">$850.50</div>
+                <button class="view-details-btn">View Details</button>
+            </div>
+            
+            <!-- Transportation Category -->
+            <div class="expense-card" data-category="transportation">
+                <div class="expense-percentage">13% of expenses</div>
+                <div class="category-icon transport-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="expense-category">Transportation</div>
+                <div class="expense-amount">$450.25</div>
+                <button class="view-details-btn">View Details</button>
+            </div>
+            
+            <!-- Utilities Category -->
+            <div class="expense-card" data-category="utilities">
+                <div class="expense-percentage">10% of expenses</div>
+                <div class="category-icon utilities-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="expense-category">Utilities</div>
+                <div class="expense-amount">$350.00</div>
+                <button class="view-details-btn">View Details</button>
+            </div>
+        </div>
 
         <!-- Recent Transactions -->
         <h2 class="section-title">Recent Transactions</h2>
-        <table class="transactions-table" id="transactionsTable">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>User</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <button class="btn-view-all">View All Transactions</button>
+        <div class="transactions-container">
+            <table class="transactions-table" id="transactionsTable">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Transactions will be populated by JavaScript -->
+                </tbody>
+            </table>
+            <button class="view-all-btn" id="viewAllTransactions">View All Transactions</button>
+        </div>
     </div>
 
     <!-- JavaScript -->
