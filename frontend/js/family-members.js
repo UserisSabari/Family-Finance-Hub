@@ -30,6 +30,7 @@ const userAvatar = document.querySelector('.user-avatar');
 let currentUserRole = null; // Store the current user's role
 let familyAdminId = null; // Store the Family Admin's UID
 let allMembers = []; // Store all family members for filtering
+let currentUserId = null;// Define currentUserId globally
 
 // Check if the user has a family
 auth.onAuthStateChanged(async (user) => {
@@ -37,6 +38,7 @@ auth.onAuthStateChanged(async (user) => {
         const userDisplayName = document.getElementById('userDisplayName');
         const userRole = document.getElementById('userRole');
         const userDoc = await getDoc(doc(db, "users", user.uid));
+        currentUserId = user.uid; // Initialize currentUserId when the user is authenticated
         
         if (userDoc.exists()) {
             const userData = userDoc.data();
