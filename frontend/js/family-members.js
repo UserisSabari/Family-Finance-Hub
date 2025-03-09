@@ -320,7 +320,6 @@ memberTabs.addEventListener('click', async (e) => {
     }
 });
 
-
 // Update Profile Icon
 // auth.onAuthStateChanged((user) => {
 //     if (user) {
