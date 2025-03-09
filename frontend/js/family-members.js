@@ -1,5 +1,5 @@
 import { auth, db, addFamilyMember, fetchFamilyMembers } from './firebase.js';
-import { doc, getDoc, setDoc, collection, addDoc,deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { doc, getDoc, setDoc, collection, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // DOM Elements
 const addMemberBtn = document.getElementById('addMemberBtn');
