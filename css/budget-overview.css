@@ -9,13 +9,13 @@
 body {
     display: flex;
     min-height: 100vh;
-    background-color: #f0f7f7;
+    background-color: #f8f9fa;
 }
 
 /* Sidebar Styles */
 .sidebar {
     width: 220px;
-    background-color: #f5fafa;
+    background-color: #ffffff;
     padding: 20px 0;
     border-right: 1px solid #e0e0e0;
     display: flex;
@@ -88,6 +88,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
 }
 
 .user-avatar img {
@@ -98,6 +99,7 @@ body {
 }
 
 .user-info {
+    margin-left: 10px;
     font-size: 14px;
 }
 
@@ -137,7 +139,7 @@ body {
 .main-content {
     flex-grow: 1;
     padding: 20px 30px;
-    background-color: #fff;
+    background-color: #f8f9fa;
     margin-left: 220px;
     transition: margin-left 0.3s ease;
 }
@@ -180,7 +182,7 @@ body {
 .action-buttons {
     display: flex;
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .btn-primary {
@@ -198,11 +200,14 @@ body {
 .btn-primary i {
     margin-right: 8px;
 }
+.btn-primary:hower {
+    background-color: #008c7a;
+}
 
 .btn-secondary {
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     color: #555;
-    border: none;
+    border: 1px solid #e0e0e0;
     padding: 10px 20px;
     border-radius: 30px;
     cursor: pointer;
@@ -210,26 +215,26 @@ body {
 }
 
 .btn-secondary:hover {
-    background-color: #e0e0e0;
+    background-color: #f0f0f0;
 }
 
 /* Tab Navigation */
 .tab-nav {
     display: flex;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     border-bottom: 1px solid #ddd;
 }
 
 .tab-item {
-    padding: 12px 20px;
+    padding: 10px 20px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px;
     color: #555;
     position: relative;
 }
 
 .tab-item.active {
-    color: #333;
+    color: #00a389;
     font-weight: 500;
 }
 
@@ -248,23 +253,44 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .summary-card {
-    background-color: #f5fafa;
-    border-radius: 12px;
+    background-color: #ffffff;
+    border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.card-tag {
-    color: #00a389;
-    font-size: 12px;
-    margin-bottom: 15px;
+.card-icon {
+    margin-bottom: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
 }
 
-.card-title {
+.income-icon {
+    background-color: #36d7b7;
+}
+
+.expenses-icon {
+    background-color: #36d7b7;
+}
+
+.budget-icon {
+    background-color: #36d7b7;
+}
+
+.savings-icon {
+    background-color: #36d7b7;
+}
+
+.card-label {
     font-size: 14px;
     color: #666;
     margin-bottom: 10px;
@@ -273,7 +299,7 @@ body {
 .card-amount {
     font-size: 24px;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: #333;
 }
 
@@ -283,26 +309,60 @@ body {
     line-height: 1.4;
 }
 
+/* Section Title */
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
 /* Expense Categories */
 .expense-categories {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .expense-card {
-    background-color: #f5fafa;
-    border-radius: 12px;
+    background-color: #ffffff;
+    border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .expense-percentage {
     font-size: 14px;
-    font-weight: 500;
+    color: #666;
     margin-bottom: 10px;
-    color: #555;
+}
+
+.category-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.house-icon {
+    background-color: #36d7b7;
+}
+
+.food-icon {
+    background-color: #36d7b7;
+}
+
+.transport-icon {
+    background-color: #36d7b7;
+}
+
+.utilities-icon {
+    background-color: #36d7b7;
 }
 
 .expense-category {
@@ -318,14 +378,19 @@ body {
     margin-bottom: 15px;
 }
 
-.btn-view {
+.view-details-btn {
     background-color: #00a389;
     color: white;
     border: none;
     padding: 8px 15px;
-    border-radius: 30px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+}
+
+/* Transactions Container */
+.transactions-container {
+    margin-bottom: 30px;
 }
 
 /* Transactions Table */
@@ -333,26 +398,28 @@ body {
     width: 100%;
     border-collapse: collapse;
     background-color: white;
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
 .transactions-table th,
 .transactions-table td {
-    padding: 15px 20px;
+    padding: 12px 15px;
     text-align: left;
 }
 
 .transactions-table th {
-    background-color: #f9f9f9;
+    background-color: #f8f9fa;
     font-weight: 500;
     color: #666;
+    font-size: 14px;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .transactions-table tr {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .transactions-table tr:last-child {
@@ -361,30 +428,84 @@ body {
 
 .transactions-table td {
     color: #333;
-}
-
-.btn-edit,
-.btn-delete {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
     font-size: 14px;
 }
 
-.btn-edit img,
-.btn-delete img {
-    width: 20px;
-    height: 20px;
+.transactions-table td button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #666;
 }
 
-.btn-view-all {
+.transactions-table td button:hover {
+    color: #333;
+}
+
+.view-all-btn {
     background-color: #f0f0f0;
     color: #555;
     border: none;
     padding: 8px 20px;
-    border-radius: 30px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 15px;
     display: inline-block;
+}
+
+/* Loading state */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #00a389;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Toast notifications */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.toast-success {
+    background-color: #4caf50;
+}
+
+.toast-error {
+    background-color: #f44336;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
