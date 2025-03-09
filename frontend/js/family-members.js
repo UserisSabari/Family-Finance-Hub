@@ -278,17 +278,17 @@ async function editMember(memberId) {
 async function deleteMember(memberId) {
     if (confirm("Are you sure you want to delete this member?")) {
         try {
+             // Prevent deleting the Family Admin
+             if (memberId === familyAdminId) {
+                alert("You cannot delete the Family Admin.");
+                return;
+            }
             const user = auth.currentUser;
             if (user) {
                 const userDoc = await getDoc(doc(db, "users", user.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     if (userData.familyId) {
-                        // Prevent deleting the Family Admin
-                        if (memberId === familyAdminId) {
-                            alert("You cannot delete the Family Admin.");
-                            return;
-                        }
 
                         // Delete the member from Firestore
                         await deleteDoc(doc(db, "families", userData.familyId, "members", memberId));
