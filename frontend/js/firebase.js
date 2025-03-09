@@ -123,7 +123,7 @@ export const addFamilyMember = async (familyId, email, memberType) => {
         });
 
         console.log("Invitation sent to:", email);
-        alert("Invitation sent successfully!");
+        // alert("Invitation sent successfully!");
     } catch (error) {
         console.error("Error sending invitation:", error);
         alert(`Error: ${error.message}`);
