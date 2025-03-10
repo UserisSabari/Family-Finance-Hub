@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Family Finance</title>
+    <link rel="stylesheet" href="css/settings.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-brand">Family Finance</div>
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="family-members.html" class="menu-item">
+                <i class="fas fa-users"></i> Family Members
+            </a>
+            <a href="budget-overview.html" class="menu-item">
+                <i class="fas fa-chart-pie"></i> Budget Overview
+            </a>
+            <a href="financial-goals.html" class="menu-item">
+                <i class="fas fa-bullseye"></i> Financial Goals
+            </a>
+            <a href="reports.html" class="menu-item">
+                <i class="fas fa-file-alt"></i> Reports
+            </a>
+            <a href="settings.html" class="menu-item  active">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="userDisplayName">Loading...</div>
+                <div class="user-role" id="userRole">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+            <a href="dashboard.html">Home</a>
+            <span class="breadcrumb-arrow">›</span>
+            <span>Settings</span>
+        </div>
+
+        <!-- Page Title -->
+        <h1 class="page-title">Settings</h1>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <div class="tab-item active">Account</div>
+            <div class="tab-item">Family</div>
+            <div class="tab-item">Notifications</div>
+            <div class="tab-item">Preferences</div>
+            <div class="tab-item">Integrations</div>
+        </div>
+
+        <!-- Profile Information Section -->
+        <h2 class="section-title">Profile Information</h2>
+        <div class="profile-section">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-name" id="profileName">Loading...</div>
+                <div class="profile-role" id="profileRole">Loading...</div>
+                <div class="profile-buttons">
+                    <button class="btn btn-primary">Edit Profile</button>
+                    <button class="btn btn-secondary">Change Password</button>
+                </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="profile-card">
+                <div class="profile-icon">
+                    <i class="fas fa-address-card"></i>
+                </div>
+                <div class="profile-name">Contact Information</div>
+                <div class="profile-role" id="contactInfo">Loading...</div>
+                <div class="profile-buttons">
+                    <button class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Settings Section -->
+        <h2 class="section-title">Account Settings</h2>
+
+        <!-- Two-Factor Authentication -->
+        <div class="settings-row">
+            <div class="settings-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="settings-content">
+                <div class="settings-title">Two-Factor Authentication</div>
+                <div class="settings-description">Add an extra layer of security to your account</div>
+            </div>
+            <div class="settings-action">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="twoFactorToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Email Notifications -->
+        <div class="settings-row">
+            <div class="settings-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="settings-content">
+                <div class="settings-title">Email Notifications</div>
+                <div class="settings-description">Receive important updates via email</div>
+            </div>
+            <div class="settings-action">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="emailToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Currency -->
+        <div class="settings-row">
+            <div class="settings-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="settings-content">
+                <div class="settings-title">Currency</div>
+                <div class="settings-description" id="currencyDescription">Loading...</div>
+            </div>
+            <div class="settings-action">
+                <select class="select-dropdown" id="currencySelect">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                    <option value="CAD">CAD</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Date Format -->
+        <div class="settings-row">
+            <div class="settings-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="settings-content">
+                <div class="settings-title">Date Format</div>
+                <div class="settings-description" id="dateFormatDescription">Loading...</div>
+            </div>
+            <div class="settings-action">
+                <select class="select-dropdown" id="dateFormatSelect">
+                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Privacy & Data Section -->
+        <h2 class="section-title">Privacy & Data</h2>
+
+        <!-- Data Backup -->
+        <div class="settings-row">
+            <div class="settings-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="settings-content">
+                <div class="settings-title">Data Backup</div>
+                <div class="settings-description" id="lastBackupDate">Loading...</div>
+            </div>
+            <div class="settings-action">
+                <i class="fas fa-sync-alt" style="cursor: pointer;" id="backupBtn"></i>
+            </div>
+        </div>
+
+        <!-- Export Financial Data -->
+        <div class="settings-row">
+            <div class="settings-icon">
+                <i class="fas fa-file-export"></i>
+            </div>
+            <div class="settings-content">
+                <div class="settings-title">Export Financial Data</div>
+                <div class="settings-description">Download your data as CSV or PDF</div>
+            </div>
+            <div class="settings-action">
+                <i class="fas fa-arrow-right" style="cursor: pointer;"></i>
+            </div>
+        </div>
+
+        <!-- Privacy Settings -->
+        <div class="settings-row">
+            <div class="settings-icon">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="settings-content">
+                <div class="settings-title">Privacy Settings</div>
+                <div class="settings-description">Manage how your data is used</div>
+            </div>
+            <div class="settings-action">
+                <i class="fas fa-arrow-right" style="cursor: pointer;"></i>
+            </div>
+        </div>
+
+        <!-- Support & Help Section -->
+        <h2 class="section-title">Support & Help</h2>
+        <div class="support-section">
+            <div class="support-header">
+                <div class="support-title">Send us your feedback or report an issue</div>
+            </div>
+            <div class="feedback-form">
+                <textarea class="feedback-textarea" placeholder="Type your suggestions, feedback, or report an issue here..."></textarea>
+                <div>
+                    <button class="btn btn-primary" id="submitFeedback">
+                        Submit Feedback
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="footer-actions">
+            <button class="btn btn-primary" id="saveChanges">Save Changes</button>
+            <button class="btn btn-secondary" id="resetDefaults">Reset to Defaults</button>
+        </div>
+    </div>
+
+    <script src="js/settings.js"></script>
+</body>
+</html>
