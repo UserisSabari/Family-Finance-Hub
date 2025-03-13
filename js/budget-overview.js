@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // User is authenticated, fetch initial data
             fetchBudgetData('monthly');
             loadUserInfo();
-        } //else {
-        //     // User is not authenticated, redirect to login
-        //     window.location.href = 'login.html';
-        // }
+        } else {
+            // User is not authenticated, redirect to login
+            window.location.href = 'login.html';
+        }
     });
 
     // Set up event listeners
@@ -79,6 +79,9 @@ async function fetchBudgetData(view) {
             console.log("No budget data found for the selected period.");
             currentData = {};
             updateDashboard({ summary: {}, categories: [], transactions: [] });
+
+            // Display a message to the user
+            showNotification("No budget data found. Start by adding a budget item!", 'info');
         }
     } catch (error) {
         console.error("Error fetching budget data:", error);
@@ -320,13 +323,42 @@ function setupEventListeners() {
 
 // Open modal for adding a new budget item
 function openAddBudgetModal() {
-    // This is a placeholder - you would implement a modal in your UI
-    console.log('Opening add budget modal');
-    
-    // Example: show modal
-    // const modal = document.getElementById('addBudgetModal');
-    // modal.style.display = 'block';
+    const modal = document.getElementById('addBudgetModal');
+    if (modal) {
+        modal.style.display = 'block';
+    } else {
+        console.error("Add budget modal not found in the DOM.");
+    }
 }
+
+// Close modal when clicking outside of it
+window.addEventListener('click', (event) => {
+    const modal = document.getElementById('addBudgetModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Handle form submission for adding a budget item
+document.getElementById('addBudgetForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const category = document.getElementById('budgetCategory').value;
+    const amount = parseFloat(document.getElementById('budgetAmount').value);
+
+    if (!category || isNaN(amount)) {
+        alert("Please fill out all fields correctly.");
+        return;
+    }
+
+    try {
+        await addBudgetItem({ category, amount });
+        document.getElementById('addBudgetModal').style.display = 'none';
+    } catch (error) {
+        console.error("Error adding budget item:", error);
+        alert("Failed to add budget item. Please try again.");
+    }
+});
 
 // Open modal for adjusting budget
 function openAdjustBudgetModal() {

@@ -63,6 +63,21 @@
             <button class="btn-secondary" id="adjustBudgetBtn">Adjust Budget</button>
         </div>
 
+        <!-- Add Budget Modal -->
+<div id="addBudgetModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add Budget Item</h2>
+        <form id="addBudgetForm">
+            <label for="budgetCategory">Category:</label>
+            <input type="text" id="budgetCategory" required>
+            <label for="budgetAmount">Amount:</label>
+            <input type="number" id="budgetAmount" required>
+            <button type="submit">Add</button>
+        </form>
+    </div>
+</div>
+
         <!-- Tab Navigation -->
         <div class="tab-nav">
             <div class="tab-item active" data-period="monthly">Monthly</div>
