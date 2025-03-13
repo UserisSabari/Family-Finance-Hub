@@ -6,7 +6,6 @@ import { auth, db } from "./firebase.js"; // Import Firebase auth and db instanc
 const tabItems = document.querySelectorAll('.tab-item'); // Corrected selector
 const addBudgetBtn = document.querySelector('#addBudgetBtn'); // Corrected selector
 const adjustBudgetBtn = document.querySelector('#adjustBudgetBtn'); // Corrected selector
-const viewAllTransactionsBtn = document.querySelector('#viewAllTransactions'); // Corrected selector
 
 // Current view state
 let currentView = 'monthly';
@@ -45,7 +44,6 @@ async function loadUserInfo() {
                 const userData = userDoc.data();
                 document.getElementById('userDisplayName').textContent = userData.name || "User";
                 document.getElementById('userRole').textContent = userData.role || "Member";
-                document.querySelector('.user-avatar').innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/32'}" alt="Profile" class="profile-icon">`;
                 currentUserRole = userData.role; // Store the current user's role
                 currentUserId = user.uid; // Store the current user's ID
                 currentFamilyId = userData.familyId; // Store the current family's ID
@@ -71,22 +69,55 @@ async function fetchBudgetData(view) {
             throw new Error("User not authenticated or family ID not found");
         }
 
-        // Fetch budget data for the current family
+        // Fetch family data (total income, total expenses, remaining budget)
+        const familyDoc = await getDoc(doc(db, "families", currentFamilyId));
+        if (!familyDoc.exists()) {
+            throw new Error("Family data not found");
+        }
+
+        const familyData = familyDoc.data();
+        const totalIncome = familyData.totalIncome || 0;
+        const totalExpenses = familyData.totalExpenses || 0;
+        const remainingBudget = familyData.remainingBudget || 0;
+
+        // Update summary cards
+        document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
+        document.getElementById('totalExpenses').textContent = formatCurrency(totalExpenses);
+        document.getElementById('remainingBudget').textContent = formatCurrency(remainingBudget);
+
+        // Fetch budget data for the current family and period
         const budgetQuery = query(collection(db, "families", currentFamilyId, "budgets"), where("period", "==", view));
         const budgetSnapshot = await getDocs(budgetQuery);
 
-        if (!budgetSnapshot.empty) {
-            const budgetData = budgetSnapshot.docs.map(doc => doc.data());
-            currentData = { summary: {}, categories: budgetData, transactions: [] };
-            updateDashboard(currentData);
-        } else {
-            console.log("No budget data found for the selected period.");
-            currentData = { summary: {}, categories: [], transactions: [] };
-            updateDashboard(currentData);
+        // Fetch transactions for the current family and period
+        const transactionsQuery = query(collection(db, "families", currentFamilyId, "transactions"), where("period", "==", view));
+        const transactionsSnapshot = await getDocs(transactionsQuery);
 
-            // Display a message to the user
-            alert("No budget data found. Start by adding a budget item!");
-        }
+        // Process budget data
+        const categories = budgetSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                name: data.category || "Uncategorized",
+                amount: data.amount || 0,
+                percentage: data.percentage || 0
+            };
+        });
+
+        // Process transactions data
+        const transactions = transactionsSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                id: doc.id,
+                description: data.description || "No description",
+                category: data.category || "Uncategorized",
+                amount: data.amount || 0,
+                date: data.date || "No date"
+            };
+        });
+
+        // Update the dashboard with the fetched data
+        currentData = { summary: { totalIncome, totalExpenses, remainingBudget }, categories, transactions };
+        updateDashboard(currentData);
     } catch (error) {
         console.error("Error fetching budget data:", error);
         alert("Failed to load budget data. Please try again later.");
@@ -112,13 +143,11 @@ function updateSummaryCards(summary) {
     const totalIncome = document.getElementById('totalIncome');
     const totalExpenses = document.getElementById('totalExpenses');
     const remainingBudget = document.getElementById('remainingBudget');
-    const monthlySavings = document.getElementById('monthlySavings');
 
-    if (totalIncome && totalExpenses && remainingBudget && monthlySavings) {
+    if (totalIncome && totalExpenses && remainingBudget) {
         totalIncome.textContent = formatCurrency(summary.totalIncome || 0);
         totalExpenses.textContent = formatCurrency(summary.totalExpenses || 0);
         remainingBudget.textContent = formatCurrency(summary.remainingBudget || 0);
-        monthlySavings.textContent = formatCurrency(summary.savings || 0);
     } else {
         console.error("One or more summary card elements not found in the DOM.");
     }
@@ -127,15 +156,35 @@ function updateSummaryCards(summary) {
 // Update expense categories with data
 function updateExpenseCategories(categories) {
     const expenseCategoriesContainer = document.querySelector('.expense-categories');
+    if (!expenseCategoriesContainer) {
+        console.error("Expense categories container not found in the DOM.");
+        return;
+    }
+
+    // Clear the container
     expenseCategoriesContainer.innerHTML = '';
 
+    // Check if categories is an array and not empty
+    if (!Array.isArray(categories)) {
+        console.error("Categories data is not an array.");
+        return;
+    }
+
+    // Loop through categories and create cards
     categories.forEach(category => {
+        // Ensure the category object and its properties are defined
+        if (!category || typeof category !== 'object' || !category.name) {
+            console.error("Invalid category data:", category);
+            return;
+        }
+
+        // Create the category card
         const categoryCard = document.createElement('div');
         categoryCard.className = 'category-card';
         categoryCard.innerHTML = `
-            <div class="category-percentage">${category.percentage}% of expenses</div>
+            <div class="category-percentage">${category.percentage || 0}% of expenses</div>
             <div class="category-name">${category.name}</div>
-            <div class="category-amount">${formatCurrency(category.amount)}</div>
+            <div class="category-amount">${formatCurrency(category.amount || 0)}</div>
             <button class="view-details-btn" data-category="${category.name.toLowerCase()}">View Details</button>
         `;
         expenseCategoriesContainer.appendChild(categoryCard);
@@ -145,17 +194,35 @@ function updateExpenseCategories(categories) {
 // Update transactions table with data
 function updateTransactions(transactions) {
     const tableBody = document.querySelector('.transactions-table tbody');
+    if (!tableBody) {
+        console.error("Transactions table body not found in the DOM.");
+        return;
+    }
+
+    // Clear the table body
     tableBody.innerHTML = '';
 
+    // Check if transactions is an array and not empty
+    if (!Array.isArray(transactions)) {
+        console.error("Transactions data is not an array.");
+        return;
+    }
+
+    // Loop through transactions and create rows
     transactions.forEach(transaction => {
+        // Ensure the transaction object and its properties are defined
+        if (!transaction || typeof transaction !== 'object') {
+            console.error("Invalid transaction data:", transaction);
+            return;
+        }
+
+        // Create the table row
         const row = document.createElement('tr');
         row.setAttribute('data-id', transaction.id);
         row.innerHTML = `
-            <td class="transaction-icon-cell"><i class="fas fa-receipt"></i></td>
             <td class="transaction-description">${transaction.description}</td>
             <td class="transaction-category">${transaction.category}</td>
             <td class="transaction-amount">${formatCurrency(transaction.amount)}</td>
-            <td class="transaction-member">${transaction.member}</td>
             <td class="transaction-date">${formatDate(transaction.date)}</td>
             <td class="transaction-actions">
                 ${currentUserRole === "Family Admin" ? `
@@ -309,15 +376,6 @@ function setupEventListeners() {
             confirmDeleteTransaction(transactionId);
         }
     });
-    
-    // View all transactions button
-    if (viewAllTransactionsBtn) {
-        viewAllTransactionsBtn.addEventListener('click', () => {
-            window.location.href = 'transactions.html';
-        });
-    } else {
-        console.error('View All Transactions button not found!');
-    }
 }
 
 // Open modal for adding a new budget item
