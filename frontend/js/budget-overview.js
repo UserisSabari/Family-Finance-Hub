@@ -13,6 +13,7 @@ let currentView = 'monthly';
 let currentData = {};
 let currentUserRole = null; // Store the current user's role
 let currentUserId = null; // Store the current user's ID
+let currentFamilyId = null; // Store the current family's ID
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             // User is authenticated, fetch initial data
             loadUserInfo();
-            fetchBudgetData('monthly');
         } else {
             // User is not authenticated, redirect to login
             window.location.href = 'login.html';
@@ -45,8 +45,13 @@ async function loadUserInfo() {
                 const userData = userDoc.data();
                 document.getElementById('userDisplayName').textContent = userData.name || "User";
                 document.getElementById('userRole').textContent = userData.role || "Member";
+                document.querySelector('.user-avatar').innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/32'}" alt="Profile" class="profile-icon">`;
                 currentUserRole = userData.role; // Store the current user's role
                 currentUserId = user.uid; // Store the current user's ID
+                currentFamilyId = userData.familyId; // Store the current family's ID
+
+                // Fetch budget data after loading user info
+                fetchBudgetData(currentView);
             }
         }
     } catch (error) {
@@ -62,22 +67,22 @@ async function fetchBudgetData(view) {
 
     try {
         const user = auth.currentUser;
-        if (!user) {
-            throw new Error("User not authenticated");
+        if (!user || !currentFamilyId) {
+            throw new Error("User not authenticated or family ID not found");
         }
 
-        // Fetch budget data for the current user
-        const budgetQuery = query(collection(db, "budgets"), where("userId", "==", user.uid), where("period", "==", view));
+        // Fetch budget data for the current family
+        const budgetQuery = query(collection(db, "families", currentFamilyId, "budgets"), where("period", "==", view));
         const budgetSnapshot = await getDocs(budgetQuery);
 
         if (!budgetSnapshot.empty) {
-            const budgetData = budgetSnapshot.docs[0].data();
-            currentData = budgetData;
-            updateDashboard(budgetData);
+            const budgetData = budgetSnapshot.docs.map(doc => doc.data());
+            currentData = { summary: {}, categories: budgetData, transactions: [] };
+            updateDashboard(currentData);
         } else {
             console.log("No budget data found for the selected period.");
-            currentData = {};
-            updateDashboard({ summary: {}, categories: [], transactions: [] });
+            currentData = { summary: {}, categories: [], transactions: [] };
+            updateDashboard(currentData);
 
             // Display a message to the user
             alert("No budget data found. Start by adding a budget item!");
@@ -163,55 +168,42 @@ function updateTransactions(transactions) {
     });
 }
 
-// Add a new budget item to Firestore
-async function addBudgetItem(item) {
+// Add or update a budget item in Firestore
+async function addOrUpdateBudgetItem(item) {
     try {
         const user = auth.currentUser;
-        if (!user) {
-            throw new Error("User not authenticated");
+        if (!user || !currentFamilyId) {
+            throw new Error("User not authenticated or family ID not found");
         }
 
-        await addDoc(collection(db, "budgets"), {
-            userId: user.uid,
-            period: currentView,
-            ...item,
-            createdAt: new Date()
-        });
-
-        alert("Budget item added successfully!"); // Use alert
-        document.getElementById('addBudgetModal').style.display = 'none';
-        fetchBudgetData(currentView); // Refresh data
-    } catch (error) {
-        console.error("Error adding budget item:", error);
-        alert("Failed to add budget item. Please try again."); // Use alert
-    }
-}
-
-// Adjust an existing budget item in Firestore
-async function adjustBudgetItem(item) {
-    try {
-        const user = auth.currentUser;
-        if (!user) {
-            throw new Error("User not authenticated");
-        }
-
-        const budgetQuery = query(collection(db, "budgets"), where("userId", "==", user.uid), where("period", "==", currentView), where("category", "==", item.category));
+        // Check if a budget item for the same category and period already exists
+        const budgetQuery = query(collection(db, "families", currentFamilyId, "budgets"), where("category", "==", item.category), where("period", "==", currentView));
         const budgetSnapshot = await getDocs(budgetQuery);
 
         if (!budgetSnapshot.empty) {
+            // Update existing budget item
             const budgetDoc = budgetSnapshot.docs[0];
-            await updateDoc(doc(db, "budgets", budgetDoc.id), {
-                amount: item.amount
+            await updateDoc(doc(db, "families", currentFamilyId, "budgets", budgetDoc.id), {
+                amount: item.amount,
+                updatedAt: new Date()
             });
-            alert("Budget item adjusted successfully!"); // Use alert
-            document.getElementById('adjustBudgetModal').style.display = 'none';
-            fetchBudgetData(currentView); // Refresh data
+            alert("Budget item updated successfully!");
         } else {
-            throw new Error("No budget item found for the selected category.");
+            // Add new budget item
+            await addDoc(collection(db, "families", currentFamilyId, "budgets"), {
+                ...item,
+                period: currentView,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+            alert("Budget item added successfully!");
         }
+
+        // Refresh data after adding/updating
+        fetchBudgetData(currentView);
     } catch (error) {
-        console.error("Error adjusting budget item:", error);
-        alert("Failed to adjust budget item. Please try again."); // Use alert
+        console.error("Error adding/updating budget item:", error);
+        alert("Failed to add/update budget item. Please try again.");
     }
 }
 
@@ -384,7 +376,7 @@ document.getElementById('addBudgetForm')?.addEventListener('submit', async (e) =
     }
 
     try {
-        await addBudgetItem({ category, amount });
+        await addOrUpdateBudgetItem({ category, amount });
         clearForm('addBudgetForm'); // Clear the form
     } catch (error) {
         console.error("Error adding budget item:", error);
@@ -405,7 +397,7 @@ document.getElementById('adjustBudgetForm')?.addEventListener('submit', async (e
     }
 
     try {
-        await adjustBudgetItem({ category, amount });
+        await addOrUpdateBudgetItem({ category, amount });
         clearForm('adjustBudgetForm'); // Clear the form
     } catch (error) {
         console.error("Error adjusting budget item:", error);
