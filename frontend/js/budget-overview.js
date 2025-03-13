@@ -19,13 +19,16 @@ let currentUserId = null; // Store the current user's ID
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
+    // Show loading spinner immediately
+    showLoading();
+
     // Wait for user authentication
     auth.onAuthStateChanged((user) => {
         if (user) {
             // User is authenticated, fetch initial data
             fetchBudgetData('monthly');
             loadUserInfo();
-        }// else {
+        } //else {
         //     // User is not authenticated, redirect to login
         //     window.location.href = 'login.html';
         // }
@@ -99,10 +102,19 @@ function updateDashboard(data) {
 
 // Update summary cards with data
 function updateSummaryCards(summary) {
-    document.querySelector('.income-amount').textContent = formatCurrency(summary.totalIncome || 0);
-    document.querySelector('.expenses-amount').textContent = formatCurrency(summary.totalExpenses || 0);
-    document.querySelector('.budget-amount').textContent = formatCurrency(summary.remainingBudget || 0);
-    document.querySelector('.savings-amount').textContent = formatCurrency(summary.savings || 0);
+    const totalIncome = document.getElementById('totalIncome');
+    const totalExpenses = document.getElementById('totalExpenses');
+    const remainingBudget = document.getElementById('remainingBudget');
+    const monthlySavings = document.getElementById('monthlySavings');
+
+    if (totalIncome && totalExpenses && remainingBudget && monthlySavings) {
+        totalIncome.textContent = formatCurrency(summary.totalIncome || 0);
+        totalExpenses.textContent = formatCurrency(summary.totalExpenses || 0);
+        remainingBudget.textContent = formatCurrency(summary.remainingBudget || 0);
+        monthlySavings.textContent = formatCurrency(summary.savings || 0);
+    } else {
+        console.error("One or more summary card elements not found in the DOM.");
+    }
 }
 
 // Update expense categories with data
