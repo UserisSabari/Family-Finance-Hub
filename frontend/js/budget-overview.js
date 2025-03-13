@@ -179,22 +179,35 @@ async function addBudgetItem(item) {
         });
 
         showSuccessMessage("Budget item added successfully!");
-        fetchBudgetData(currentView); // Refresh data
     } catch (error) {
         console.error("Error adding budget item:", error);
         showErrorMessage("Failed to add budget item. Please try again.");
     }
 }
 
-// Delete a transaction from Firestore
-async function deleteTransaction(transactionId) {
+// Adjust an existing budget item in Firestore
+async function adjustBudgetItem(item) {
     try {
-        await deleteDoc(doc(db, "transactions", transactionId));
-        showSuccessMessage("Transaction deleted successfully!");
-        fetchBudgetData(currentView); // Refresh data
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("User not authenticated");
+        }
+
+        const budgetQuery = query(collection(db, "budgets"), where("userId", "==", user.uid), where("period", "==", currentView), where("category", "==", item.category));
+        const budgetSnapshot = await getDocs(budgetQuery);
+
+        if (!budgetSnapshot.empty) {
+            const budgetDoc = budgetSnapshot.docs[0];
+            await updateDoc(doc(db, "budgets", budgetDoc.id), {
+                amount: item.amount
+            });
+            showSuccessMessage("Budget item adjusted successfully!");
+        } else {
+            throw new Error("No budget item found for the selected category.");
+        }
     } catch (error) {
-        console.error("Error deleting transaction:", error);
-        showErrorMessage("Failed to delete transaction. Please try again.");
+        console.error("Error adjusting budget item:", error);
+        showErrorMessage("Failed to adjust budget item. Please try again.");
     }
 }
 
@@ -342,12 +355,35 @@ function openAddBudgetModal() {
     }
 }
 
-// Close modal when clicking outside of it
-window.addEventListener('click', (event) => {
-    const modal = document.getElementById('addBudgetModal');
-    if (event.target === modal) {
-        modal.style.display = 'none';
+// Open modal for adjusting budget
+function openAdjustBudgetModal() {
+    const modal = document.getElementById('adjustBudgetModal');
+    if (modal) {
+        modal.style.display = 'block';
+    } else {
+        console.error("Adjust budget modal not found in the DOM.");
     }
+}
+
+// Close modals when clicking outside of them
+window.addEventListener('click', (event) => {
+    const addBudgetModal = document.getElementById('addBudgetModal');
+    const adjustBudgetModal = document.getElementById('adjustBudgetModal');
+
+    if (event.target === addBudgetModal) {
+        addBudgetModal.style.display = 'none';
+    }
+    if (event.target === adjustBudgetModal) {
+        adjustBudgetModal.style.display = 'none';
+    }
+});
+
+// Close modals when clicking the close button
+document.querySelectorAll('.modal .close').forEach(closeButton => {
+    closeButton.addEventListener('click', () => {
+        const modal = closeButton.closest('.modal');
+        modal.style.display = 'none';
+    });
 });
 
 // Handle form submission for adding a budget item
@@ -365,58 +401,31 @@ document.getElementById('addBudgetForm')?.addEventListener('submit', async (e) =
     try {
         await addBudgetItem({ category, amount });
         document.getElementById('addBudgetModal').style.display = 'none';
+        fetchBudgetData(currentView); // Refresh data
     } catch (error) {
         console.error("Error adding budget item:", error);
         alert("Failed to add budget item. Please try again.");
     }
 });
 
-// Open modal for adjusting budget
-function openAdjustBudgetModal() {
-    // This is a placeholder - you would implement a modal in your UI
-    console.log('Opening adjust budget modal');
-    
-    // Example: show modal
-    // const modal = document.getElementById('adjustBudgetModal');
-    // modal.style.display = 'block';
-}
+// Handle form submission for adjusting budget
+document.getElementById('adjustBudgetForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-// Navigate to detailed view for a category
-function navigateToCategoryDetails(category) {
-    // Convert category to URL-friendly format
-    const categorySlug = category.toLowerCase().replace(' ', '-');
-    
-    // Navigate to category details page
-    window.location.href = `category-details.html?category=${categorySlug}`;
-}
+    const category = document.getElementById('adjustCategory').value;
+    const amount = parseFloat(document.getElementById('adjustAmount').value);
 
-// Open modal for editing a transaction
-function openEditTransactionModal(transactionId) {
-    // This is a placeholder - you would implement a modal in your UI
-    console.log(`Opening edit modal for transaction ${transactionId}`);
-    
-    // Find transaction in current data
-    const transaction = currentData.transactions.find(t => t.id == transactionId);
-    
-    if (transaction) {
-        // Example: show modal and populate with data
-        // const modal = document.getElementById('editTransactionModal');
-        // document.getElementById('editTransactionId').value = transaction.id;
-        // document.getElementById('editTransactionDescription').value = transaction.description;
-        // document.getElementById('editTransactionCategory').value = transaction.category;
-        // document.getElementById('editTransactionAmount').value = transaction.amount;
-        // document.getElementById('editTransactionMember').value = transaction.member;
-        // document.getElementById('editTransactionDate').value = formatDateForInput(transaction.date);
-        // modal.style.display = 'block';
+    if (!category || isNaN(amount)) {
+        alert("Please fill out all fields correctly.");
+        return;
     }
-}
 
-// Confirm and delete a transaction
-function confirmDeleteTransaction(transactionId) {
-    // This is where you'd normally show a confirmation dialog
-    const confirmed = confirm('Are you sure you want to delete this transaction?');
-    
-    if (confirmed) {
-        deleteTransaction(transactionId);
+    try {
+        await adjustBudgetItem({ category, amount });
+        document.getElementById('adjustBudgetModal').style.display = 'none';
+        fetchBudgetData(currentView); // Refresh data
+    } catch (error) {
+        console.error("Error adjusting budget item:", error);
+        alert("Failed to adjust budget item. Please try again.");
     }
-}
+});
