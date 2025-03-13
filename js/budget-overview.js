@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // User is authenticated, fetch initial data
             fetchBudgetData('monthly');
             loadUserInfo();
-        } else {
+        } //else {
             // User is not authenticated, redirect to login
-            window.location.href = 'login.html';
-        }
+        //     window.location.href = 'login.html';
+        // }
     });
 
     // Set up event listeners
