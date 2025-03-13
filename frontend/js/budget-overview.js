@@ -19,14 +19,20 @@ let currentUserId = null; // Store the current user's ID
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
-    // Fetch initial data based on default view (monthly)
-    fetchBudgetData('monthly');
-    
+    // Wait for user authentication
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            // User is authenticated, fetch initial data
+            fetchBudgetData('monthly');
+            loadUserInfo();
+        }// else {
+        //     // User is not authenticated, redirect to login
+        //     window.location.href = 'login.html';
+        // }
+    });
+
     // Set up event listeners
     setupEventListeners();
-    
-    // Load user info
-    loadUserInfo();
 });
 
 // Load user info from Firestore
@@ -231,14 +237,17 @@ function showNotification(message, type) {
 
 // Set up event listeners
 function setupEventListeners() {
-    // Mobile menu toggle
     const menuToggle = document.getElementById('menuToggle');
     const sidebar = document.querySelector('.sidebar');
-    
-    menuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-    });
-    
+
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    } else {
+        console.error("Menu toggle or sidebar not found in the DOM.");
+    }
+
     // Tab navigation
     tabItems.forEach(tab => {
         tab.addEventListener('click', () => {

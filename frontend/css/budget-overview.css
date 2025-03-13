@@ -459,7 +459,7 @@ body {
 
 /* Loading state */
 .loading-overlay {
-    position: absolute;
+    position: fixed; /* Use fixed positioning to cover the entire viewport */
     top: 0;
     left: 220px; /* Adjust based on sidebar width */
     width: calc(100% - 220px); /* Adjust based on sidebar width */
