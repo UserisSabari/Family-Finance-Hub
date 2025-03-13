@@ -140,6 +140,43 @@
             <button class="view-all-btn" id="viewAllTransactions">View All Transactions</button>
         </div>
     </div>
+    <!-- Add Budget Modal -->
+<div id="addBudgetModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add Budget Item</h2>
+        <form id="addBudgetForm">
+            <div class="form-group">
+                <label for="budgetCategory">Category</label>
+                <input type="text" id="budgetCategory" name="budgetCategory" required>
+            </div>
+            <div class="form-group">
+                <label for="budgetAmount">Amount</label>
+                <input type="number" id="budgetAmount" name="budgetAmount" required>
+            </div>
+            <button type="submit" class="btn-primary">Add Budget</button>
+        </form>
+    </div>
+</div>
+
+<!-- Adjust Budget Modal -->
+<div id="adjustBudgetModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Adjust Budget</h2>
+        <form id="adjustBudgetForm">
+            <div class="form-group">
+                <label for="adjustCategory">Category</label>
+                <input type="text" id="adjustCategory" name="adjustCategory" required>
+            </div>
+            <div class="form-group">
+                <label for="adjustAmount">New Amount</label>
+                <input type="number" id="adjustAmount" name="adjustAmount" required>
+            </div>
+            <button type="submit" class="btn-primary">Adjust Budget</button>
+        </form>
+    </div>
+</div>
 
     <!-- JavaScript -->
     <script src="js/budget-overview.js" type="module"></script>
