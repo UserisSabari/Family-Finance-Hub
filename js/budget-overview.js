@@ -126,18 +126,18 @@ function fetchBudgetData(view) {
     
     setTimeout(() => {
         // This is where you would normally query Firestore
-        // const db = firebase.firestore();
-        // db.collection('budgets').doc(view).get().then((doc) => {
-        //     if (doc.exists) {
-        //         const data = doc.data();
-        //         updateDashboard(data);
-        //     }
-        // }).catch((error) => {
-        //     console.error('Error fetching budget data:', error);
-        //     showErrorMessage('Failed to load budget data. Please try again later.');
-        // }).finally(() => {
-        //     hideLoading();
-        // });
+        const db = firebase.firestore();
+        db.collection('budgets').doc(view).get().then((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                updateDashboard(data);
+            }
+        }).catch((error) => {
+            console.error('Error fetching budget data:', error);
+            showErrorMessage('Failed to load budget data. Please try again later.');
+        }).finally(() => {
+            hideLoading();
+        });
         
         // Simulate data for demonstration
         const mockData = getMockData(view);

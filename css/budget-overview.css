@@ -142,6 +142,7 @@ body {
     background-color: #f8f9fa;
     margin-left: 220px;
     transition: margin-left 0.3s ease;
+    position: relative;
 }
 
 @media (max-width: 768px) {
@@ -456,10 +457,10 @@ body {
 
 /* Loading state */
 .loading-overlay {
-    position: fixed;
+    position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 220px; /* Adjust based on sidebar width */
+    width: calc(100% - 220px); /* Adjust based on sidebar width */
     height: 100%;
     background-color: rgba(255, 255, 255, 0.8);
     display: flex;
