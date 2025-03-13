@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
     auth.onAuthStateChanged((user) => {
         if (user) {
             // User is authenticated, fetch initial data
-            fetchBudgetData('monthly');
             loadUserInfo();
-        } //else {
+            fetchBudgetData('monthly');
+        } else {
             // User is not authenticated, redirect to login
-        //     window.location.href = 'login.html';
-        // }
+            window.location.href = 'login.html';
+        }
     });
 
     // Set up event listeners
@@ -54,6 +54,8 @@ async function loadUserInfo() {
         }
     } catch (error) {
         console.error("Error loading user info:", error);
+    } finally {
+        hideLoading(); // Hide loading screen after fetching user info
     }
 }
 
@@ -87,7 +89,7 @@ async function fetchBudgetData(view) {
         console.error("Error fetching budget data:", error);
         showErrorMessage("Failed to load budget data. Please try again later.");
     } finally {
-        hideLoading();
+        hideLoading(); // Hide loading screen after fetching budget data
     }
 }
 
