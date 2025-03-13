@@ -275,21 +275,6 @@ body {
     color: white;
 }
 
-.income-icon {
-    background-color: #36d7b7;
-}
-
-.expenses-icon {
-    background-color: #36d7b7;
-}
-
-.budget-icon {
-    background-color: #36d7b7;
-}
-
-.savings-icon {
-    background-color: #36d7b7;
-}
 
 .card-label {
     font-size: 14px;
@@ -350,20 +335,37 @@ body {
     margin-bottom: 10px;
 }
 
+/* Colorful Icons */
+.income-icon {
+    background-color: #4CAF50; /* Green */
+}
+
+.expenses-icon {
+    background-color: #F44336; /* Red */
+}
+
+.budget-icon {
+    background-color: #2196F3; /* Blue */
+}
+
+.savings-icon {
+    background-color: #FFC107; /* Yellow */
+}
+
 .house-icon {
-    background-color: #36d7b7;
+    background-color: #9C27B0; /* Purple */
 }
 
 .food-icon {
-    background-color: #36d7b7;
+    background-color: #FF5722; /* Deep Orange */
 }
 
 .transport-icon {
-    background-color: #36d7b7;
+    background-color: #3F51B5; /* Indigo */
 }
 
 .utilities-icon {
-    background-color: #36d7b7;
+    background-color: #009688; /* Teal */
 }
 
 .expense-category {
