@@ -14,6 +14,8 @@ const viewAllTransactionsBtn = document.querySelector('.view-all-transactions-bt
 // Current view state
 let currentView = 'monthly';
 let currentData = {};
+let currentUserRole = null; // Store the current user's role
+let currentUserId = null; // Store the current user's ID
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
@@ -37,6 +39,8 @@ async function loadUserInfo() {
                 const userData = userDoc.data();
                 document.getElementById('userDisplayName').textContent = userData.name || "User";
                 document.getElementById('userRole').textContent = userData.role || "Member";
+                currentUserRole = userData.role; // Store the current user's role
+                currentUserId = user.uid; // Store the current user's ID
             }
         }
     } catch (error) {
@@ -129,8 +133,10 @@ function updateTransactions(transactions) {
             <td class="transaction-member">${transaction.member}</td>
             <td class="transaction-date">${formatDate(transaction.date)}</td>
             <td class="transaction-actions">
-                <button class="edit-transaction-btn"><i class="fas fa-edit"></i></button>
-                <button class="delete-transaction-btn"><i class="fas fa-trash"></i></button>
+                ${currentUserRole === "Family Admin" ? `
+                    <button class="edit-transaction-btn"><i class="fas fa-edit"></i></button>
+                    <button class="delete-transaction-btn"><i class="fas fa-trash"></i></button>
+                ` : ''}
             </td>
         `;
         tableBody.appendChild(row);
