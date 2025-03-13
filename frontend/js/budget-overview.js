@@ -80,11 +80,11 @@ async function fetchBudgetData(view) {
             updateDashboard({ summary: {}, categories: [], transactions: [] });
 
             // Display a message to the user
-            showNotification("No budget data found. Start by adding a budget item!", 'info');
+            alert("No budget data found. Start by adding a budget item!");
         }
     } catch (error) {
         console.error("Error fetching budget data:", error);
-        showErrorMessage("Failed to load budget data. Please try again later.");
+        alert("Failed to load budget data. Please try again later.");
     } finally {
         hideLoading(); // Hide loading screen after fetching budget data
     }
@@ -178,10 +178,12 @@ async function addBudgetItem(item) {
             createdAt: new Date()
         });
 
-        showSuccessMessage("Budget item added successfully!");
+        alert("Budget item added successfully!"); // Use alert
+        document.getElementById('addBudgetModal').style.display = 'none';
+        fetchBudgetData(currentView); // Refresh data
     } catch (error) {
         console.error("Error adding budget item:", error);
-        showErrorMessage("Failed to add budget item. Please try again.");
+        alert("Failed to add budget item. Please try again."); // Use alert
     }
 }
 
@@ -201,13 +203,15 @@ async function adjustBudgetItem(item) {
             await updateDoc(doc(db, "budgets", budgetDoc.id), {
                 amount: item.amount
             });
-            showSuccessMessage("Budget item adjusted successfully!");
+            alert("Budget item adjusted successfully!"); // Use alert
+            document.getElementById('adjustBudgetModal').style.display = 'none';
+            fetchBudgetData(currentView); // Refresh data
         } else {
             throw new Error("No budget item found for the selected category.");
         }
     } catch (error) {
         console.error("Error adjusting budget item:", error);
-        showErrorMessage("Failed to adjust budget item. Please try again.");
+        alert("Failed to adjust budget item. Please try again."); // Use alert
     }
 }
 
@@ -239,27 +243,6 @@ function hideLoading() {
     if (overlay) {
         overlay.remove();
     }
-}
-
-// Show success message
-function showSuccessMessage(message) {
-    showNotification(message, 'success');
-}
-
-// Show error message
-function showErrorMessage(message) {
-    showNotification(message, 'error');
-}
-
-// Show notification
-function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
 }
 
 // Set up event listeners
@@ -350,6 +333,7 @@ function openAddBudgetModal() {
     const modal = document.getElementById('addBudgetModal');
     if (modal) {
         modal.style.display = 'block';
+        focusFirstInput('addBudgetModal'); // Focus on the first input
     } else {
         console.error("Add budget modal not found in the DOM.");
     }
@@ -360,6 +344,7 @@ function openAdjustBudgetModal() {
     const modal = document.getElementById('adjustBudgetModal');
     if (modal) {
         modal.style.display = 'block';
+        focusFirstInput('adjustBudgetModal'); // Focus on the first input
     } else {
         console.error("Adjust budget modal not found in the DOM.");
     }
@@ -400,8 +385,7 @@ document.getElementById('addBudgetForm')?.addEventListener('submit', async (e) =
 
     try {
         await addBudgetItem({ category, amount });
-        document.getElementById('addBudgetModal').style.display = 'none';
-        fetchBudgetData(currentView); // Refresh data
+        clearForm('addBudgetForm'); // Clear the form
     } catch (error) {
         console.error("Error adding budget item:", error);
         alert("Failed to add budget item. Please try again.");
@@ -422,10 +406,28 @@ document.getElementById('adjustBudgetForm')?.addEventListener('submit', async (e
 
     try {
         await adjustBudgetItem({ category, amount });
-        document.getElementById('adjustBudgetModal').style.display = 'none';
-        fetchBudgetData(currentView); // Refresh data
+        clearForm('adjustBudgetForm'); // Clear the form
     } catch (error) {
         console.error("Error adjusting budget item:", error);
         alert("Failed to adjust budget item. Please try again.");
     }
 });
+
+// Clear form fields after submission
+function clearForm(formId) {
+    const form = document.getElementById(formId);
+    if (form) {
+        form.reset();
+    }
+}
+
+// Focus on the first input field when the modal opens
+function focusFirstInput(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        const firstInput = modal.querySelector('input, select');
+        if (firstInput) {
+            firstInput.focus();
+        }
+    }
+}
