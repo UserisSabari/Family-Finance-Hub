@@ -222,3 +222,131 @@ function showNotification(message, type) {
         notification.remove();
     }, 3000);
 }
+
+// Set up event listeners
+function setupEventListeners() {
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+    
+    // Tab navigation
+    tabItems.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Get selected view
+            const view = tab.getAttribute('data-period');
+            
+            // Update active tab
+            tabItems.forEach(item => item.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Fetch data for selected view
+            fetchBudgetData(view);
+            currentView = view;
+        });
+    });
+    
+    // Add budget item button
+    addBudgetBtn.addEventListener('click', () => {
+        openAddBudgetModal();
+    });
+    
+    // Adjust budget button
+    adjustBudgetBtn.addEventListener('click', () => {
+        openAdjustBudgetModal();
+    });
+    
+    // Set up event delegation for dynamically added elements
+    document.addEventListener('click', (event) => {
+        // View details buttons
+        if (event.target.closest('.view-details-btn')) {
+            const button = event.target.closest('.view-details-btn');
+            const category = button.getAttribute('data-category');
+            navigateToCategoryDetails(category);
+        }
+        
+        // Edit transaction buttons
+        if (event.target.closest('.edit-transaction-btn')) {
+            const button = event.target.closest('.edit-transaction-btn');
+            const row = button.closest('tr');
+            const transactionId = row.getAttribute('data-id');
+            openEditTransactionModal(transactionId);
+        }
+        
+        // Delete transaction buttons
+        if (event.target.closest('.delete-transaction-btn')) {
+            const button = event.target.closest('.delete-transaction-btn');
+            const row = button.closest('tr');
+            const transactionId = row.getAttribute('data-id');
+            confirmDeleteTransaction(transactionId);
+        }
+    });
+    
+    // View all transactions button
+    viewAllTransactionsBtn.addEventListener('click', () => {
+        window.location.href = 'transactions.html';
+    });
+}
+
+// Open modal for adding a new budget item
+function openAddBudgetModal() {
+    // This is a placeholder - you would implement a modal in your UI
+    console.log('Opening add budget modal');
+    
+    // Example: show modal
+    // const modal = document.getElementById('addBudgetModal');
+    // modal.style.display = 'block';
+}
+
+// Open modal for adjusting budget
+function openAdjustBudgetModal() {
+    // This is a placeholder - you would implement a modal in your UI
+    console.log('Opening adjust budget modal');
+    
+    // Example: show modal
+    // const modal = document.getElementById('adjustBudgetModal');
+    // modal.style.display = 'block';
+}
+
+// Navigate to detailed view for a category
+function navigateToCategoryDetails(category) {
+    // Convert category to URL-friendly format
+    const categorySlug = category.toLowerCase().replace(' ', '-');
+    
+    // Navigate to category details page
+    window.location.href = `category-details.html?category=${categorySlug}`;
+}
+
+// Open modal for editing a transaction
+function openEditTransactionModal(transactionId) {
+    // This is a placeholder - you would implement a modal in your UI
+    console.log(`Opening edit modal for transaction ${transactionId}`);
+    
+    // Find transaction in current data
+    const transaction = currentData.transactions.find(t => t.id == transactionId);
+    
+    if (transaction) {
+        // Example: show modal and populate with data
+        // const modal = document.getElementById('editTransactionModal');
+        // document.getElementById('editTransactionId').value = transaction.id;
+        // document.getElementById('editTransactionDescription').value = transaction.description;
+        // document.getElementById('editTransactionCategory').value = transaction.category;
+        // document.getElementById('editTransactionAmount').value = transaction.amount;
+        // document.getElementById('editTransactionMember').value = transaction.member;
+        // document.getElementById('editTransactionDate').value = formatDateForInput(transaction.date);
+        // modal.style.display = 'block';
+    }
+}
+
+// Confirm and delete a transaction
+function confirmDeleteTransaction(transactionId) {
+    // This is where you'd normally show a confirmation dialog
+    const confirmed = confirm('Are you sure you want to delete this transaction?');
+    
+    if (confirmed) {
+        deleteTransaction(transactionId);
+    }
+}
