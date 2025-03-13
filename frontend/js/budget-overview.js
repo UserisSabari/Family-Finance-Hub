@@ -3,13 +3,10 @@ import { getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc, u
 import { auth, db } from "./firebase.js"; // Import Firebase auth and db instances
 
 // DOM elements
-const tabItems = document.querySelectorAll('.time-period-tabs .tab');
-const addBudgetBtn = document.querySelector('.add-budget-btn');
-const adjustBudgetBtn = document.querySelector('.adjust-budget-btn');
-const viewDetailsButtons = document.querySelectorAll('.view-details-btn');
-const editButtons = document.querySelectorAll('.edit-transaction-btn');
-const deleteButtons = document.querySelectorAll('.delete-transaction-btn');
-const viewAllTransactionsBtn = document.querySelector('.view-all-transactions-btn');
+const tabItems = document.querySelectorAll('.tab-item'); // Corrected selector
+const addBudgetBtn = document.querySelector('#addBudgetBtn'); // Corrected selector
+const adjustBudgetBtn = document.querySelector('#adjustBudgetBtn'); // Corrected selector
+const viewAllTransactionsBtn = document.querySelector('#viewAllTransactions'); // Corrected selector
 
 // Current view state
 let currentView = 'monthly';
@@ -282,14 +279,22 @@ function setupEventListeners() {
     });
     
     // Add budget item button
-    addBudgetBtn.addEventListener('click', () => {
-        openAddBudgetModal();
-    });
+    if (addBudgetBtn) {
+        addBudgetBtn.addEventListener('click', () => {
+            openAddBudgetModal();
+        });
+    } else {
+        console.error('Add Budget button not found!');
+    }
     
     // Adjust budget button
-    adjustBudgetBtn.addEventListener('click', () => {
-        openAdjustBudgetModal();
-    });
+    if (adjustBudgetBtn) {
+        adjustBudgetBtn.addEventListener('click', () => {
+            openAdjustBudgetModal();
+        });
+    } else {
+        console.error('Adjust Budget button not found!');
+    }
     
     // Set up event delegation for dynamically added elements
     document.addEventListener('click', (event) => {
@@ -318,9 +323,13 @@ function setupEventListeners() {
     });
     
     // View all transactions button
-    viewAllTransactionsBtn.addEventListener('click', () => {
-        window.location.href = 'transactions.html';
-    });
+    if (viewAllTransactionsBtn) {
+        viewAllTransactionsBtn.addEventListener('click', () => {
+            window.location.href = 'transactions.html';
+        });
+    } else {
+        console.error('View All Transactions button not found!');
+    }
 }
 
 // Open modal for adding a new budget item
