@@ -453,6 +453,22 @@ body {
     background-color: #009688; /* Teal */
 }
 
+.health-icon{
+    background-color: #ff0000;
+}
+
+.education-icon{
+    background-color: #af7ac5;
+}
+
+.shopping-icon{
+    background-color: #2196F3;
+}
+
+.entertainment-icon{
+    background-color: #4CAF50;
+}
+
 .expense-category {
     font-size: 18px;
     font-weight: 600;
