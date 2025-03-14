@@ -235,6 +235,83 @@ function updateTransactions(transactions) {
     });
 }
 
+// Navigate to category details (within the same page)
+function navigateToCategoryDetails(category) {
+    console.log(`Fetching details for category: ${category}`);
+
+    // Fetch category details from Firestore (or any other data source)
+    fetchCategoryDetails(category)
+        .then(details => {
+            // Update the modal content with the fetched details
+            const modalContent = document.getElementById('categoryDetailsContent');
+            if (modalContent) {
+                modalContent.innerHTML = `
+                    <p><strong>Category:</strong> ${details.name}</p>
+                    <p><strong>Total Spent:</strong> ${formatCurrency(details.amount)}</p>
+                    <p><strong>Percentage of Expenses:</strong> ${details.percentage}%</p>
+                    <p><strong>Recent Transactions:</strong></p>
+                    <ul>
+                        ${details.transactions.map(transaction => `
+                            <li>${transaction.description} - ${formatCurrency(transaction.amount)}</li>
+                        `).join('')}
+                    </ul>
+                `;
+            }
+
+            // Show the modal
+            const modal = document.getElementById('categoryDetailsModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching category details:", error);
+            alert("Failed to fetch category details. Please try again.");
+        });
+}
+
+// Fetch category details from Firestore
+async function fetchCategoryDetails(category) {
+    try {
+        const user = auth.currentUser;
+        if (!user || !currentFamilyId) {
+            throw new Error("User not authenticated or family ID not found");
+        }
+
+        // Fetch budget data for the selected category
+        const budgetQuery = query(collection(db, "families", currentFamilyId, "budgets"), where("category", "==", category));
+        const budgetSnapshot = await getDocs(budgetQuery);
+
+        if (budgetSnapshot.empty) {
+            throw new Error("No budget data found for this category");
+        }
+
+        const budgetData = budgetSnapshot.docs[0].data();
+
+        // Fetch recent transactions for the selected category
+        const transactionsQuery = query(collection(db, "families", currentFamilyId, "transactions"), where("category", "==", category));
+        const transactionsSnapshot = await getDocs(transactionsQuery);
+
+        const transactions = transactionsSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                description: data.description || "No description",
+                amount: data.amount || 0
+            };
+        });
+
+        return {
+            name: budgetData.category || "Uncategorized",
+            amount: budgetData.amount || 0,
+            percentage: budgetData.percentage || 0,
+            transactions
+        };
+    } catch (error) {
+        console.error("Error fetching category details:", error);
+        throw error;
+    }
+}
+
 // Add or update a budget item in Firestore
 async function addOrUpdateBudgetItem(item) {
     try {
@@ -404,12 +481,16 @@ function openAdjustBudgetModal() {
 window.addEventListener('click', (event) => {
     const addBudgetModal = document.getElementById('addBudgetModal');
     const adjustBudgetModal = document.getElementById('adjustBudgetModal');
+    const categoryDetailsModal = document.getElementById('categoryDetailsModal');
 
     if (event.target === addBudgetModal) {
         addBudgetModal.style.display = 'none';
     }
     if (event.target === adjustBudgetModal) {
         adjustBudgetModal.style.display = 'none';
+    }
+    if (event.target === categoryDetailsModal) {
+        categoryDetailsModal.style.display = 'none';
     }
 });
 
