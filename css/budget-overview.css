@@ -203,7 +203,7 @@ body {
 .btn-primary i {
     margin-right: 8px;
 }
-.btn-primary:hower {
+.btn-primary:hover {
     background-color: #008c7a;
 }
 
@@ -360,7 +360,6 @@ body {
     justify-content: center;
     color: white;
 }
-
 
 .card-label {
     font-size: 14px;
