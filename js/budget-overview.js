@@ -178,17 +178,68 @@ function updateExpenseCategories(categories) {
             return;
         }
 
+        // Determine the icon and color based on the category name
+        const categoryClass = getCategoryClass(category.name);
+        const iconClass = getCategoryIcon(category.name);
+
         // Create the category card
         const categoryCard = document.createElement('div');
-        categoryCard.className = 'category-card';
+        categoryCard.className = 'expense-card'; // Use the correct class name
         categoryCard.innerHTML = `
-            <div class="category-percentage">${category.percentage || 0}% of expenses</div>
-            <div class="category-name">${category.name}</div>
-            <div class="category-amount">${formatCurrency(category.amount || 0)}</div>
+            <div class="expense-percentage">${category.percentage || 0}% of expenses</div>
+            <div class="category-icon ${categoryClass}">
+                <i class="${iconClass}"></i>
+            </div>
+            <div class="expense-category">${category.name}</div>
+            <div class="expense-amount">${formatCurrency(category.amount || 0)}</div>
             <button class="view-details-btn" data-category="${category.name.toLowerCase()}">View Details</button>
         `;
         expenseCategoriesContainer.appendChild(categoryCard);
     });
+}
+
+// Helper function to get the CSS class for a category
+function getCategoryClass(categoryName) {
+    switch (categoryName.toLowerCase()) {
+        case 'food':
+            return 'food-icon';
+        case 'transport':
+            return 'transport-icon';
+        case 'utilities':
+            return 'utilities-icon';
+        case 'entertainment':
+            return 'entertainment-icon';
+        case 'health':
+            return 'health-icon';
+        case 'education':
+            return 'education-icon';
+        case 'shopping':
+            return 'shopping-icon';
+        default:
+            return 'other-icon';
+    }
+}
+
+// Helper function to get the icon class for a category
+function getCategoryIcon(categoryName) {
+    switch (categoryName.toLowerCase()) {
+        case 'food':
+            return 'fas fa-utensils';
+        case 'transport':
+            return 'fas fa-bus';
+        case 'utilities':
+            return 'fas fa-lightbulb';
+        case 'entertainment':
+            return 'fas fa-film';
+        case 'health':
+            return 'fas fa-heartbeat';
+        case 'education':
+            return 'fas fa-graduation-cap';
+        case 'shopping':
+            return 'fas fa-shopping-cart';
+        default:
+            return 'fas fa-question-circle';
+    }
 }
 
 // Update transactions table with data
