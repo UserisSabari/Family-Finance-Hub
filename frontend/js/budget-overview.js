@@ -467,11 +467,33 @@ function openAddBudgetModal() {
 }
 
 // Open modal for adjusting budget
-function openAdjustBudgetModal() {
+async function openAdjustBudgetModal() {
     const modal = document.getElementById('adjustBudgetModal');
     if (modal) {
         modal.style.display = 'block';
         focusFirstInput('adjustBudgetModal'); // Focus on the first input
+
+        // Fetch existing budget data for the selected category
+        const categorySelect = document.getElementById('adjustCategory');
+        categorySelect.addEventListener('change', async () => {
+            const selectedCategory = categorySelect.value;
+            if (selectedCategory) {
+                try {
+                    const budgetQuery = query(collection(db, "families", currentFamilyId, "budgets"), where("category", "==", selectedCategory), where("period", "==", currentView));
+                    const budgetSnapshot = await getDocs(budgetQuery);
+
+                    if (!budgetSnapshot.empty) {
+                        const budgetData = budgetSnapshot.docs[0].data();
+                        document.getElementById('adjustAmount').value = budgetData.amount || 0;
+                    } else {
+                        document.getElementById('adjustAmount').value = 0;
+                    }
+                } catch (error) {
+                    console.error("Error fetching budget data:", error);
+                    alert("Failed to fetch budget data. Please try again.");
+                }
+            }
+        });
     } else {
         console.error("Adjust budget modal not found in the DOM.");
     }
