@@ -317,7 +317,20 @@ function navigateToCategoryDetails(category) {
         })
         .catch(error => {
             console.error("Error fetching category details:", error);
-            alert("Failed to fetch category details. Please try again.");
+            // Show a user-friendly message in the modal
+            const modalContent = document.getElementById('categoryDetailsContent');
+            if (modalContent) {
+                modalContent.innerHTML = `
+                    <p>No budget data found for the category: ${category}.</p>
+                    <p>Please add a budget for this category to see details.</p>
+                `;
+            }
+
+            // Show the modal
+            const modal = document.getElementById('categoryDetailsModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
         });
 }
 
@@ -329,18 +342,34 @@ async function fetchCategoryDetails(category) {
             throw new Error("User not authenticated or family ID not found");
         }
 
-        // Fetch budget data for the selected category
-        const budgetQuery = query(collection(db, "families", currentFamilyId, "budgets"), where("category", "==", category));
+        // Fetch budget data for the selected category and current view (monthly, quarterly, yearly)
+        const budgetQuery = query(
+            collection(db, "families", currentFamilyId, "budgets"),
+            where("category", "==", category),
+            where("period", "==", currentView) // Ensure the period matches the current view
+        );
         const budgetSnapshot = await getDocs(budgetQuery);
 
-        if (budgetSnapshot.empty) {
-            throw new Error("No budget data found for this category");
+        let budgetData = {
+            name: category,
+            amount: 0,
+            percentage: 0,
+            transactions: []
+        };
+
+        if (!budgetSnapshot.empty) {
+            // If budget data exists, use the first document
+            budgetData = budgetSnapshot.docs[0].data();
+        } else {
+            console.warn("No budget data found for this category. Using default values.");
         }
 
-        const budgetData = budgetSnapshot.docs[0].data();
-
         // Fetch recent transactions for the selected category
-        const transactionsQuery = query(collection(db, "families", currentFamilyId, "transactions"), where("category", "==", category));
+        const transactionsQuery = query(
+            collection(db, "families", currentFamilyId, "transactions"),
+            where("category", "==", category),
+            where("period", "==", currentView) // Ensure the period matches the current view
+        );
         const transactionsSnapshot = await getDocs(transactionsQuery);
 
         const transactions = transactionsSnapshot.docs.map(doc => {
@@ -352,7 +381,7 @@ async function fetchCategoryDetails(category) {
         });
 
         return {
-            name: budgetData.category || "Uncategorized",
+            name: budgetData.category || category,
             amount: budgetData.amount || 0,
             percentage: budgetData.percentage || 0,
             transactions
