@@ -635,3 +635,38 @@ function focusFirstInput(modalId) {
         }
     }
 }
+
+async function addIncome(amount) {
+    try {
+        const user = auth.currentUser;
+        if (!user || !currentFamilyId) {
+            throw new Error("User not authenticated or family ID not found");
+        }
+
+        // Fetch the current family data
+        const familyDoc = await getDoc(doc(db, "families", currentFamilyId));
+        if (!familyDoc.exists()) {
+            throw new Error("Family data not found");
+        }
+
+        const familyData = familyDoc.data();
+        const currentTotalIncome = familyData.totalIncome || 0;
+        const currentTotalExpenses = familyData.totalExpenses || 0;
+
+        // Update total income
+        const newTotalIncome = currentTotalIncome + amount;
+        const newRemainingBudget = newTotalIncome - currentTotalExpenses;
+
+        // Update the family document in Firestore
+        await updateDoc(doc(db, "families", currentFamilyId), {
+            totalIncome: newTotalIncome,
+            remainingBudget: newRemainingBudget
+        });
+
+        // Refresh the budget data
+        fetchBudgetData(currentView);
+    } catch (error) {
+        console.error("Error adding income:", error);
+        alert("Failed to add income. Please try again.");
+    }
+}
