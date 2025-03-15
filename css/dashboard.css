@@ -281,9 +281,8 @@ body {
 }
 
 .transaction-category {
-    display: flex;
-    align-items: center;
-    align-self: center;
+    /* display: flex; */
+    align: center;
 }
 
 .transaction-category i {
