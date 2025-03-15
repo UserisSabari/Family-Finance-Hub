@@ -1,5 +1,5 @@
 import { auth, db } from './firebase.js';
-import { doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { doc, getDoc, addDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // Fetch user data and update the dashboard
 auth.onAuthStateChanged(async (user) => {
