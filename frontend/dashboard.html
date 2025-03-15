@@ -86,22 +86,6 @@
                 </div>
             </div>
         </div>
-        <div class="section">
-            <div class="section-title">Recent Transactions</div>
-            <table id="transactionsTable" class="transactions-table">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>User</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows will be dynamically inserted here by dashboard.js -->
-                </tbody>
-            </table>
-        </div>
 
         <!-- Action Buttons -->
         <div class="action-buttons">
@@ -203,15 +187,19 @@
             </div>
         </div>
 
-        <!-- Recent Transactions -->
         <div class="section">
-            <h2 class="section-title">Recent Transactions</h2>
-            <table class="transactions-table" id="transactionsTable">
-                <tbody>
-                    <!-- Transactions will be loaded dynamically -->
+            <div class="section-title">Recent Transactions</div>
+            <table id="transactionsTable" class="transactions-table">
+                <thead>
                     <tr>
-                        <td colspan="5" style="text-align: center;">Loading transactions...</td>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>User</th>
+                        <th>Date</th>
                     </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically inserted here by dashboard.js -->
                 </tbody>
             </table>
         </div>
