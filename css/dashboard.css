@@ -200,9 +200,23 @@ body {
 .btn-primary {
     background-color: #00a389;
 }
+.btn-primary:hover {
+    background-color: #008c7a;
+}
 
 .btn-success {
     background-color: #4CAF50;
+}
+.btn-success:hover {
+    background-color: #15aa1a;
+}
+.btn-warning {
+    background-color: #ffc107; /* Yellow/orange color */
+    color: #000; /* Black text for better contrast */
+}
+
+.btn-warning:hover {
+    background-color: #e0a800; /* Darker shade on hover */
 }
 
 .btn i {

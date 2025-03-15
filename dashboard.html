@@ -111,6 +111,9 @@
             <button class="btn btn-success" id="addIncomeBtn">
                 <i class="fas fa-plus"></i> Add Income
             </button>
+            <button class="btn btn-warning" id="setSavingsBtn">
+                <i class="fas fa-piggy-bank"></i> Set Savings
+            </button>
         </div>
 
         <!-- Add Income Modal -->
@@ -157,6 +160,21 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Add Expense</button>
+        </form>
+    </div>
+</div>
+
+<!-- Set Savings Modal -->
+<div id="setSavingsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Set Savings</h2>
+        <form id="setSavingsForm">
+            <div class="form-group">
+                <label for="savingsAmount">Savings Amount</label>
+                <input type="number" id="savingsAmount" name="savingsAmount" required>
+            </div>
+            <button type="submit" class="btn btn-warning">Set Savings</button>
         </form>
     </div>
 </div>
