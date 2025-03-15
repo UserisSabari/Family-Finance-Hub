@@ -216,11 +216,3 @@ document.getElementById('addExpenseForm')?.addEventListener('submit', async (e) 
     document.getElementById('addExpenseForm').reset(); // Clear the form
     closeModal('addExpenseModal'); // Close the modal
 });
-
-// Helper function to close modals
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
