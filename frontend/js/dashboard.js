@@ -1,5 +1,5 @@
 import { auth, db } from './firebase.js';
-import { doc, getDoc, addDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { doc, getDoc, collection, query, where, getDocs, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // Fetch user data and update the dashboard
 auth.onAuthStateChanged(async (user) => {
@@ -25,7 +25,7 @@ auth.onAuthStateChanged(async (user) => {
             document.getElementById('totalIncome').textContent = `₹${userData.totalIncome?.toFixed(2) || "0.00"}`;
             document.getElementById('totalExpenses').textContent = `₹${userData.totalExpenses?.toFixed(2) || "0.00"}`;
             document.getElementById('savings').textContent = `₹${userData.savings?.toFixed(2) || "0.00"}`;
-            document.getElementById('remainingBudget').textContent = `₹${userData.remainingBudget?.toFixed(2) || "0.00"}`;
+            document.getElementById('remainingBudget').textContent = `₹${(userData.totalIncome - userData.totalExpenses - userData.savings)?.toFixed(2) || "0.00"}`;
         }
 
         // Fetch recent transactions
@@ -51,8 +51,6 @@ auth.onAuthStateChanged(async (user) => {
     }
 });
 
-
-
 // Open modals
 document.getElementById('addIncomeBtn')?.addEventListener('click', () => {
     openModal('addIncomeModal');
@@ -60,6 +58,10 @@ document.getElementById('addIncomeBtn')?.addEventListener('click', () => {
 
 document.getElementById('addExpenseBtn')?.addEventListener('click', () => {
     openModal('addExpenseModal');
+});
+
+document.getElementById('setSavingsBtn')?.addEventListener('click', () => {
+    openModal('setSavingsModal');
 });
 
 // Close modals when clicking the close button
@@ -132,6 +134,7 @@ async function addIncome(amount, category) {
         });
 
         alert("Income added successfully!");
+        await updateUI(); // Update the UI after adding income
     } catch (error) {
         console.error("Error adding income:", error);
         alert("Failed to add income. Please try again.");
@@ -178,9 +181,39 @@ async function addExpense(amount, category) {
         });
 
         alert("Expense added successfully!");
+        await updateUI(); // Update the UI after adding expense
     } catch (error) {
         console.error("Error adding expense:", error);
         alert("Failed to add expense. Please try again.");
+    }
+}
+
+// Function to set savings
+async function setSavings(amount) {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("User not authenticated");
+        }
+
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        const userData = userDoc.data();
+
+        const newSavings = amount;
+        const newRemainingBudget = userData.totalIncome - userData.totalExpenses - newSavings;
+
+        // Update the user's savings and remaining budget
+        await updateDoc(userRef, {
+            savings: newSavings,
+            remainingBudget: newRemainingBudget
+        });
+
+        alert("Savings updated successfully!");
+        await updateUI(); // Update the UI after setting savings
+    } catch (error) {
+        console.error("Error setting savings:", error);
+        alert("Failed to set savings. Please try again.");
     }
 }
 
@@ -216,3 +249,53 @@ document.getElementById('addExpenseForm')?.addEventListener('submit', async (e) 
     document.getElementById('addExpenseForm').reset(); // Clear the form
     closeModal('addExpenseModal'); // Close the modal
 });
+
+// Event listener for setting savings
+document.getElementById('setSavingsForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const savingsAmount = parseFloat(document.getElementById('savingsAmount').value);
+    if (isNaN(savingsAmount)) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    await setSavings(savingsAmount);
+    document.getElementById('setSavingsForm').reset(); // Clear the form
+    closeModal('setSavingsModal'); // Close the modal
+});
+
+// Function to update the UI with the latest data
+async function updateUI() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists()) {
+        const userData = userDoc.data();
+
+        // Update financial summary
+        document.getElementById('totalIncome').textContent = `₹${userData.totalIncome?.toFixed(2) || "0.00"}`;
+        document.getElementById('totalExpenses').textContent = `₹${userData.totalExpenses?.toFixed(2) || "0.00"}`;
+        document.getElementById('savings').textContent = `₹${userData.savings?.toFixed(2) || "0.00"}`;
+        document.getElementById('remainingBudget').textContent = `₹${(userData.totalIncome - userData.totalExpenses - userData.savings)?.toFixed(2) || "0.00"}`;
+    }
+
+    // Fetch and update recent transactions
+    const transactionsQuery = query(collection(db, "users", user.uid, "transactions"));
+    const transactionsSnapshot = await getDocs(transactionsQuery);
+    const transactionsList = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
+    transactionsList.innerHTML = transactionsSnapshot.docs.map(doc => {
+        const transaction = doc.data();
+        return `
+            <tr>
+                <td class="transaction-category">
+                    <i class="fas fa-shopping-cart"></i> ${transaction.category}
+                </td>
+                <td class="transaction-amount">₹${transaction.amount?.toFixed(2) || "0.00"}</td>
+                <td class="transaction-user">${transaction.user || "N/A"}</td>
+                <td class="transaction-date">${transaction.date || "N/A"}</td>
+            </tr>
+        `;
+    }).join('');
+}
