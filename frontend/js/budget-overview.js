@@ -69,16 +69,33 @@ async function fetchBudgetData(view) {
             throw new Error("User not authenticated or family ID not found");
         }
 
-        // Fetch family data (total income, total expenses, remaining budget)
+        // Fetch all family members
+        const familyMembersQuery = query(collection(db, "users"), where("familyId", "==", currentFamilyId));
+        const familyMembersSnapshot = await getDocs(familyMembersQuery);
+
+        let totalIncome = 0;
+
+        // Sum up the incomes of all family members
+        familyMembersSnapshot.forEach(doc => {
+            const memberData = doc.data();
+            totalIncome += memberData.totalIncome || 0; // Ensure income is a number
+        });
+
+        // Fetch family data (total expenses, remaining budget)
         const familyDoc = await getDoc(doc(db, "families", currentFamilyId));
         if (!familyDoc.exists()) {
             throw new Error("Family data not found");
         }
 
         const familyData = familyDoc.data();
-        const totalIncome = familyData.totalIncome || 0;
         const totalExpenses = familyData.totalExpenses || 0;
-        const remainingBudget = familyData.remainingBudget || 0;
+        const remainingBudget = totalIncome - totalExpenses;
+
+        // Update the family document with the new total income and remaining budget
+        await updateDoc(doc(db, "families", currentFamilyId), {
+            totalIncome: totalIncome,
+            remainingBudget: remainingBudget
+        });
 
         // Update summary cards
         document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
@@ -306,7 +323,6 @@ function navigateToCategoryDetails(category) {
                             <li>${transaction.description} - ${formatCurrency(transaction.amount)}</li>
                         `).join('')}
                     </ul>
-                    <button class="delete-expense-btn" data-category="${category}">Delete Expense</button>
                 `;
             }
 
@@ -314,14 +330,6 @@ function navigateToCategoryDetails(category) {
             const modal = document.getElementById('categoryDetailsModal');
             if (modal) {
                 modal.style.display = 'block';
-            }
-
-            // Add event listener for delete expense button
-            const deleteExpenseBtn = document.querySelector('.delete-expense-btn');
-            if (deleteExpenseBtn) {
-                deleteExpenseBtn.addEventListener('click', () => {
-                    deleteExpense(category);
-                });
             }
         })
         .catch(error => {
@@ -432,80 +440,11 @@ async function addOrUpdateBudgetItem(item) {
             alert("Budget item added successfully!");
         }
 
-        // Update total expenses and remaining budget
-        await updateFamilyBudget(item.amount);
-
         // Refresh data after adding/updating
         fetchBudgetData(currentView);
     } catch (error) {
         console.error("Error adding/updating budget item:", error);
         alert("Failed to add/update budget item. Please try again.");
-    }
-}
-
-// Update family budget (total expenses and remaining budget)
-async function updateFamilyBudget(amount) {
-    try {
-        const user = auth.currentUser;
-        if (!user || !currentFamilyId) {
-            throw new Error("User not authenticated or family ID not found");
-        }
-
-        // Fetch the current family data
-        const familyDoc = await getDoc(doc(db, "families", currentFamilyId));
-        if (!familyDoc.exists()) {
-            throw new Error("Family data not found");
-        }
-
-        const familyData = familyDoc.data();
-        const totalIncome = familyData.totalIncome || 0;
-        const totalExpenses = familyData.totalExpenses || 0;
-        const remainingBudget = familyData.remainingBudget || 0;
-
-        // Update total expenses and remaining budget
-        const newTotalExpenses = totalExpenses + amount;
-        const newRemainingBudget = totalIncome - newTotalExpenses;
-
-        // Update the family document in Firestore
-        await updateDoc(doc(db, "families", currentFamilyId), {
-            totalExpenses: newTotalExpenses,
-            remainingBudget: newRemainingBudget
-        });
-    } catch (error) {
-        console.error("Error updating family budget:", error);
-        throw error;
-    }
-}
-
-// Delete an expense
-async function deleteExpense(category) {
-    try {
-        const user = auth.currentUser;
-        if (!user || !currentFamilyId) {
-            throw new Error("User not authenticated or family ID not found");
-        }
-
-        // Fetch the budget item for the selected category
-        const budgetQuery = query(collection(db, "families", currentFamilyId, "budgets"), where("category", "==", category), where("period", "==", currentView));
-        const budgetSnapshot = await getDocs(budgetQuery);
-
-        if (!budgetSnapshot.empty) {
-            // Delete the budget item
-            const budgetDoc = budgetSnapshot.docs[0];
-            await deleteDoc(doc(db, "families", currentFamilyId, "budgets", budgetDoc.id));
-
-            // Update total expenses and remaining budget
-            await updateFamilyBudget(-budgetDoc.data().amount);
-
-            // Refresh data after deletion
-            fetchBudgetData(currentView);
-            alert("Expense deleted successfully!");
-        } else {
-            alert("No expense found for this category.");
-        }
-    } catch (error) {
-        console.error("Error deleting expense:", error);
-        alert("Failed to delete expense. Please try again.");
     }
 }
 
