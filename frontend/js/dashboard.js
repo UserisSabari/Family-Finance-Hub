@@ -53,7 +53,44 @@ auth.onAuthStateChanged(async (user) => {
 
 
 
+// Open modals
+document.getElementById('addIncomeBtn')?.addEventListener('click', () => {
+    openModal('addIncomeModal');
+});
 
+document.getElementById('addExpenseBtn')?.addEventListener('click', () => {
+    openModal('addExpenseModal');
+});
+
+// Close modals when clicking the close button
+document.querySelectorAll('.modal .close').forEach(closeButton => {
+    closeButton.addEventListener('click', () => {
+        closeModal(closeButton.closest('.modal').id);
+    });
+});
+
+// Close modals when clicking outside of them
+window.addEventListener('click', (event) => {
+    if (event.target.classList.contains('modal')) {
+        closeModal(event.target.id);
+    }
+});
+
+// Helper function to open a modal
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'block';
+    }
+}
+
+// Helper function to close a modal
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
 
 // Function to add income
 async function addIncome(amount, category) {
