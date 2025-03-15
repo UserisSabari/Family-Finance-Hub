@@ -50,3 +50,140 @@ auth.onAuthStateChanged(async (user) => {
         window.location.href = './index.html';
     }
 });
+
+
+
+
+
+// Function to add income
+async function addIncome(amount, category) {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("User not authenticated");
+        }
+
+        // Add income to the user's document
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        const userData = userDoc.data();
+
+        const newIncome = userData.totalIncome + amount;
+
+        // Update the user's total income
+        await updateDoc(userRef, {
+            totalIncome: newIncome
+        });
+
+        // Add income transaction
+        await addDoc(collection(db, "users", user.uid, "transactions"), {
+            amount: amount,
+            category: category,
+            type: "income",
+            date: new Date().toLocaleDateString()
+        });
+
+        // Update the family's total income
+        const familyRef = doc(db, "families", userData.familyId);
+        const familyDoc = await getDoc(familyRef);
+        const familyData = familyDoc.data();
+
+        const newFamilyIncome = familyData.totalIncome + amount;
+
+        await updateDoc(familyRef, {
+            totalIncome: newFamilyIncome
+        });
+
+        alert("Income added successfully!");
+    } catch (error) {
+        console.error("Error adding income:", error);
+        alert("Failed to add income. Please try again.");
+    }
+}
+
+// Function to add expense
+async function addExpense(amount, category) {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("User not authenticated");
+        }
+
+        // Add expense to the user's document
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        const userData = userDoc.data();
+
+        const newExpenses = userData.totalExpenses + amount;
+
+        // Update the user's total expenses
+        await updateDoc(userRef, {
+            totalExpenses: newExpenses
+        });
+
+        // Add expense transaction
+        await addDoc(collection(db, "users", user.uid, "transactions"), {
+            amount: amount,
+            category: category,
+            type: "expense",
+            date: new Date().toLocaleDateString()
+        });
+
+        // Update the family's total expenses
+        const familyRef = doc(db, "families", userData.familyId);
+        const familyDoc = await getDoc(familyRef);
+        const familyData = familyDoc.data();
+
+        const newFamilyExpenses = familyData.totalExpenses + amount;
+
+        await updateDoc(familyRef, {
+            totalExpenses: newFamilyExpenses
+        });
+
+        alert("Expense added successfully!");
+    } catch (error) {
+        console.error("Error adding expense:", error);
+        alert("Failed to add expense. Please try again.");
+    }
+}
+
+// Event listeners for adding income and expense
+document.getElementById('addIncomeForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const amount = parseFloat(document.getElementById('incomeAmount').value);
+    const category = document.getElementById('incomeCategory').value;
+
+    if (isNaN(amount)) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    await addIncome(amount, category);
+    document.getElementById('addIncomeForm').reset(); // Clear the form
+    closeModal('addIncomeModal'); // Close the modal
+});
+
+document.getElementById('addExpenseForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const amount = parseFloat(document.getElementById('expenseAmount').value);
+    const category = document.getElementById('expenseCategory').value;
+
+    if (isNaN(amount)) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    await addExpense(amount, category);
+    document.getElementById('addExpenseForm').reset(); // Clear the form
+    closeModal('addExpenseModal'); // Close the modal
+});
+
+// Helper function to close modals
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
