@@ -292,16 +292,17 @@ body {
 
 .transaction-amount {
     font-weight: 500;
-    text-align: right;
+    text-align: center;
 }
 
 .transaction-user {
     color: #555;
+    text-align: center;
 }
 
 .transaction-date {
     color: #777;
-    text-align: right;
+    text-align: center;
 }
 
 .transaction-actions {
