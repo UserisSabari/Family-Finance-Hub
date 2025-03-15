@@ -283,6 +283,7 @@ body {
 .transaction-category {
     display: flex;
     align-items: center;
+    align-self: center;
 }
 
 .transaction-category i {
