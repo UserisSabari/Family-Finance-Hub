@@ -363,7 +363,7 @@ async function fetchCategoryDetails(category) {
         const budgetQuery = query(
             collection(db, "families", currentFamilyId, "budgets"),
             where("category", "==", category),
-            where("period", "==", currentView) // Ensure the period matches the current view
+            where("period", "==", currentView)
         );
         const budgetSnapshot = await getDocs(budgetQuery);
 
@@ -385,7 +385,7 @@ async function fetchCategoryDetails(category) {
         const transactionsQuery = query(
             collection(db, "families", currentFamilyId, "transactions"),
             where("category", "==", category),
-            where("period", "==", currentView) // Ensure the period matches the current view
+            where("period", "==", currentView)
         );
         const transactionsSnapshot = await getDocs(transactionsQuery);
 
@@ -397,10 +397,21 @@ async function fetchCategoryDetails(category) {
             };
         });
 
+        // Calculate total spent for the category
+        const totalSpent = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+
+        // Fetch total expenses for the current period
+        const familyDoc = await getDoc(doc(db, "families", currentFamilyId));
+        const familyData = familyDoc.data();
+        const totalExpenses = familyData.totalExpenses || 0;
+
+        // Calculate percentage of expenses for the category
+        const percentage = totalExpenses > 0 ? ((totalSpent / totalExpenses) * 100).toFixed(2) : 0;
+
         return {
             name: budgetData.category || category,
-            amount: budgetData.amount || 0,
-            percentage: budgetData.percentage || 0,
+            amount: totalSpent, // Use total spent instead of budget amount
+            percentage: percentage, // Calculate percentage
             transactions
         };
     } catch (error) {
@@ -418,7 +429,11 @@ async function addOrUpdateBudgetItem(item) {
         }
 
         // Check if a budget item for the same category and period already exists
-        const budgetQuery = query(collection(db, "families", currentFamilyId, "budgets"), where("category", "==", item.category), where("period", "==", currentView));
+        const budgetQuery = query(
+            collection(db, "families", currentFamilyId, "budgets"),
+            where("category", "==", item.category),
+            where("period", "==", currentView)
+        );
         const budgetSnapshot = await getDocs(budgetQuery);
 
         if (!budgetSnapshot.empty) {
