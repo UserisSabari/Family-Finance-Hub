@@ -92,6 +92,7 @@ body {
 }
 .user-info {
     font-size: 14px;
+    margin-left: 10px;
 }
 
 .user-info .user-name {
