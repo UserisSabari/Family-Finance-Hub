@@ -94,11 +94,11 @@ body {
 
 .user-info {
     font-size: 14px;
+    margin-left: 10px;
 }
 
 .user-info .user-name {
     font-weight: 500;
-    margin-left: 10px;
 }
 
 .user-info .user-role {
