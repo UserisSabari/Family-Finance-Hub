@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Family - Family Finance</title>
+    <link rel="stylesheet" href="css/family-members.css"> <!-- Reuse the same CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="breadcrumb">
+            <a href="dashboard.html">Home</a>
+            <span class="breadcrumb-arrow">›</span>
+            <span>Join Family</span>
+        </div>
+        <h1 class="page-title">Join Family</h1>
+
+        <!-- Family Invitation Message -->
+        <div class="family-invitation-message" id="familyInvitationMessage">
+            <p>You have been invited to join the family: <strong id="familyName"></strong></p>
+            <button class="join-family-btn" id="joinFamilyBtn">
+                <i class="fas fa-user-plus"></i> Join Family
+            </button>
+        </div>
+
+        <!-- Loading Message -->
+        <div class="loading-message" id="loadingMessage" hidden>
+            <p>Loading family details...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage" hidden>
+            <p id="errorText"></p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { auth, db } from './firebase.js';
+        import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // DOM Elements
+        const familyInvitationMessage = document.getElementById('familyInvitationMessage');
+        const familyName = document.getElementById('familyName');
+        const joinFamilyBtn = document.getElementById('joinFamilyBtn');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        // Extract familyId from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const familyId = urlParams.get('familyId');
+
+        // Check if the user is authenticated
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                if (!familyId) {
+                    showError("Invalid family invitation link. Please check the link and try again.");
+                    return;
+                }
+
+                // Fetch family details
+                loadingMessage.hidden = false;
+                familyInvitationMessage.hidden = true;
+
+                try {
+                    const familyDoc = await getDoc(doc(db, "families", familyId));
+                    if (familyDoc.exists()) {
+                        const familyData = familyDoc.data();
+                        familyName.textContent = familyData.name; // Display the family name
+                        loadingMessage.hidden = true;
+                        familyInvitationMessage.hidden = false;
+
+                        // Handle Join Family button click
+                        joinFamilyBtn.addEventListener('click', async () => {
+                            try {
+                                // Add the user to the family members collection
+                                await setDoc(doc(db, "families", familyId, "members", user.uid), {
+                                    email: user.email,
+                                    role: "Member", // Default role for new members
+                                    status: "active",
+                                    createdAt: new Date()
+                                });
+
+                                // Update the user's document with the family ID
+                                await setDoc(doc(db, "users", user.uid), {
+                                    familyId: familyId
+                                }, { merge: true });
+
+                                alert("You have successfully joined the family!");
+                                window.location.href = "dashboard.html"; // Redirect to dashboard
+                            } catch (error) {
+                                console.error("Error joining family:", error);
+                                showError(`Error: ${error.message}`);
+                            }
+                        });
+                    } else {
+                        showError("Family not found. Please check the invitation link.");
+                    }
+                } catch (error) {
+                    console.error("Error fetching family details:", error);
+                    showError(`Error: ${error.message}`);
+                }
+            } else {
+                showError("You must be logged in to join a family. Please log in and try again.");
+            }
+        });
+
+        // Show error message
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.hidden = false;
+            loadingMessage.hidden = true;
+            familyInvitationMessage.hidden = true;
+        }
+    </script>
+</body>
+</html>
