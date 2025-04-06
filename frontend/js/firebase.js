@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -12,48 +12,101 @@ const firebaseConfig = {
     measurementId: "G-05SCM8DEZZ"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app); // Initialize Firestore
+const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
+
+// Configure Google provider
+provider.setCustomParameters({
+    prompt: 'select_account'
+});
+
+// Set persistence to LOCAL
+auth.setPersistence('local');
+
+// Add localhost to authorized domains
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    console.log("Running on localhost - enabling development mode");
+    // Enable development mode features
+    window.firebase = {
+        config: firebaseConfig,
+        auth: auth,
+        db: db
+    };
+}
+
+// Helper function to handle Firestore errors
+async function handleFirestoreError(operation, error) {
+    console.error(`Firestore ${operation} error:`, error);
+    if (error.code === 'permission-denied') {
+        console.error("Permission denied. Please check your Firebase Security Rules.");
+        throw new Error("You don't have permission to perform this action. Please contact support.");
+    }
+    throw error;
+}
+
+// Helper function to get correct path
+function getCorrectPath(path) {
+    // If running on localhost, use relative path
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return path;
+    }
+    // Otherwise, use absolute path
+    const currentPath = window.location.pathname;
+    const basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+    return `${basePath}${path}`;
+}
 
 // Sign in with Google
 export const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
+    return signInWithPopup(auth, provider)
         .then(async (result) => {
-            console.log("User signed in:", result.user);
             const user = result.user;
+            console.log("Google sign-in successful:", user);
 
-            // Check if the user already exists in Firestore
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (!userDoc.exists()) {
-                // User is new, create a new document in Firestore
-                await setDoc(doc(db, "users", user.uid), {
-                    name: user.displayName || "", // Use Google display name
-                    email: user.email || "", // Use Google email
-                    role: "Family Admin", // Default role for the first user
-                    totalIncome: 0,
-                    totalExpenses: 0,
-                    savings: 0,
-                    remainingBudget: 0,
-                    createdAt: new Date()
-                }); 
-                // Create a family for the first user
-                // const familyRef = await addDoc(collection(db, "families"), {
-                //     name: `${name}'s Family`, // Default family name
-                //     createdBy: user.uid,
-                //     createdAt: new Date()
-                // });
+            try {
+                // Check if user exists in Firestore
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (!userDoc.exists()) {
+                    // Create new user document with proper permissions
+                    await setDoc(doc(db, "users", user.uid), {
+                        name: user.displayName || "",
+                        email: user.email || "",
+                        role: "Family Admin",
+                        totalIncome: 0,
+                        totalExpenses: 0,
+                        savings: 0,
+                        remainingBudget: 0,
+                        createdAt: new Date(),
+                        lastLogin: new Date(),
+                        isActive: true
+                    });
+                    console.log("New user created in Firestore");
+                } else {
+                    // Update last login time for existing user
+                    await updateDoc(doc(db, "users", user.uid), {
+                        lastLogin: new Date()
+                    });
+                }
 
-                console.log("New user created in Firestore:", user.uid);
+                // Redirect to dashboard
+                window.location.href = getCorrectPath("/dashboard.html");
+            } catch (error) {
+                console.error("Error during Google sign-in:", error);
+                if (error.code === 'permission-denied') {
+                    throw new Error("You don't have permission to access this resource. Please contact support.");
+                }
+                throw new Error("Failed to complete sign-in. Please try again.");
             }
-
-            // Redirect to dashboard
-            window.location.href = "dashboard.html";
         })
         .catch((error) => {
-            console.error("Error during Google sign-in:", error);
-            alert(`Error: ${error.message}`);
+            console.error("Google sign-in error:", error);
+            if (error.code === 'auth/popup-closed-by-user') {
+                throw new Error("Sign-in was cancelled. Please try again.");
+            }
+            throw new Error(getErrorMessage(error.code));
         });
 };
 
@@ -62,50 +115,100 @@ export const signUpWithEmailPassword = async (email, password, name) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        console.log("Email sign-up successful:", user);
 
-        // Create a family for the first user
-        // const familyRef = await addDoc(collection(db, "families"), {
-        //     name: `${name}'s Family`, // Default family name
-        //     createdBy: user.uid,
-        //     createdAt: new Date()
-        // });
+        try {
+            // Create user document in Firestore
+            await setDoc(doc(db, "users", user.uid), {
+                name: name || "",
+                email: email,
+                role: "Family Admin",
+                totalIncome: 0,
+                totalExpenses: 0,
+                savings: 0,
+                remainingBudget: 0,
+                createdAt: new Date()
+            });
 
-        // Save user details in Firestore
-        await setDoc(doc(db, "users", user.uid), {
-            name: name || "", 
-            email: email,
-            role: "Family Admin", // Default role for the first user
-            // familyId: familyRef.id,
-            totalIncome: 0,
-            totalExpenses: 0,
-            savings: 0,
-            remainingBudget: 0
-        });
-
-        console.log("User signed up:", user);
-        window.location.href = "dashboard.html"; // Redirect to dashboard
-    } catch (error) {
-        console.error("Error during sign-up:", error);
-        if (error.code === "auth/email-already-in-use") {
-            alert("This email is already registered. Please use a different email.");
-        } else {
-            alert(`Error: ${error.message}`);
+            // Redirect to dashboard
+            window.location.href = getCorrectPath("/dashboard.html");
+        } catch (error) {
+            handleFirestoreError("user creation", error);
         }
+    } catch (error) {
+        console.error("Email sign-up error:", error);
+        throw new Error(getErrorMessage(error.code));
     }
 };
 
 // Email/Password Login
-export const loginWithEmailPassword = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            console.log("User logged in:", userCredential.user);
-            window.location.href = "dashboard.html"; // Redirect to dashboard
-        })
-        .catch((error) => {
-            console.error("Error during login:", error);
-            alert(`Error: ${error.message}`);
-        });
+export const loginWithEmailPassword = async (email, password) => {
+    try {
+        console.log("Attempting login with email:", email);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        console.log("Email login successful:", user);
+
+        try {
+            // Check if user exists in Firestore
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (!userDoc.exists()) {
+                console.error("User document not found in Firestore");
+                throw new Error("User account not found. Please register first.");
+            }
+
+            console.log("User document found, redirecting to dashboard...");
+            window.location.href = getCorrectPath("/dashboard.html");
+        } catch (error) {
+            handleFirestoreError("user verification", error);
+        }
+    } catch (error) {
+        console.error("Email login error:", error);
+        throw new Error(getErrorMessage(error.code));
+    }
 };
+
+// Helper function to get user-friendly error messages
+function getErrorMessage(errorCode) {
+    switch (errorCode) {
+        case 'auth/invalid-email':
+            return 'Invalid email address.';
+        case 'auth/user-disabled':
+            return 'This account has been disabled.';
+        case 'auth/user-not-found':
+            return 'No account found with this email.';
+        case 'auth/wrong-password':
+            return 'Incorrect password.';
+        case 'auth/email-already-in-use':
+            return 'This email is already registered.';
+        case 'auth/weak-password':
+            return 'Password should be at least 6 characters.';
+        case 'auth/operation-not-allowed':
+            return 'This operation is not allowed.';
+        case 'auth/network-request-failed':
+            return 'Network error. Please check your connection.';
+        default:
+            return 'An error occurred. Please try again.';
+    }
+}
+
+// Check authentication state and handle redirects
+onAuthStateChanged(auth, (user) => {
+    console.log("Auth state changed:", user ? "User signed in" : "No user");
+    if (user) {
+        // If user is on login page and authenticated, redirect to dashboard
+        if (window.location.pathname.includes('login_form.html')) {
+            console.log("User authenticated, redirecting to dashboard...");
+            window.location.href = getCorrectPath("/dashboard.html");
+        }
+    } else {
+        // If user is not authenticated and on dashboard, redirect to login
+        if (window.location.pathname.includes('dashboard.html')) {
+            console.log("User not authenticated, redirecting to login...");
+            window.location.href = getCorrectPath("/login_form.html");
+        }
+    }
+});
 
 // Add a family member
 export const addFamilyMember = async (familyId, email, memberType) => {
