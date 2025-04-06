@@ -1,55 +1,143 @@
 import { auth, db } from './firebase.js';
-import { doc, getDoc, collection, query, where, getDocs, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { doc, getDoc, collection, query, where, getDocs, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+// DOM Elements
+const userDisplayName = document.getElementById('userDisplayName');
+const userRole = document.getElementById('userRole');
+const welcomeMessage = document.getElementById('welcomeMessage');
+const userAvatar = document.querySelector('.user-avatar');
+const totalIncome = document.getElementById('totalIncome');
+const totalExpenses = document.getElementById('totalExpenses');
+const savings = document.getElementById('savings');
+const remainingBudget = document.getElementById('remainingBudget');
+const transactionsTable = document.getElementById('transactionsTable');
 
 // Fetch user data and update the dashboard
 auth.onAuthStateChanged(async (user) => {
     if (user) {
-        // User is signed in
-        const userDisplayName = document.getElementById('userDisplayName');
-        const userRole = document.getElementById('userRole');
-        const welcomeMessage = document.getElementById('welcomeMessage');
-        const userAvatar = document.querySelector('.user-avatar');
+        try {
+            // Fetch user details from Firestore
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
 
-        // Fetch user details from Firestore
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-            const userData = userDoc.data();
+                // Update user info
+                userDisplayName.textContent = userData.name || user.email;
+                userRole.textContent = userData.role || "User";
+                welcomeMessage.textContent = `Welcome back, ${userData.name || user.email}!`;
+                userAvatar.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/32'}" alt="Profile" class="profile-icon">`;
 
-            // Update user info
-            userDisplayName.textContent = userData.name || user.email;
-            userRole.textContent = userData.role || "User"; // Default to "User" if role is not set
-            welcomeMessage.textContent = `Welcome back, ${userData.name || user.email}!`;
-            userAvatar.innerHTML = `<img src="${user.photoURL || 'https://via.placeholder.com/32'}" alt="Profile" class="profile-icon">`;
+                // Update financial summary
+                totalIncome.textContent = `₹${userData.totalIncome?.toFixed(2) || "0.00"}`;
+                totalExpenses.textContent = `₹${userData.totalExpenses?.toFixed(2) || "0.00"}`;
+                savings.textContent = `₹${userData.savings?.toFixed(2) || "0.00"}`;
+                remainingBudget.textContent = `₹${(userData.totalIncome - userData.totalExpenses - userData.savings)?.toFixed(2) || "0.00"}`;
 
-            // Update financial summary
-            document.getElementById('totalIncome').textContent = `₹${userData.totalIncome?.toFixed(2) || "0.00"}`;
-            document.getElementById('totalExpenses').textContent = `₹${userData.totalExpenses?.toFixed(2) || "0.00"}`;
-            document.getElementById('savings').textContent = `₹${userData.savings?.toFixed(2) || "0.00"}`;
-            document.getElementById('remainingBudget').textContent = `₹${(userData.totalIncome - userData.totalExpenses - userData.savings)?.toFixed(2) || "0.00"}`;
+                // Fetch and display recent transactions
+                await fetchRecentTransactions(user.uid);
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            showError("Failed to load user data. Please try refreshing the page.");
+        }
+    } else {
+        window.location.href = "login_form.html";
+    }
+});
+
+// Fetch recent transactions
+async function fetchRecentTransactions(userId) {
+    try {
+        const transactionsQuery = query(collection(db, "users", userId, "transactions"));
+        const transactionsSnapshot = await getDocs(transactionsQuery);
+        const transactionsList = transactionsTable.getElementsByTagName('tbody')[0];
+        
+        if (transactionsSnapshot.empty) {
+            transactionsList.innerHTML = '<tr><td colspan="4" class="text-center">No transactions found</td></tr>';
+            return;
         }
 
-        // Fetch recent transactions
-        const transactionsQuery = query(collection(db, "users", user.uid, "transactions"));
-        const transactionsSnapshot = await getDocs(transactionsQuery);
-        const transactionsList = document.getElementById('transactionsTable').getElementsByTagName('tbody')[0];
         transactionsList.innerHTML = transactionsSnapshot.docs.map(doc => {
             const transaction = doc.data();
             return `
                 <tr>
                     <td class="transaction-category">
-                        <i class="fas fa-shopping-cart"></i> ${transaction.category}
+                        <i class="fas fa-${getTransactionIcon(transaction.type)}"></i> ${transaction.category}
                     </td>
-                    <td class="transaction-amount">₹${transaction.amount?.toFixed(2) || "0.00"}</td>
-                    <td class="transaction-user">${transaction.user || "N/A"}</td>
-                    <td class="transaction-date">${transaction.date || "N/A"}</td>
+                    <td class="transaction-amount ${transaction.type === 'expense' ? 'text-danger' : 'text-success'}">
+                        ₹${transaction.amount?.toFixed(2) || "0.00"}
+                    </td>
+                    <td class="transaction-date">${formatDate(transaction.date)}</td>
+                    <td class="transaction-actions">
+                        <button class="btn btn-sm btn-outline-primary" onclick="editTransaction('${doc.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTransaction('${doc.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
             `;
         }).join('');
-    // } else {
-    //     // No user is signed in, redirect to login
-    //     window.location.href = './index.html';
+    } catch (error) {
+        console.error("Error fetching transactions:", error);
+        showError("Failed to load transactions. Please try refreshing the page.");
     }
-});
+}
+
+// Helper functions
+function getTransactionIcon(type) {
+    switch (type) {
+        case 'income':
+            return 'arrow-up';
+        case 'expense':
+            return 'arrow-down';
+        case 'savings':
+            return 'piggy-bank';
+        default:
+            return 'exchange-alt';
+    }
+}
+
+function formatDate(date) {
+    if (!date) return 'N/A';
+    const d = new Date(date);
+    return d.toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'alert alert-danger alert-dismissible fade show';
+    errorDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    document.querySelector('.container').prepend(errorDiv);
+    setTimeout(() => errorDiv.remove(), 5000);
+}
+
+// Export functions for use in HTML
+window.editTransaction = async (transactionId) => {
+    // Implement edit transaction functionality
+    console.log("Edit transaction:", transactionId);
+};
+
+window.deleteTransaction = async (transactionId) => {
+    if (confirm("Are you sure you want to delete this transaction?")) {
+        try {
+            await deleteDoc(doc(db, "users", auth.currentUser.uid, "transactions", transactionId));
+            await fetchRecentTransactions(auth.currentUser.uid);
+            showError("Transaction deleted successfully");
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+            showError("Failed to delete transaction");
+        }
+    }
+};
 
 // Open modals
 document.getElementById('addIncomeBtn')?.addEventListener('click', () => {
@@ -290,11 +378,20 @@ async function updateUI() {
         return `
             <tr>
                 <td class="transaction-category">
-                    <i class="fas fa-shopping-cart"></i> ${transaction.category}
+                    <i class="fas fa-${getTransactionIcon(transaction.type)}"></i> ${transaction.category}
                 </td>
-                <td class="transaction-amount">₹${transaction.amount?.toFixed(2) || "0.00"}</td>
-                <td class="transaction-user">${transaction.user || "N/A"}</td>
-                <td class="transaction-date">${transaction.date || "N/A"}</td>
+                <td class="transaction-amount ${transaction.type === 'expense' ? 'text-danger' : 'text-success'}">
+                    ₹${transaction.amount?.toFixed(2) || "0.00"}
+                </td>
+                <td class="transaction-date">${formatDate(transaction.date)}</td>
+                <td class="transaction-actions">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editTransaction('${doc.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteTransaction('${doc.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
             </tr>
         `;
     }).join('');
