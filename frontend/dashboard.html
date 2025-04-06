@@ -5,12 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Family Finance Dashboard</title>
+    <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Menu Toggle Button -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <!-- Sidebar -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="sidebar-brand">Family Finance</div>
         <div class="sidebar-menu">
             <a href="dashboard.html" class="menu-item active">
@@ -51,8 +62,8 @@
         <!-- Financial Summary -->
         <div class="financial-summary">
             <h2 class="summary-title">Financial Summary</h2>
-            <div class="summary-cards">
-                <div class="summary-card income-card">
+            <div class="summary-cards grid grid-4">
+                <div class="summary-card">
                     <div class="card-icon">
                         <i class="fas fa-wallet"></i>
                     </div>
@@ -60,7 +71,7 @@
                     <div class="card-value" id="totalIncome">$0.00</div>
                     <div class="card-meta" id="incomeChange">-</div>
                 </div>
-                <div class="summary-card expenses-card">
+                <div class="summary-card">
                     <div class="card-icon">
                         <i class="fas fa-shopping-cart"></i>
                     </div>
@@ -68,7 +79,7 @@
                     <div class="card-value" id="totalExpenses">$0.00</div>
                     <div class="card-meta" id="expensesChange">-</div>
                 </div>
-                <div class="summary-card savings-card">
+                <div class="summary-card">
                     <div class="card-icon">
                         <i class="fas fa-piggy-bank"></i>
                     </div>
@@ -76,7 +87,7 @@
                     <div class="card-value" id="savings">$0.00</div>
                     <div class="card-meta" id="savingsPercentage">-</div>
                 </div>
-                <div class="summary-card budget-card">
+                <div class="summary-card">
                     <div class="card-icon">
                         <i class="fas fa-balance-scale"></i>
                     </div>
@@ -101,67 +112,67 @@
         </div>
 
         <!-- Add Income Modal -->
-<div id="addIncomeModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Add Income</h2>
-        <form id="addIncomeForm">
-            <div class="form-group">
-                <label for="incomeAmount">Amount</label>
-                <input type="number" id="incomeAmount" name="incomeAmount" required>
+        <div id="addIncomeModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add Income</h2>
+                <form id="addIncomeForm">
+                    <div class="form-group">
+                        <label for="incomeAmount">Amount</label>
+                        <input type="number" id="incomeAmount" name="incomeAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeCategory">Category</label>
+                        <select id="incomeCategory" name="incomeCategory" required>
+                            <option value="Salary">Salary</option>
+                            <option value="Bonus">Bonus</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Income</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="incomeCategory">Category</label>
-                <select id="incomeCategory" name="incomeCategory" required>
-                    <option value="Salary">Salary</option>
-                    <option value="Bonus">Bonus</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-success">Add Income</button>
-        </form>
-    </div>
-</div>
+        </div>
 
-<!-- Add Expense Modal -->
-<div id="addExpenseModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Add Expense</h2>
-        <form id="addExpenseForm">
-            <div class="form-group">
-                <label for="expenseAmount">Amount</label>
-                <input type="number" id="expenseAmount" name="expenseAmount" required>
+        <!-- Add Expense Modal -->
+        <div id="addExpenseModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add Expense</h2>
+                <form id="addExpenseForm">
+                    <div class="form-group">
+                        <label for="expenseAmount">Amount</label>
+                        <input type="number" id="expenseAmount" name="expenseAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expenseCategory">Category</label>
+                        <select id="expenseCategory" name="expenseCategory" required>
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Expense</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="expenseCategory">Category</label>
-                <select id="expenseCategory" name="expenseCategory" required>
-                    <option value="Food">Food</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Utilities">Utilities</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Expense</button>
-        </form>
-    </div>
-</div>
+        </div>
 
-<!-- Set Savings Modal -->
-<div id="setSavingsModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Set Savings</h2>
-        <form id="setSavingsForm">
-            <div class="form-group">
-                <label for="savingsAmount">Savings Amount</label>
-                <input type="number" id="savingsAmount" name="savingsAmount" required>
+        <!-- Set Savings Modal -->
+        <div id="setSavingsModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Set Savings</h2>
+                <form id="setSavingsForm">
+                    <div class="form-group">
+                        <label for="savingsAmount">Savings Amount</label>
+                        <input type="number" id="savingsAmount" name="savingsAmount" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Set Savings</button>
+                </form>
             </div>
-            <button type="submit" class="btn btn-warning">Set Savings</button>
-        </form>
-    </div>
-</div>
+        </div>
 
         <!-- Spending Categories -->
         <div class="section">
@@ -187,8 +198,9 @@
             </div>
         </div>
 
+        <!-- Recent Transactions -->
         <div class="section">
-            <div class="section-title">Recent Transactions</div>
+            <h2 class="section-title">Recent Transactions</h2>
             <table id="transactionsTable" class="transactions-table">
                 <thead>
                     <tr>
