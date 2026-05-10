@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Finance - Financial Goals</title>
+    <link rel="stylesheet" href="css/financial-goals.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-brand">Family Finance</div>
+            <div class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="family-members.html" class="menu-item">
+                    <i class="fas fa-users"></i> Family Members
+                </a>
+                <a href="budget-overview.html" class="menu-item">
+                    <i class="fas fa-chart-pie"></i> Budget Overview
+                </a>
+                <a href="financial-goals.html" class="menu-item active">
+                    <i class="fas fa-bullseye"></i> Financial Goals
+                </a>
+                <a href="reports.html" class="menu-item">
+                    <i class="fas fa-file-alt"></i> Reports
+                </a>
+                <a href="settings.html" class="menu-item">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <div class="user-name" id="userDisplayName">Loading...</div>
+                    <div class="user-role" id="userRole">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="dashboard.html">Home</a>
+                <span class="breadcrumb-arrow">›</span>
+                <span>Financial Goals</span>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Financial Goals</h1>
+            </div>
+
+            <!-- Buttons Section -->
+            <div class="buttons-section">
+                <button id="createGoalBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Create New Goal</button>
+                <button id="viewArchivedBtn" class="btn btn-secondary">View Archived Goals</button>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="card">
+                    <div class="card-icon savings-icon">
+                        <i class="fas fa-piggy-bank"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Total Savings</h3>
+                        <h2 id="totalSavings">₹0</h2>
+                        <p>Total savings across all goals</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon contributions-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Monthly Contributions</h3>
+                        <h2 id="monthlyContributions">₹0</h2>
+                        <p>Monthly contributions to goals</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon active-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Active Goals</h3>
+                        <h2 id="activeGoalsCount">4</h2>
+                        <p>Active financial goals</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon achieved-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Achieved Goals</h3>
+                        <h2 id="achievedGoalsCount">2</h2>
+                        <p>Goals achieved this year</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Goals Section -->
+            <div class="section">
+                <h2>Active Goals</h2>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="all">All Goals</button>
+                    <button class="tab-btn" data-tab="short">Short-term</button>
+                    <button class="tab-btn" data-tab="mid">Mid-term</button>
+                    <button class="tab-btn" data-tab="long">Long-term</button>
+                </div>
+                
+                <!-- Goals List -->
+                <div class="goals-list" id="goalsList">
+                    <!-- Goals will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Recent Contributions Section -->
+            <div class="section">
+                <h2>Recent Contributions</h2>
+                <div class="table-container">
+                    <table class="data-table" id="contributionsTable">
+                        <thead>
+                            <tr>
+                                <th>Goal</th>
+                                <th>Amount</th>
+                                <th>Contributor</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Contributions will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Goal Progress Section -->
+            <div class="section">
+                <h2>Goal Progress</h2>
+                <div class="card full-width">
+                    <div class="card-icon progress-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Monthly Contributions</h3>
+                        <h2>Savings Progress</h2>
+                        <p>Track your progress toward financial goals</p>
+                        <div class="chart-container" id="progressChart">
+                            <!-- Chart will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for creating new goal -->
+    <div class="modal" id="newGoalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Goal</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="newGoalForm">
+                    <div class="form-group">
+                        <label for="goalName">Goal Name</label>
+                        <input type="text" id="goalName" name="goalName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalAmount">Target Amount ($)</label>
+                        <input type="number" id="goalAmount" name="goalAmount" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalCategory">Category</label>
+                        <select id="goalCategory" name="goalCategory" required>
+                            <option value="">Select a category</option>
+                            <option value="vacation">Vacation</option>
+                            <option value="emergency">Emergency Fund</option>
+                            <option value="car">Vehicle</option>
+                            <option value="education">Education</option>
+                            <option value="home">Home</option>
+                            <option value="retirement">Retirement</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalTimeframe">Timeframe</label>
+                        <select id="goalTimeframe" name="goalTimeframe" required>
+                            <option value="">Select a timeframe</option>
+                            <option value="short">Short-term (< 1 year)</option>
+                            <option value="mid">Mid-term (1-5 years)</option>
+                            <option value="long">Long-term (> 5 years)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalContribution">Monthly Contribution ($)</label>
+                        <input type="number" id="goalContribution" name="goalContribution" min="1" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelGoalBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Goal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.7.0/chart.min.js"></script>
+    <script src="js/financial-goals.js"></script>
+</body>
+</html>
