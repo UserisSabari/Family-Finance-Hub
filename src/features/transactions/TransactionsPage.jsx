@@ -57,12 +57,17 @@ export function TransactionsPage() {
         setNotice('Transaction saved.');
       }
       setEditing(null);
-      await load();
     } catch (reason) {
       setError(reason);
       throw reason;
     } finally {
       setSubmitting(false);
+    }
+
+    try {
+      await load();
+    } catch (loadErr) {
+      console.warn('Post-save reload note:', loadErr);
     }
   };
 

@@ -1,4 +1,5 @@
 import { formatInr } from '../../lib/format/currency';
+import { normalizeDateString } from '../../lib/format/dates';
 import { IconEdit, IconTrash } from '../icons/Icons';
 
 export function TransactionTable({ transactions, onEdit, onDelete }) {
@@ -22,10 +23,11 @@ export function TransactionTable({ transactions, onEdit, onDelete }) {
             const isExpense = transaction.type === 'expense';
             const isRefund = transaction.type === 'refund';
             const isTransfer = transaction.type === 'transfer';
+            const displayDate = typeof transaction.date === 'string' ? transaction.date : normalizeDateString(transaction.date);
 
             return (
               <tr key={transaction.id}>
-                <td style={{ color: 'var(--color-muted)', fontSize: '0.875rem' }}>{transaction.date}</td>
+                <td style={{ color: 'var(--color-muted)', fontSize: '0.875rem' }}>{displayDate}</td>
                 <td>
                   <span className={`transaction-type-badge badge-${transaction.type}`}>
                     {transaction.type}

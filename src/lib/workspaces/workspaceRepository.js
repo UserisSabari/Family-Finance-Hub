@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '../firebase';
+import { normalizeDateString } from '../format/dates';
 import { listUserWorkspaces as listFamilyWorkspaces } from '../../features/family/familyRepository';
 
 export async function ensurePersonalWorkspace(uid) {
@@ -104,7 +105,11 @@ async function getWorkspaceCollection(workspaceId, name) {
     const result = await getDocs(
       query(collection(db, name), where('workspace', '==', workspaceId)),
     );
-    return result.docs.map((item) => ({ id: item.id, ...item.data() }));
+    return result.docs.map((item) => {
+      const data = item.data();
+      const date = normalizeDateString(data.date);
+      return { id: item.id, ...data, ...(date ? { date } : {}) };
+    });
   } catch (err) {
     console.warn(`Could not load ${name} for ${workspaceId}:`, err);
     return [];

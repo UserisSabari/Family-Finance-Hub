@@ -18,3 +18,26 @@ export function formatDateInKolkata(value) {
     dateStyle: 'medium',
   }).format(date);
 }
+
+export function normalizeDateString(value) {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  if (typeof value?.toDate === 'function') {
+    try {
+      return value.toDate().toISOString().slice(0, 10);
+    } catch {
+      return '';
+    }
+  }
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? '' : value.toISOString().slice(0, 10);
+  }
+  if (typeof value === 'object' && typeof value.seconds === 'number') {
+    try {
+      return new Date(value.seconds * 1000).toISOString().slice(0, 10);
+    } catch {
+      return '';
+    }
+  }
+  return '';
+}

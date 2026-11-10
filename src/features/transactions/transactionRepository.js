@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore';
 
 import { auth, db } from '../../lib/firebase';
+import { normalizeDateString } from '../../lib/format/dates';
 import { normalizeTransactionInput } from './transactionForm';
 
 const transactionsCollection = () => collection(db, 'transactions');
@@ -26,8 +27,8 @@ function toFirestoreInput(input) {
 
 function fromFirestore(item) {
   const data = item.data();
-  const date = data.date?.toDate ? data.date.toDate().toISOString().slice(0, 10) : data.date;
-  return { id: item.id, ...data, date };
+  const date = normalizeDateString(data.date) || data.date;
+  return { id: item.id, ...data, date: typeof date === 'string' ? date : normalizeDateString(date) };
 }
 
 export async function listTransactions(workspaceId, filters = {}) {

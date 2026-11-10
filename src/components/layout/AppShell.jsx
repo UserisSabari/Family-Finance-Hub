@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { BottomNav } from './BottomNav';
 import { MobileHeader } from './MobileHeader';
 import { Sidebar } from './Sidebar';
+import { ErrorBoundary } from '../feedback/ErrorBoundary';
 
 export function AppShell() {
   return (
@@ -10,7 +11,9 @@ export function AppShell() {
       <Sidebar />
       <div className="app-main">
         <MobileHeader />
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
         <BottomNav />
       </div>
     </div>
