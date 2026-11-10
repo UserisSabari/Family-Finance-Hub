@@ -2,7 +2,7 @@ export const FINANCIAL_PROFILES = {
   student: {
     id: 'student',
     label: 'Student',
-    emoji: '🎓',
+    icon: 'student',
     tagline: 'Pocket money, hostel mess, travel, and campus essentials',
     quickAmounts: [10, 20, 50, 100, 200, 500],
     expenseCategories: [
@@ -31,7 +31,7 @@ export const FINANCIAL_PROFILES = {
   salaried: {
     id: 'salaried',
     label: 'Salaried',
-    emoji: '💼',
+    icon: 'briefcase',
     tagline: 'Monthly salary, rent, bills, groceries, and wealth building',
     quickAmounts: [100, 200, 500, 1000, 2000],
     expenseCategories: [
@@ -60,7 +60,7 @@ export const FINANCIAL_PROFILES = {
   freelancer: {
     id: 'freelancer',
     label: 'Freelancer',
-    emoji: '💻',
+    icon: 'laptop',
     tagline: 'Irregular client payouts, project expenses, and tax buffers',
     quickAmounts: [100, 500, 1000, 2000, 5000],
     expenseCategories: [
@@ -87,7 +87,7 @@ export const FINANCIAL_PROFILES = {
   family: {
     id: 'family',
     label: 'Family / Household',
-    emoji: '👨‍👩‍👧',
+    icon: 'family',
     tagline: 'Shared home expenses, kids education, groceries, and savings',
     quickAmounts: [200, 500, 1000, 2000, 5000],
     expenseCategories: [

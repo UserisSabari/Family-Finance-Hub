@@ -169,7 +169,7 @@ export function BudgetsPage() {
 
                     {result.remaining > 0 && (
                       <p className="muted" style={{ fontSize: '0.8125rem', borderTop: '1px solid var(--color-border)', paddingTop: '0.5rem' }}>
-                        💡 <strong>{formatInr(dailyRemaining)} / day</strong> safe spending for next {remainingDays} days
+                        Safe spending: <strong>{formatInr(dailyRemaining)} / day</strong> for next {remainingDays} days
                       </p>
                     )}
                   </article>

@@ -1,4 +1,20 @@
 import { listFinancialProfiles } from '../../lib/profiles/profileConfig';
+import { IconBriefcase, IconFamily, IconLaptop, IconStudent } from '../../components/icons/Icons';
+
+function ProfileIcon({ icon, size = 20 }) {
+  switch (icon) {
+    case 'student':
+      return <IconStudent size={size} />;
+    case 'briefcase':
+      return <IconBriefcase size={size} />;
+    case 'laptop':
+      return <IconLaptop size={size} />;
+    case 'family':
+      return <IconFamily size={size} />;
+    default:
+      return <IconBriefcase size={size} />;
+  }
+}
 
 export function ProfileSelector({ currentProfile, onSelect, disabled = false }) {
   const profiles = listFinancialProfiles();
@@ -19,7 +35,7 @@ export function ProfileSelector({ currentProfile, onSelect, disabled = false }) 
           >
             <div className="profile-card-top">
               <div className="profile-avatar-wrap">
-                <span className="profile-emoji">{profile.emoji}</span>
+                <ProfileIcon icon={profile.icon} size={20} />
               </div>
               <div className="profile-title-group">
                 <span className="profile-label">{profile.label}</span>

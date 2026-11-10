@@ -164,7 +164,7 @@ export function GoalsPage() {
                       </div>
                       {progress.completed && (
                         <span className="badge-income" style={{ padding: '0.2rem 0.5rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 700 }}>
-                          Achieved! 🎉
+                          Achieved
                         </span>
                       )}
                     </div>
@@ -185,7 +185,7 @@ export function GoalsPage() {
 
                     {!progress.completed && monthlyRequired > 0 && (
                       <p className="muted" style={{ fontSize: '0.8125rem', borderTop: '1px solid var(--color-border)', paddingTop: '0.5rem' }}>
-                        💡 Save <strong>{formatInr(monthlyRequired)}/month</strong> to reach goal on time
+                        Required pace: <strong>{formatInr(monthlyRequired)}/month</strong> to reach target
                       </p>
                     )}
 

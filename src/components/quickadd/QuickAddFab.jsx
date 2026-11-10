@@ -23,7 +23,7 @@ export function QuickAddFab() {
     setFeedback('');
     try {
       await createTransaction(workspace.id, input);
-      setFeedback('Transaction saved! ⚡');
+      setFeedback('Transaction saved.');
       setTimeout(() => {
         setOpen(false);
         setFeedback('');
