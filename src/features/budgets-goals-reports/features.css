@@ -1,0 +1,293 @@
+.feature-header {
+  margin-bottom: var(--space-6);
+}
+
+.feature-grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  margin-top: var(--space-6);
+}
+
+.feature-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  position: relative;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.feature-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.feature-card h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.feature-card p {
+  margin: 0;
+}
+
+.feature-card strong {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Feature Form */
+.feature-form-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-form {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 36rem;
+}
+
+.feature-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.feature-form input,
+.feature-form select {
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.9375rem;
+}
+
+.feature-form input:focus,
+.feature-form select:focus {
+  border-color: var(--color-accent);
+}
+
+.feature-form button {
+  justify-self: start;
+}
+
+/* Progress bar inside cards */
+.feature-progress-track {
+  height: 0.65rem;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: var(--space-1) 0;
+}
+
+.feature-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.4s ease;
+}
+
+/* Threshold statuses */
+.status-healthy {
+  color: var(--color-income);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.status-warning {
+  color: var(--color-warning);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.status-overspent {
+  color: var(--color-expense);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.budget-health-bar-healthy {
+  background: var(--color-income);
+}
+
+.budget-health-bar-warning {
+  background: var(--color-warning);
+}
+
+.budget-health-bar-overspent {
+  background: var(--color-expense);
+}
+
+.badge-alert {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--color-expense-subtle);
+  color: var(--color-expense);
+}
+
+/* HTML progress element styling for Goals */
+progress {
+  width: 100%;
+  height: 0.75rem;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-subtle);
+}
+
+progress::-webkit-progress-bar {
+  background-color: var(--color-surface-subtle);
+}
+
+progress::-webkit-progress-value {
+  background-color: var(--color-accent);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+progress::-moz-progress-bar {
+  background-color: var(--color-accent);
+  border-radius: var(--radius-full);
+}
+
+/* Category Breakdown */
+.category-breakdown {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+.breakdown-row {
+  margin: 0;
+}
+
+.breakdown-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: 0.9375rem;
+}
+
+.breakdown-label span {
+  font-weight: 600;
+}
+
+.breakdown-label strong {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.breakdown-track {
+  height: 0.6rem;
+  margin-top: 0.4rem;
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.breakdown-track span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent), #34d399);
+  border-radius: inherit;
+  transition: width 0.4s ease;
+}
+
+/* Trend Chart */
+.trend-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: var(--space-3);
+  min-height: 14rem;
+  padding: var(--space-5) var(--space-2) var(--space-2);
+  border-bottom: 2px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.trend-point {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-2);
+  height: 100%;
+  min-width: 3.5rem;
+  flex: 1;
+}
+
+.trend-bar {
+  display: block;
+  width: min(2.5rem, 80%);
+  min-height: 6px;
+  background: linear-gradient(180deg, var(--color-accent), var(--color-accent-hover));
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: height 0.4s ease, opacity var(--transition-fast);
+}
+
+.trend-bar:hover {
+  opacity: 0.85;
+}
+
+.trend-point small {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Report Filters */
+.report-period-pills {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.report-period-btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.report-period-btn.active {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  border-color: var(--color-accent);
+}
