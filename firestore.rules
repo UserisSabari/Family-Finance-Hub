@@ -6,14 +6,15 @@ service cloud.firestore {
     }
 
     function isPersonalWorkspace(workspaceId) {
-      return workspaceId == 'personal_' + request.auth.uid;
+      return signedIn() && workspaceId == ('personal_' + request.auth.uid);
     }
 
     function isWorkspaceMember(workspaceId) {
-      return signedIn()
-        && (isPersonalWorkspace(workspaceId)
-            || (exists(/databases/$(database)/documents/workspaceMembers/$(workspaceId + '_' + request.auth.uid))
-                && get(/databases/$(database)/documents/workspaceMembers/$(workspaceId + '_' + request.auth.uid)).data.status == 'active'));
+      return signedIn() && (
+        isPersonalWorkspace(workspaceId) ||
+        (exists(/databases/$(database)/documents/workspaceMembers/$(workspaceId + '_' + request.auth.uid)) &&
+         get(/databases/$(database)/documents/workspaceMembers/$(workspaceId + '_' + request.auth.uid)).data.status == 'active')
+      );
     }
 
     function role(workspaceId) {
@@ -29,7 +30,7 @@ service cloud.firestore {
     }
 
     function ownsRecord() {
-      return resource.data.createdBy == request.auth.uid;
+      return signedIn() && resource.data.createdBy == request.auth.uid;
     }
 
     match /users/{uid} {
@@ -37,8 +38,11 @@ service cloud.firestore {
     }
 
     match /workspaces/{workspaceId} {
-      allow read: if isWorkspaceMember(workspaceId)
-        || (signedIn() && (isPersonalWorkspace(workspaceId) || resource.data.owner == request.auth.uid));
+      allow read: if signedIn() && (
+        isPersonalWorkspace(workspaceId) ||
+        resource.data.owner == request.auth.uid ||
+        isWorkspaceMember(workspaceId)
+      );
       allow create: if signedIn()
         && request.resource.data.owner == request.auth.uid
         && request.resource.data.kind in ['family', 'personal'];
@@ -67,15 +71,18 @@ service cloud.firestore {
 
     match /{recordCollection}/{recordId} {
       allow read: if recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions']
-        && (isWorkspaceMember(resource.data.workspace) || resource.data.workspace == 'personal_' + request.auth.uid);
+        && signedIn()
+        && (resource.data.workspace == 'personal_' + request.auth.uid || isWorkspaceMember(resource.data.workspace));
       allow create: if recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions']
-        && (isWorkspaceMember(request.resource.data.workspace) || request.resource.data.workspace == 'personal_' + request.auth.uid)
-        && request.resource.data.createdBy == request.auth.uid;
+        && signedIn()
+        && (request.resource.data.workspace == 'personal_' + request.auth.uid || isWorkspaceMember(request.resource.data.workspace));
       allow update: if recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions']
+        && signedIn()
         && request.resource.data.workspace == resource.data.workspace
         && (isAdmin(resource.data.workspace)
           || (isWorkspaceMember(resource.data.workspace) && ownsRecord()));
       allow delete: if (recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions'])
+        && signedIn()
         && (isAdmin(resource.data.workspace)
           || (isWorkspaceMember(resource.data.workspace) && ownsRecord()));
     }
