@@ -47,9 +47,9 @@ service cloud.firestore {
 
     match /workspaceMembers/{memberId} {
       allow read: if signedIn()
-        && (resource.data.user == request.auth.uid
-            || memberId.matches('^.*_' + request.auth.uid + '$')
-            || isAdmin(resource.data.workspace));
+        && (memberId.matches('^.*_' + request.auth.uid + '$')
+            || (resource != null && resource.data.user == request.auth.uid)
+            || (resource != null && isAdmin(resource.data.workspace)));
       allow create: if signedIn()
         && request.resource.data.user == request.auth.uid
         && (request.resource.data.role == 'owner' || isPersonalWorkspace(request.resource.data.workspace));
@@ -67,9 +67,9 @@ service cloud.firestore {
 
     match /{recordCollection}/{recordId} {
       allow read: if recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions']
-        && isWorkspaceMember(resource.data.workspace);
+        && (isWorkspaceMember(resource.data.workspace) || resource.data.workspace == 'personal_' + request.auth.uid);
       allow create: if recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions']
-        && isWorkspaceMember(request.resource.data.workspace)
+        && (isWorkspaceMember(request.resource.data.workspace) || request.resource.data.workspace == 'personal_' + request.auth.uid)
         && request.resource.data.createdBy == request.auth.uid;
       allow update: if recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions']
         && request.resource.data.workspace == resource.data.workspace
