@@ -4,6 +4,8 @@ import { useTheme } from '../../app/AppProviders';
 import { useAuth } from '../../hooks/useAuth';
 import { useWorkspace } from '../../hooks/useWorkspace';
 import { addCategory, getCategories, removeCategory, updateProfile } from './settingsRepository';
+import { ProfileSelector } from './ProfileSelector';
+import { DEFAULT_PROFILE_ID } from '../../lib/profiles/profileConfig';
 import './settings.css';
 
 export function SettingsPage() {
@@ -11,6 +13,7 @@ export function SettingsPage() {
   const { profile, workspace, refresh } = useWorkspace();
   const { theme, setTheme } = useTheme();
   const [displayName, setDisplayName] = useState(profile?.displayName ?? '');
+  const [financialProfile, setFinancialProfile] = useState(profile?.financialProfile || DEFAULT_PROFILE_ID);
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState(profile?.categories ?? []);
   const [message, setMessage] = useState('');
@@ -32,11 +35,28 @@ export function SettingsPage() {
     setError('');
     setMessage('');
     try {
-      await updateProfile(user.uid, { displayName });
+      const updates = { displayName };
+      if (financialProfile !== profile?.financialProfile && profile?.financialProfile !== undefined) {
+        updates.financialProfile = financialProfile;
+      }
+      await updateProfile(user.uid, updates);
       await refresh?.();
       setMessage('Profile saved.');
     } catch (reason) {
       setError(reason.message || 'Unable to save profile.');
+    }
+  }
+
+  async function handleSelectProfile(profileId) {
+    setFinancialProfile(profileId);
+    setError('');
+    setMessage('');
+    try {
+      await updateProfile(user.uid, { financialProfile: profileId });
+      await refresh?.();
+      setMessage('Financial profile updated.');
+    } catch (reason) {
+      setError(reason.message || 'Unable to switch profile.');
     }
   }
 
@@ -83,6 +103,14 @@ export function SettingsPage() {
           <input id="settings-email" value={user?.email ?? ''} readOnly />
           <button type="submit">Save profile</button>
         </form>
+      </section>
+
+      <section className="settings-card" aria-labelledby="lifestyle-heading">
+        <h2 id="lifestyle-heading">Financial Profile & Lifestyle</h2>
+        <p className="muted" style={{ fontSize: '0.875rem', margin: '0 0 var(--space-2)' }}>
+          Choose your financial stage to automatically adapt quick amounts, categories, and budgeting tools:
+        </p>
+        <ProfileSelector currentProfile={financialProfile} onSelect={handleSelectProfile} />
       </section>
       <section className="settings-card" aria-labelledby="display-heading">
         <h2 id="display-heading">Display</h2>

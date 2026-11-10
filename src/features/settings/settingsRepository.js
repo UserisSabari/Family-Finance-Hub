@@ -17,8 +17,18 @@ function normalizeCategory(category) {
 
 export async function updateProfile(uid, updates) {
   if (!uid) throw new Error('A signed-in user is required.');
-  const values = { displayName: String(updates?.displayName ?? '').trim() };
-  if (!values.displayName) throw new Error('Display name is required.');
+  const values = {};
+  if (updates?.displayName !== undefined) {
+    const trimmed = String(updates.displayName ?? '').trim();
+    if (!trimmed) throw new Error('Display name is required.');
+    values.displayName = trimmed;
+  }
+  if (updates?.financialProfile !== undefined) {
+    values.financialProfile = String(updates.financialProfile).trim();
+  }
+  if (Object.keys(values).length === 0) {
+    throw new Error('No profile updates provided.');
+  }
   await setDoc(doc(requireDatabase(), 'users', uid), { ...values, updatedAt: new Date() }, { merge: true });
   return getUserProfile(uid);
 }

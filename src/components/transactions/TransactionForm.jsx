@@ -1,24 +1,17 @@
 import { useState } from 'react';
 
+import { useFinancialProfile } from '../../hooks/useFinancialProfile';
 import { getInitialTransactionValues, normalizeTransactionInput } from '../../features/transactions/transactionForm';
 
-const quickCategories = [
-  'Groceries',
-  'Food & Dining',
-  'Chai & Snacks',
-  'Transportation',
-  'Utilities',
-  'Shopping',
-  'Rent',
-  'Medical',
-  'Investment',
-];
-
-const quickAmounts = [100, 200, 500, 1000, 2000];
-
 export function TransactionForm({ initialValues, onSubmit, onCancel, submitting }) {
+  const profileConfig = useFinancialProfile();
   const [values, setValues] = useState({ ...getInitialTransactionValues(), ...initialValues });
   const [error, setError] = useState('');
+
+  const quickAmounts = profileConfig?.quickAmounts || [10, 20, 50, 100, 200, 500];
+  const activeCategories = values.type === 'income'
+    ? (profileConfig?.incomeCategories || ['Income', 'Pocket Money', 'Salary', 'Gift'])
+    : (profileConfig?.expenseCategories || ['Groceries', 'Food', 'Transport', 'Shopping']);
 
   const update = (key) => (event) => setValues((current) => ({ ...current, [key]: event.target.value }));
 
@@ -95,9 +88,9 @@ export function TransactionForm({ initialValues, onSubmit, onCancel, submitting 
         />
       </label>
 
-      {/* Quick Category Chips */}
+      {/* Quick Category Chips based on active financial profile */}
       <div className="quick-chip-container" aria-label="Suggested categories">
-        {quickCategories.map((cat) => (
+        {activeCategories.map((cat) => (
           <button
             key={cat}
             type="button"
