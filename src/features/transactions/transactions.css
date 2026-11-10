@@ -235,3 +235,89 @@
     flex-direction: column;
   }
 }
+
+/* Mobile Transactions List */
+.transaction-mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+
+.transaction-mobile-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  box-shadow: var(--shadow-sm);
+}
+
+.tx-mobile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tx-mobile-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tx-mobile-category {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.tx-mobile-amount {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.tx-mobile-note {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+.tx-mobile-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.tx-mobile-date {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* Visibility toggling between mobile list and desktop table */
+@media (max-width: 47.99rem) {
+  .transaction-desktop-table {
+    display: none !important;
+  }
+  .transaction-table-wrap {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+  .transaction-mobile-list {
+    padding: 0;
+  }
+}
+
+@media (min-width: 48rem) {
+  .transaction-mobile-list {
+    display: none !important;
+  }
+  .transaction-desktop-table {
+    display: table !important;
+  }
+}

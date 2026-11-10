@@ -24,6 +24,19 @@ export function normalizeTransactionInput(input = {}) {
     note: typeof input.note === 'string' ? input.note.trim() : '',
   };
   if (input.transferId?.trim()) normalized.transferId = input.transferId.trim();
+  if (input.isPassThrough !== undefined) normalized.isPassThrough = Boolean(input.isPassThrough);
+  if (input.splitWith?.trim()) {
+    normalized.splitWith = input.splitWith.trim();
+    if (input.splitAmount !== undefined && input.splitAmount !== '') {
+      const parsedSplit = typeof input.splitAmount === 'string' ? Number(input.splitAmount) : input.splitAmount;
+      if (Number.isFinite(parsedSplit) && parsedSplit > 0) {
+        normalized.splitAmount = parsedSplit;
+      }
+    }
+    if (input.splitSettled !== undefined) {
+      normalized.splitSettled = Boolean(input.splitSettled);
+    }
+  }
   const result = validateTransaction(normalized);
   if (!result.valid) throw new Error(Object.values(result.errors).join(' '));
   return normalized;

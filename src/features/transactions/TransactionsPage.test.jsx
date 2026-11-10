@@ -53,13 +53,13 @@ describe('TransactionsPage', () => {
     createTransaction.mockResolvedValueOnce({ id: 'tx-2' });
 
     render(<TransactionsPage />);
-    expect(await screen.findByText('Lunch')).toBeInTheDocument();
+    expect(await screen.findAllByText('Lunch')).toHaveLength(2);
 
     fireEvent.change(screen.getByLabelText(/search/i), { target: { value: 'missing' } });
     expect(screen.queryByText('Lunch')).not.toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(/search/i), { target: { value: 'Lunch' } });
-    fireEvent.click(screen.getByRole('button', { name: /add transaction/i }));
+    fireEvent.click(screen.getAllByRole('button', { name: /add transaction/i })[0]);
     fireEvent.change(screen.getByLabelText(/amount/i), { target: { value: '50' } });
     const dialog = screen.getByRole('dialog');
     fireEvent.change(within(dialog).getByLabelText(/^Category$/), { target: { value: 'Food' } });
@@ -84,8 +84,8 @@ describe('TransactionsPage', () => {
     deleteTransaction.mockResolvedValueOnce();
 
     render(<TransactionsPage />);
-    expect(await screen.findByText('Move money')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /delete move money/i }));
+    expect(await screen.findAllByText('Move money')).toHaveLength(2);
+    fireEvent.click(screen.getAllByRole('button', { name: /delete move money/i })[0]);
     fireEvent.click(screen.getByRole('button', { name: /confirm delete/i }));
 
     await waitFor(() => expect(deleteTransaction).toHaveBeenCalledWith('tx-1'));

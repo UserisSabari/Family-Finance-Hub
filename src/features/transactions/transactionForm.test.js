@@ -36,6 +36,24 @@ describe('transaction form', () => {
     });
   });
 
+  it('normalizes student pass-through and peer split fields', () => {
+    expect(normalizeTransactionInput({
+      type: 'expense',
+      amount: '1200',
+      category: 'Mess & Food',
+      date: '2026-11-09',
+      isPassThrough: true,
+      splitWith: 'Amit, Priya',
+      splitAmount: '800',
+      splitSettled: false,
+    })).toMatchObject({
+      isPassThrough: true,
+      splitWith: 'Amit, Priya',
+      splitAmount: 800,
+      splitSettled: false,
+    });
+  });
+
   it('rejects zero, negative, unsupported, and invalid-date values', () => {
     expect(() => normalizeTransactionInput({
       type: 'expense',

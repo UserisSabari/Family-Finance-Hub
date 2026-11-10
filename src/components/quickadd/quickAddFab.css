@@ -1,0 +1,44 @@
+/* Floating Action Button for Instant Transaction Entry */
+.quick-fab-btn {
+  position: fixed;
+  bottom: 5.25rem;
+  right: 1.25rem;
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.8rem 1.15rem;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-accent) 0%, #047857 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  box-shadow: 0 6px 20px -2px rgba(5, 150, 105, 0.45);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.quick-fab-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 24px -2px rgba(5, 150, 105, 0.55);
+}
+
+.quick-fab-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.fab-text {
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+}
+
+@media (min-width: 48rem) {
+  .quick-fab-btn {
+    bottom: 2rem;
+    right: 2rem;
+    padding: 0.9rem 1.4rem;
+    font-size: 1rem;
+  }
+}

@@ -5,7 +5,63 @@ import { IconEdit, IconTrash } from '../icons/Icons';
 export function TransactionTable({ transactions, onEdit, onDelete }) {
   return (
     <div className="transaction-table-wrap">
-      <table className="transaction-table">
+      {/* Mobile Card List (shown on mobile screens) */}
+      <div className="transaction-mobile-list" role="feed" aria-label="Transactions mobile list">
+        {transactions.map((transaction) => {
+          const isIncome = transaction.type === 'income';
+          const isExpense = transaction.type === 'expense';
+          const displayDate = typeof transaction.date === 'string' ? transaction.date : normalizeDateString(transaction.date);
+
+          return (
+            <article key={transaction.id} className="transaction-mobile-card">
+              <div className="tx-mobile-top">
+                <div className="tx-mobile-info">
+                  <span className={`transaction-type-badge badge-${transaction.type}`}>
+                    {transaction.type}
+                  </span>
+                  <span className="tx-mobile-category">{transaction.category || 'General'}</span>
+                </div>
+                <span className={`tx-mobile-amount ${isIncome ? 'amount-income' : isExpense ? 'amount-expense' : ''}`}>
+                  {isIncome ? '+' : isExpense ? '-' : ''}
+                  {formatInr(transaction.amount)}
+                </span>
+              </div>
+
+              {transaction.note && (
+                <p className="tx-mobile-note">{transaction.note}</p>
+              )}
+
+              <div className="tx-mobile-bottom">
+                <span className="tx-mobile-date">{displayDate}</span>
+                <div className="transaction-actions">
+                  <button
+                    type="button"
+                    className="action-btn edit-btn"
+                    title="Edit transaction"
+                    onClick={() => onEdit(transaction)}
+                  >
+                    <IconEdit size={14} />
+                    <span>Edit</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="action-btn delete-btn"
+                    aria-label={`Delete ${transaction.note || transaction.category}`}
+                    title="Delete transaction"
+                    onClick={() => onDelete(transaction)}
+                  >
+                    <IconTrash size={14} />
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      {/* Desktop Table (shown on tablets & desktops) */}
+      <table className="transaction-table transaction-desktop-table">
         <caption className="sr-only">Transactions</caption>
         <thead>
           <tr>
@@ -21,8 +77,6 @@ export function TransactionTable({ transactions, onEdit, onDelete }) {
           {transactions.map((transaction) => {
             const isIncome = transaction.type === 'income';
             const isExpense = transaction.type === 'expense';
-            const isRefund = transaction.type === 'refund';
-            const isTransfer = transaction.type === 'transfer';
             const displayDate = typeof transaction.date === 'string' ? transaction.date : normalizeDateString(transaction.date);
 
             return (
