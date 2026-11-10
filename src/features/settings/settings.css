@@ -153,11 +153,11 @@
 .profile-selector-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-3);
-  margin-top: var(--space-3);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
-@media (min-width: 40rem) {
+@media (min-width: 44rem) {
   .profile-selector-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -169,80 +169,143 @@
   text-align: left;
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
   color: var(--color-text);
   width: 100% !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: relative;
 }
 
 .profile-card:hover:not(:disabled) {
-  border-color: var(--color-accent);
-  box-shadow: var(--shadow-sm);
+  border-color: var(--color-border-subtle);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .profile-card.selected {
   border-color: var(--color-accent);
+  border-width: 2px;
   background: var(--color-surface);
-  box-shadow: 0 0 0 2px var(--color-accent);
+  box-shadow: 0 4px 16px -2px rgba(5, 150, 105, 0.16);
 }
 
-.profile-card-header {
+[data-theme='dark'] .profile-card.selected {
+  box-shadow: 0 4px 18px -2px rgba(16, 185, 129, 0.22);
+}
+
+.profile-card-top {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-1);
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.profile-avatar-wrap {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
 .profile-emoji {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
+}
+
+.profile-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
 }
 
 .profile-label {
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 1.05rem;
   color: var(--color-text);
+  letter-spacing: -0.01em;
 }
 
-.profile-active-tag {
-  margin-left: auto;
-  font-size: 0.7rem;
+.profile-persona-meta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.profile-radio-indicator {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-border-subtle);
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: var(--color-accent);
   color: #ffffff;
-  padding: 0.15rem 0.55rem;
-  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.profile-radio-indicator.indicator-selected {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .profile-tagline {
-  margin: 0.25rem 0 var(--space-3);
-  font-size: 0.8125rem;
+  margin: 0 0 var(--space-4);
+  font-size: 0.875rem;
   color: var(--color-muted);
-  line-height: 1.4;
+  line-height: 1.45;
+  font-weight: 450;
+}
+
+.profile-card-footer {
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.profile-presets-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-muted);
 }
 
 .profile-sample-categories {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
-  margin-top: auto;
 }
 
 .sample-category-pill {
   font-size: 0.75rem;
+  font-weight: 600;
   padding: 0.2rem 0.55rem;
   background: var(--color-surface-subtle);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
   color: var(--color-text);
-  font-weight: 500;
+}
+
+.profile-card.selected .sample-category-pill {
+  background: var(--color-surface);
+  border-color: rgba(5, 150, 105, 0.3);
 }
 
 .sample-category-more {
   font-size: 0.7rem;
   color: var(--color-muted);
   align-self: center;
+  font-weight: 600;
 }
