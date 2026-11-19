@@ -101,11 +101,11 @@ export function SpendDonutChart({ items = [] }) {
           <span style={{ fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 600, textTransform: 'uppercase' }}>
             {activeSegment ? activeSegment.category : 'Total Outflow'}
           </span>
-          <strong style={{ fontSize: '1.15rem', color: 'var(--color-text)', marginTop: '0.1rem' }}>
+          <strong style={{ fontSize: '1.25rem', color: 'var(--color-text)', marginTop: '0.1rem', fontVariantNumeric: 'tabular-nums' }}>
             {activeSegment ? formatInr(activeSegment.amount) : formatInr(total)}
           </strong>
           {activeSegment && (
-            <small style={{ fontSize: '0.75rem', color: activeSegment.color, fontWeight: 700 }}>
+            <small style={{ fontSize: '0.75rem', color: activeSegment.color, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
               {activeSegment.percentage}%
             </small>
           )}

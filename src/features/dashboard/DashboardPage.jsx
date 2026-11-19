@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useWorkspace } from '../../hooks/useWorkspace';
-import { calculateSummary } from '../../lib/finance/calculations';
+import { calculateAccountBalances, calculateSummary } from '../../lib/finance/calculations';
 import { formatInr } from '../../lib/format/currency';
 import { ErrorState } from '../../components/feedback/ErrorState';
 import { LoadingState } from '../../components/feedback/LoadingState';
@@ -70,6 +70,7 @@ export function DashboardPage() {
   }
 
   const summary = calculateSummary(records.transactions, records.contributions);
+  const accountBalances = calculateAccountBalances(records.transactions);
   const recent = [...records.transactions, ...records.contributions]
     .sort((a, b) => {
       const dateCmp = String(b.date || '').localeCompare(String(a.date || ''));
@@ -114,6 +115,36 @@ export function DashboardPage() {
   return (
     <main className="page-content dashboard-page">
       {header}
+
+      {/* Hero Liquidity Bento Card */}
+      <section className="dashboard-hero-bento" aria-label="Net liquidity and accounts">
+        <div className="hero-balance-content">
+          <span className="hero-balance-label">Net Liquidity</span>
+          <div className="hero-balance-amount">
+            <span className="hero-currency-symbol">₹</span>
+            <span className="hero-balance-number">{formatInr(summary.balance).replace('₹', '')}</span>
+          </div>
+          <div className="hero-accounts-row">
+            <div className="hero-account-chip chip-bank">
+              <span className="hero-chip-dot dot-bank" />
+              <span>Bank & UPI:</span>
+              <strong>{formatInr(accountBalances.bank)}</strong>
+            </div>
+            <div className="hero-account-chip chip-cash">
+              <span className="hero-chip-dot dot-cash" />
+              <span>Cash in Hand:</span>
+              <strong>{formatInr(accountBalances.cash)}</strong>
+            </div>
+            {accountBalances.pendingReceivables > 0 && (
+              <div className="hero-account-chip chip-pending">
+                <span className="hero-chip-dot dot-pending" />
+                <span>Receivables:</span>
+                <strong>{formatInr(accountBalances.pendingReceivables)}</strong>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Daily Pulse Banner */}
       <section className="daily-pulse-card" aria-label="Daily financial pulse">
