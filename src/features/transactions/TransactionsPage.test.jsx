@@ -91,4 +91,28 @@ describe('TransactionsPage', () => {
     await waitFor(() => expect(deleteTransaction).toHaveBeenCalledWith('tx-1'));
     expect(await screen.findByRole('status')).toHaveTextContent(/deleted/i);
   });
+
+  it('applies period filters including Last 30 and custom date range', async () => {
+    listTransactions.mockResolvedValue([]);
+    render(<TransactionsPage />);
+
+    fireEvent.click(screen.getByRole('button', { name: /last 30/i }));
+    await waitFor(() => {
+      expect(listTransactions).toHaveBeenCalledWith('workspace-1', expect.objectContaining({ limit: 30 }));
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /custom range/i }));
+    const fromInput = screen.getByLabelText(/from date/i);
+    const toInput = screen.getByLabelText(/to date/i);
+    fireEvent.change(fromInput, { target: { value: '2026-11-01' } });
+    fireEvent.change(toInput, { target: { value: '2026-11-15' } });
+
+    await waitFor(() => {
+      expect(listTransactions).toHaveBeenCalledWith('workspace-1', expect.objectContaining({
+        fromDate: '2026-11-01',
+        toDate: '2026-11-15',
+        limit: null,
+      }));
+    });
+  });
 });

@@ -81,4 +81,13 @@ describe('settings page', () => {
 
     await waitFor(() => expect(mocks.signOut).toHaveBeenCalledTimes(1));
   });
+
+  it('renders the About Us section with app details and architecture highlights', async () => {
+    render(<MemoryRouter><SettingsPage /></MemoryRouter>);
+
+    expect(screen.getByRole('heading', { name: /about family finance hub/i })).toBeInTheDocument();
+    expect(screen.getByText(/v0\.2\.0 PWA/i)).toBeInTheDocument();
+    expect(screen.getByText(/local-first speed/i)).toBeInTheDocument();
+    expect(screen.getByText(/multi-tab sync/i)).toBeInTheDocument();
+  });
 });

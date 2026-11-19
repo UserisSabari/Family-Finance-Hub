@@ -59,6 +59,25 @@ describe('transaction repository', () => {
     expect(result[2].id).toBe('tx-older');    // previous day → last
   });
 
+  it('filters by fromDate, toDate, and applies limit slice', async () => {
+    firestore.getDocs.mockResolvedValueOnce({
+      docs: [
+        { id: 'tx-1', data: () => ({ workspace: 'w', type: 'expense', category: 'Food', date: '2026-11-01' }) },
+        { id: 'tx-2', data: () => ({ workspace: 'w', type: 'expense', category: 'Food', date: '2026-11-15' }) },
+        { id: 'tx-3', data: () => ({ workspace: 'w', type: 'expense', category: 'Food', date: '2026-11-20' }) },
+        { id: 'tx-4', data: () => ({ workspace: 'w', type: 'expense', category: 'Food', date: '2026-11-25' }) },
+      ],
+    });
+    const result = await listTransactions('w', {
+      fromDate: '2026-11-10',
+      toDate: '2026-11-22',
+      limit: 1,
+    });
+    // Range includes tx-3 (Nov 20) and tx-2 (Nov 15). With limit: 1, newest is returned
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('tx-3');
+  });
+
   it('creates positive normalized records with explicit timestamps', async () => {
     firestore.addDoc.mockResolvedValueOnce({ id: 'tx-1' });
 

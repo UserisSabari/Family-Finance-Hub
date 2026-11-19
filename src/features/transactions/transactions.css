@@ -9,7 +9,7 @@
 
 .transaction-filters {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-5);
   background: var(--color-surface);
@@ -17,6 +17,56 @@
   border-radius: var(--radius-lg);
   margin-bottom: var(--space-5);
   box-shadow: var(--shadow-sm);
+}
+
+.filter-scope-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.filter-scope-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+}
+
+.filter-scope-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.scope-pill {
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.scope-pill:hover {
+  color: var(--color-text);
+  border-color: var(--color-accent);
+}
+
+.scope-pill.active {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+.filter-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
 }
 
 .transaction-filters label,
@@ -405,6 +455,21 @@
 
 /* Visibility toggling between mobile list and desktop table */
 @media (max-width: 47.99rem) {
+  .transaction-filters {
+    padding: var(--space-3);
+  }
+  .filter-controls-row {
+    flex-direction: column;
+    width: 100%;
+  }
+  .filter-controls-row label {
+    width: 100%;
+  }
+  .filter-controls-row input,
+  .filter-controls-row select {
+    width: 100%;
+    min-width: 100%;
+  }
   .transaction-desktop-table {
     display: none !important;
   }

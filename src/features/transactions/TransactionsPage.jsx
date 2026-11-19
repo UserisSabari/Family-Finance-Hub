@@ -17,7 +17,7 @@ import {
 } from './transactionRepository';
 import './transactions.css';
 
-const blankFilters = { search: '', type: '', category: '' };
+const blankFilters = { search: '', type: '', category: '', limit: null, fromDate: '', toDate: '', scope: 'all' };
 
 export function TransactionsPage() {
   const { workspace, loading: workspaceLoading, error: workspaceError } = useWorkspace();

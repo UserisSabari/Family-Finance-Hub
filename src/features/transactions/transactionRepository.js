@@ -38,10 +38,24 @@ export async function listTransactions(workspaceId, filters = {}) {
   if (filters.category) constraints.push(where('category', '==', filters.category));
   const snapshot = await getDocs(query(transactionsCollection(), ...constraints));
   const search = String(filters.search || '').trim().toLowerCase();
-  return snapshot.docs
+  const fromDate = filters.fromDate ? String(filters.fromDate).trim() : '';
+  const toDate = filters.toDate ? String(filters.toDate).trim() : '';
+  const limitCount = Number(filters.limit) > 0 ? Number(filters.limit) : null;
+
+  const items = snapshot.docs
     .map(fromFirestore)
-    .filter((transaction) => !search
-      || [transaction.category, transaction.note, transaction.type].some((value) => String(value || '').toLowerCase().includes(search)))
+    .filter((transaction) => {
+      if (search && ![transaction.category, transaction.note, transaction.type].some((value) => String(value || '').toLowerCase().includes(search))) {
+        return false;
+      }
+      if (fromDate && transaction.date && transaction.date < fromDate) {
+        return false;
+      }
+      if (toDate && transaction.date && transaction.date > toDate) {
+        return false;
+      }
+      return true;
+    })
     .sort((a, b) => {
       const dateCmp = String(b.date || '').localeCompare(String(a.date || ''));
       if (dateCmp !== 0) return dateCmp;
@@ -50,6 +64,8 @@ export async function listTransactions(workspaceId, filters = {}) {
       if (timeCmp !== 0) return timeCmp;
       return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
     });
+
+  return limitCount ? items.slice(0, limitCount) : items;
 }
 
 export async function createTransaction(workspaceId, input) {

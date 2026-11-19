@@ -52,9 +52,13 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
       return fetch(event.request).then((response) => {
-        // Cache successful HTML navigations for offline shell
-        if (response.ok && (event.request.mode === 'navigate' || url.pathname.endsWith('.html'))) {
-          caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, response.clone()));
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+        // Clone immediately before the response stream can be consumed
+        const copy = response.clone();
+        if (event.request.mode === 'navigate' || url.pathname.endsWith('.html')) {
+          caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, copy));
         }
         return response;
       }).catch(() => caches.match('/index.html'));
@@ -66,7 +70,10 @@ async function staleWhileRevalidate(cacheName, request) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
   const networkFetch = fetch(request).then((response) => {
-    if (response.ok) cache.put(request, response.clone());
+    if (response && response.status === 200 && response.type === 'basic') {
+      const copy = response.clone();
+      cache.put(request, copy);
+    }
     return response;
   }).catch(() => null);
   return cached || await networkFetch;
