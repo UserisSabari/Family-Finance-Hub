@@ -71,7 +71,11 @@ export function DashboardPage() {
 
   const summary = calculateSummary(records.transactions, records.contributions);
   const recent = [...records.transactions, ...records.contributions]
-    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+    .sort((a, b) => {
+      const dateCmp = String(b.date || '').localeCompare(String(a.date || ''));
+      if (dateCmp !== 0) return dateCmp;
+      return String(b.time || '00:00').localeCompare(String(a.time || '00:00'));
+    })
     .slice(0, 5);
   const hasActivity = recent.length > 0;
 
@@ -81,11 +85,23 @@ export function DashboardPage() {
   const dayOfMonth = Math.max(1, now.getDate());
   const remainingDays = Math.max(1, daysInMonth - dayOfMonth + 1);
 
-  // Filter current month expenses
+  // Filter current month expenses accounting for friend splits and refunds
   const monthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  const thisMonthExpenses = records.transactions
-    .filter((tx) => tx.type === 'expense' && String(tx.date || '').startsWith(monthPrefix))
-    .reduce((sum, tx) => sum + Number(tx.amount || 0), 0);
+  const thisMonthExpenses = Math.max(0, records.transactions
+    .filter((tx) => (tx.type === 'expense' || tx.type === 'refund') && String(tx.date || '').startsWith(monthPrefix))
+    .reduce((sum, tx) => {
+      let val = Number(tx.amount || 0);
+      if (tx.type === 'expense') {
+        if (tx.splitNote?.myShare !== undefined && Number.isFinite(Number(tx.splitNote.myShare))) {
+          val = Number(tx.splitNote.myShare);
+        }
+        return sum + val;
+      }
+      if (tx.type === 'refund') {
+        return sum - val;
+      }
+      return sum;
+    }, 0));
 
   const dailyAverageSpend = thisMonthExpenses > 0 ? thisMonthExpenses / dayOfMonth : 0;
   const projectedMonthSpend = dailyAverageSpend * daysInMonth;

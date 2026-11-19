@@ -46,7 +46,8 @@ service cloud.firestore {
       allow create: if signedIn()
         && request.resource.data.owner == request.auth.uid
         && request.resource.data.kind in ['family', 'personal'];
-      allow update, delete: if isOwner(workspaceId);
+      allow update: if isAdmin(workspaceId);
+      allow delete: if isOwner(workspaceId);
     }
 
     match /workspaceMembers/{memberId} {
@@ -75,7 +76,8 @@ service cloud.firestore {
         && (resource.data.workspace == 'personal_' + request.auth.uid || isWorkspaceMember(resource.data.workspace));
       allow create: if recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions']
         && signedIn()
-        && (request.resource.data.workspace == 'personal_' + request.auth.uid || isWorkspaceMember(request.resource.data.workspace));
+        && (request.resource.data.workspace == 'personal_' + request.auth.uid || isWorkspaceMember(request.resource.data.workspace))
+        && (!('createdBy' in request.resource.data) || request.resource.data.createdBy == request.auth.uid);
       allow update: if recordCollection in ['transactions', 'budgets', 'goals', 'goalContributions']
         && signedIn()
         && request.resource.data.workspace == resource.data.workspace

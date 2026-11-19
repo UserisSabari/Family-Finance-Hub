@@ -27,4 +27,22 @@ describe('calculateBudget', () => {
       { type: 'expense', amount: 150, date: '2026-01-01' },
     ])).toMatchObject({ actual: 150, remaining: -50, percentageUsed: 150, threshold: 'overspent' });
   });
+
+  it('uses personal myShare instead of total amount for group split expenses', () => {
+    const result = calculateBudget(
+      { amount: 5000, category: 'Food', year: 2026, month: 1 },
+      [
+        {
+          type: 'expense',
+          category: 'Food',
+          amount: 3000, // total bill
+          date: '2026-01-10',
+          splitNote: { isGroup: true, totalBill: 3000, myShare: 1000 },
+        },
+      ],
+    );
+    expect(result.actual).toBe(1000);
+    expect(result.remaining).toBe(4000);
+    expect(result.percentageUsed).toBe(20);
+  });
 });

@@ -14,8 +14,14 @@ export function calculateBudget(budget = {}, transactions = []) {
   const actual = transactions.reduce((total, transaction) => {
     if (!transaction || !inMonth(transaction.date, year, month)) return total;
     if (budget.category && transaction.category !== budget.category) return total;
-    if (transaction.type === 'expense') return total + amount(transaction.amount);
-    if (transaction.type === 'refund') return total - amount(transaction.amount);
+    let value = amount(transaction.amount);
+    if (transaction.type === 'expense') {
+      if (transaction.splitNote?.myShare !== undefined && Number.isFinite(Number(transaction.splitNote.myShare))) {
+        value = amount(transaction.splitNote.myShare);
+      }
+      return total + value;
+    }
+    if (transaction.type === 'refund') return total - value;
     return total;
   }, 0);
   const roundedActual = Math.round(Math.max(0, actual) * 100) / 100;

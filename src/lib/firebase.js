@@ -1,6 +1,7 @@
 import { getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import {
+  getFirestore,
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
@@ -18,10 +19,16 @@ export const firebaseConfig = {
 
 export const firebaseApp = getApps()[0] ?? initializeApp(firebaseConfig);
 export const auth = firebaseConfig.apiKey ? getAuth(firebaseApp) : null;
-// shortcut: persistentLocalCache with multi-tab manager; upgrade to custom cache config if eviction tuning is needed
-export const db = firebaseConfig.projectId
-  ? initializeFirestore(firebaseApp, {
+function createFirestoreInstance() {
+  if (!firebaseConfig.projectId) return null;
+  try {
+    return initializeFirestore(firebaseApp, {
       localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
-    })
-  : null;
+    });
+  } catch {
+    return getFirestore(firebaseApp);
+  }
+}
+
+export const db = createFirestoreInstance();
 export const functions = firebaseConfig.projectId ? getFunctions(firebaseApp) : null;

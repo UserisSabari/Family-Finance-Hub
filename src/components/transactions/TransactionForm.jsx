@@ -388,6 +388,19 @@ export function TransactionForm({ initialValues, onSubmit, onCancel, submitting 
                 >
                   + Add friend
                 </button>
+
+                {values.splitNote.splitMode === 'custom' && (
+                  <div style={{ fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                    {(() => {
+                      const totalBill = Number(values.amount) || 0;
+                      const allocated = values.splitNote.members.reduce((sum, m) => sum + Number(m.share || 0), 0);
+                      const diff = Math.round((totalBill - allocated) * 100) / 100;
+                      if (diff === 0) return <span style={{ color: 'var(--color-income)', fontWeight: 600 }}>✓ Fully allocated (₹{totalBill})</span>;
+                      if (diff > 0) return <span style={{ color: '#d97706', fontWeight: 600 }}>⚠️ ₹{diff} unallocated (Total: ₹{totalBill})</span>;
+                      return <span style={{ color: 'var(--color-expense)', fontWeight: 600 }}>⚠️ Over-allocated by ₹{Math.abs(diff)}</span>;
+                    })()}
+                  </div>
+                )}
               </div>
             </div>
           )}
