@@ -17,15 +17,36 @@ export function TransactionTable({ transactions, onEdit, onDelete }) {
               <div className="tx-mobile-top">
                 <div className="tx-mobile-info">
                   <span className={`transaction-type-badge badge-${transaction.type}`}>
-                    {transaction.type}
+                    {transaction.type === 'pass_through' ? 'Pass-through' : transaction.type}
                   </span>
                   <span className="tx-mobile-category">{transaction.category || 'General'}</span>
+                  {transaction.account === 'cash' && (
+                    <span className="badge-account">Cash</span>
+                  )}
+                  {transaction.type === 'transfer' && (transaction.fromAccount || transaction.toAccount) && (
+                    <span className="badge-account">{transaction.fromAccount || 'Bank'} → {transaction.toAccount || 'Cash'}</span>
+                  )}
                 </div>
                 <span className={`tx-mobile-amount ${isIncome ? 'amount-income' : isExpense ? 'amount-expense' : ''}`}>
                   {isIncome ? '+' : isExpense ? '-' : ''}
                   {formatInr(transaction.amount)}
                 </span>
               </div>
+
+              {transaction.type === 'pass_through' && (
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', marginTop: '0.2rem', fontSize: '0.8rem' }}>
+                  {transaction.passThroughFor && <span style={{ color: 'var(--color-muted)' }}>For: {transaction.passThroughFor}</span>}
+                  <span className={`badge-account ${transaction.isSettled ? 'badge-settled' : 'badge-pending'}`}>
+                    {transaction.isSettled ? '✓ Reimbursed' : '⏳ Pending return'}
+                  </span>
+                </div>
+              )}
+
+              {transaction.splitNote?.isGroup && (
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', marginTop: '0.2rem', fontSize: '0.8rem', color: 'var(--color-muted)' }}>
+                  <span>👥 Split: {formatInr(transaction.splitNote.myShare)} (my share) / {formatInr(transaction.amount)} total</span>
+                </div>
+              )}
 
               {transaction.note && (
                 <p className="tx-mobile-note">{transaction.note}</p>
@@ -88,11 +109,35 @@ export function TransactionTable({ transactions, onEdit, onDelete }) {
                 </td>
                 <td>
                   <span className={`transaction-type-badge badge-${transaction.type}`}>
-                    {transaction.type}
+                    {transaction.type === 'pass_through' ? 'Pass-through' : transaction.type}
                   </span>
+                  {transaction.account === 'cash' && (
+                    <span className="badge-account" style={{ marginLeft: '0.35rem' }}>Cash</span>
+                  )}
+                  {transaction.type === 'transfer' && (transaction.fromAccount || transaction.toAccount) && (
+                    <span className="badge-account" style={{ marginLeft: '0.35rem' }}>
+                      {transaction.fromAccount || 'Bank'} → {transaction.toAccount || 'Cash'}
+                    </span>
+                  )}
                 </td>
-                <td style={{ fontWeight: 600 }}>{transaction.category || 'General'}</td>
-                <td style={{ color: 'var(--color-muted)' }}>{transaction.note || '—'}</td>
+                <td style={{ fontWeight: 600 }}>
+                  {transaction.category || 'General'}
+                  {transaction.type === 'pass_through' && (
+                    <div style={{ marginTop: '0.2rem' }}>
+                      <span className={`badge-account ${transaction.isSettled ? 'badge-settled' : 'badge-pending'}`} style={{ fontSize: '0.7rem' }}>
+                        {transaction.isSettled ? '✓ Reimbursed' : '⏳ Pending'}
+                      </span>
+                    </div>
+                  )}
+                  {transaction.splitNote?.isGroup && (
+                    <div style={{ marginTop: '0.2rem', fontSize: '0.75rem', color: 'var(--color-muted)', fontWeight: 400 }}>
+                      👥 Split: {formatInr(transaction.splitNote.myShare)} (my share)
+                    </div>
+                  )}
+                </td>
+                <td style={{ color: 'var(--color-muted)' }}>
+                  {transaction.note || (transaction.passThroughFor ? `For: ${transaction.passThroughFor}` : '—')}
+                </td>
                 <td style={{ fontWeight: 700, fontSize: '0.9375rem' }}>
                   <span className={isIncome ? 'amount-income' : isExpense ? 'amount-expense' : ''}>
                     {isIncome ? '+' : isExpense ? '-' : ''}

@@ -12,6 +12,16 @@ describe('validateTransaction', () => {
         date: '2026-01-15',
       }),
     ).toEqual({ valid: true, errors: {} });
+
+    // pass_through is a first-class type
+    expect(
+      validateTransaction({
+        type: 'pass_through',
+        amount: 850,
+        category: 'Utility Bill',
+        date: '2026-01-15',
+      }),
+    ).toEqual({ valid: true, errors: {} });
   });
 
   it('rejects zero, negative, malformed, and unsupported transaction values', () => {

@@ -371,6 +371,20 @@ p {
 
 /* Responsive */
 @media (max-width: 48rem) {
+  .modal-overlay {
+    display: flex;
+    align-items: flex-end;
+    padding: 0;
+  }
+  .modal-content,
+  .transaction-dialog {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
+    max-height: 92vh !important;
+    padding: var(--space-5) !important;
+    animation: slideUpMobile 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
   .sidebar {
     display: none;
   }
@@ -425,6 +439,11 @@ p {
 .pro-loading-sub {
   font-size: 0.8125rem;
   color: var(--color-muted);
+}
+
+@keyframes slideUpMobile {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 @keyframes spin {

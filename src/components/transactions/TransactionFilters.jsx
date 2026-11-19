@@ -10,6 +10,7 @@ export function TransactionFilters({ filters, onChange }) {
           <option value="income">Income</option>
           <option value="expense">Expense</option>
           <option value="refund">Refund</option>
+          <option value="pass_through">Pass-through</option>
           <option value="transfer">Transfer</option>
         </select>
       </label>

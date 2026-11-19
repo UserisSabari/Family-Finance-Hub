@@ -6,6 +6,8 @@ import { TransactionFilters } from '../../components/transactions/TransactionFil
 import { TransactionForm } from '../../components/transactions/TransactionForm';
 import { TransactionTable } from '../../components/transactions/TransactionTable';
 import { IconDownload, IconPlus } from '../../components/icons/Icons';
+import { calculateAccountBalances } from '../../lib/finance/calculations';
+import { formatInr } from '../../lib/format/currency';
 import { useWorkspace } from '../../hooks/useWorkspace';
 import {
   createTransaction,
@@ -43,6 +45,8 @@ export function TransactionsPage() {
   }, [workspace?.id, filters]);
 
   useEffect(() => { load(); }, [load]);
+
+  const accountBalances = calculateAccountBalances(transactions);
 
   const save = async (input) => {
     if (submitting) return;
@@ -157,11 +161,30 @@ export function TransactionsPage() {
       )}
 
       {!loading && !error && !workspaceError && transactions.length > 0 && (
-        <TransactionTable
-          transactions={transactions}
-          onEdit={setEditing}
-          onDelete={setDeleting}
-        />
+        <>
+          <section className="accounts-summary-bar" aria-label="Accounts and wallet balances">
+            <div className="account-pill">
+              <span className="account-pill-label">Bank & UPI</span>
+              <strong>{formatInr(accountBalances.bank)}</strong>
+            </div>
+            <div className="account-pill">
+              <span className="account-pill-label">Cash in Hand</span>
+              <strong>{formatInr(accountBalances.cash)}</strong>
+            </div>
+            {accountBalances.pendingReceivables > 0 && (
+              <div className="account-pill account-pill-pending">
+                <span className="account-pill-label">Pending Receivables</span>
+                <strong>{formatInr(accountBalances.pendingReceivables)}</strong>
+              </div>
+            )}
+          </section>
+
+          <TransactionTable
+            transactions={transactions}
+            onEdit={setEditing}
+            onDelete={setDeleting}
+          />
+        </>
       )}
 
       {editing && (

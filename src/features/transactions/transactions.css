@@ -121,6 +121,74 @@
   color: var(--color-savings);
 }
 
+.badge-pass_through {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-account {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-subtle);
+  color: var(--color-muted);
+}
+
+.badge-settled {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-pending {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.accounts-summary-bar {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.account-pill {
+  display: flex;
+  flex-direction: column;
+  padding: 0.65rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  min-width: 9rem;
+}
+
+.account-pill-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.account-pill strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-top: 0.2rem;
+}
+
+.account-pill-pending {
+  border-color: #fcd34d;
+  background: #fffbeb;
+}
+
+.account-pill-pending strong {
+  color: #b45309;
+}
+
 .transaction-actions {
   display: flex;
   gap: var(--space-2);
@@ -204,6 +272,43 @@
   background: var(--color-accent-subtle);
   color: var(--color-accent);
   border-color: var(--color-accent);
+}
+
+/* Tactile Amount Hero */
+.amount-input-hero {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-surface-subtle);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 0.5rem 1rem;
+  margin-top: 0.25rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.amount-input-hero:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+}
+
+.amount-hero-currency {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.amount-hero-field {
+  width: 100% !important;
+  min-width: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  padding: 0.25rem 0 !important;
+  color: var(--color-text) !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .quick-chip-btn.active {

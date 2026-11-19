@@ -1,4 +1,4 @@
-const TRANSACTION_TYPES = new Set(['income', 'expense', 'refund', 'transfer']);
+const TRANSACTION_TYPES = new Set(['income', 'expense', 'refund', 'transfer', 'pass_through']);
 
 function isValidDate(value) {
   if (value instanceof Date) return !Number.isNaN(value.getTime());
