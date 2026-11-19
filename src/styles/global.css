@@ -427,6 +427,12 @@ p {
   }
 }
 
+.pro-loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 /* Professional Loading State */
 .pro-loading-container {
   display: flex;
@@ -467,6 +473,37 @@ p {
 .pro-loading-sub {
   font-size: 0.8125rem;
   color: var(--color-muted);
+}
+
+/* Shimmer Skeleton System */
+@keyframes shimmerPulse {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: var(--shimmer-bg);
+  background-size: 200% 100%;
+  animation: shimmerPulse 1.8s ease-in-out infinite;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+  height: 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: var(--space-5);
+  background: var(--color-surface);
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 @keyframes slideUpMobile {

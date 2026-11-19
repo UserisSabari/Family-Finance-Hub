@@ -53,7 +53,7 @@ export function DashboardPage() {
     return (
       <main className="page-content dashboard-page">
         {header}
-        <LoadingState label="Loading your overview…" />
+        <LoadingState label="Loading your overview…" type="bento" />
       </main>
     );
   }

@@ -128,7 +128,7 @@ export function BudgetsPage() {
           </div>
 
           {loading ? (
-            <LoadingState label="Loading budgets…" />
+            <LoadingState label="Loading budgets…" type="bento" />
           ) : budgets.length === 0 ? (
             <p className="muted">No budgets yet. Add a monthly budget to get started.</p>
           ) : (

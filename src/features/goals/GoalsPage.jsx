@@ -132,7 +132,7 @@ export function GoalsPage() {
           </div>
 
           {loading ? (
-            <LoadingState label="Loading goals…" />
+            <LoadingState label="Loading goals…" type="bento" />
           ) : goals.length === 0 ? (
             <p className="muted">No savings goals yet.</p>
           ) : (

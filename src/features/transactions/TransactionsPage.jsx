@@ -178,7 +178,7 @@ export function TransactionsPage() {
         />
       )}
 
-      {loading && !workspaceLoading && <LoadingState label="Loading transactions…" />}
+      {loading && !workspaceLoading && <LoadingState label="Loading transactions…" type="table" />}
       {error && !workspaceError && <ErrorState message="Could not load transactions. Please try again." />}
 
       {!loading && !error && !workspaceError && transactions.length === 0 && (

@@ -78,7 +78,7 @@ export function ReportsPage() {
       {!workspaceLoading && !workspaceError && (
         <>
           {loading ? (
-            <LoadingState label="Loading reports…" />
+            <LoadingState label="Loading reports…" type="bento" />
           ) : transactions.length === 0 ? (
             <p className="muted">No transaction data yet. Reports will appear after you add transactions.</p>
           ) : (

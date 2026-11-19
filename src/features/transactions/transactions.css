@@ -41,7 +41,7 @@
 }
 
 .scope-pill {
-  padding: 0.3rem 0.75rem;
+  padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
   border: 1px solid var(--color-border);
   background: var(--color-bg);
@@ -55,12 +55,14 @@
 .scope-pill:hover {
   color: var(--color-text);
   border-color: var(--color-accent);
+  background: var(--color-surface-subtle);
 }
 
 .scope-pill.active {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-accent-contrast, #ffffff);
   border-color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
 }
 
 .filter-controls-row {
@@ -167,34 +169,37 @@
 }
 
 .badge-transfer {
-  background: var(--color-savings-subtle);
-  color: var(--color-savings);
+  background: var(--color-transfer-subtle, rgba(99, 102, 241, 0.12));
+  color: var(--color-transfer, #6366f1);
 }
 
 .badge-pass_through {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--color-passthrough-subtle, rgba(245, 158, 11, 0.12));
+  color: var(--color-passthrough, #f59e0b);
 }
 
 .badge-account {
   display: inline-flex;
   align-items: center;
-  padding: 0.15rem 0.45rem;
-  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.72rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
   background: var(--color-surface-subtle);
   color: var(--color-muted);
+  border: 1px solid var(--color-border);
 }
 
 .badge-settled {
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--color-income-subtle);
+  color: var(--color-income);
+  border-color: rgba(16, 185, 129, 0.25);
 }
 
 .badge-pending {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--color-expense-subtle);
+  color: var(--color-expense);
+  border-color: rgba(244, 63, 94, 0.25);
 }
 
 .accounts-summary-bar {
