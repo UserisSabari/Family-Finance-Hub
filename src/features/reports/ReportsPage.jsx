@@ -109,14 +109,7 @@ export function ReportsPage() {
               </div>
 
               {/* Period Summary Metric Banner */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(11rem, 1fr))',
-                  gap: '1rem',
-                  marginBottom: '1.5rem',
-                }}
-              >
+              <div className="report-metrics-grid">
                 <div className="metric-card metric-expense">
                   <p>Total Outflow</p>
                   <strong>{formatInr(totalExpense)}</strong>
@@ -129,42 +122,51 @@ export function ReportsPage() {
                   <p>Top Category</p>
                   <strong>{categoryItems[0]?.category || '—'}</strong>
                 </div>
-                {velocity.highestSpendDay && (
-                  <div className="metric-card" style={{ borderLeft: '4px solid #f59e0b' }}>
+                {velocity.highestSpendDay ? (
+                  <div className="metric-card metric-peak">
                     <p>Peak Day ({velocity.highestSpendDay})</p>
                     <strong>{formatInr(velocity.highestSpendAmount)}</strong>
+                  </div>
+                ) : (
+                  <div className="metric-card metric-neutral">
+                    <p>Transactions</p>
+                    <strong>{transactions.length}</strong>
                   </div>
                 )}
               </div>
 
               <div className="feature-grid" style={{ marginTop: 0 }}>
-                {/* Visual Donut Chart */}
-                <section className="feature-card" style={{ gridColumn: 'span 2' }}>
+                {/* Visual Donut Chart + Category Breakdown */}
+                <section className="feature-card report-card-wide">
                   <h2>Spend Distribution</h2>
                   <SpendDonutChart items={categoryItems} />
+                  <div className="report-category-breakdown-wrap">
+                    <h3 className="report-subheading">Category Breakdown</h3>
+                    <CategoryBreakdown items={categoryItems} />
+                  </div>
                 </section>
 
                 {/* Payment Mode (Digital vs Cash) */}
-                <section className="feature-card">
+                <section className="feature-card report-payment-card">
                   <h2>Payment Mode (Digital vs Cash)</h2>
-                  <div style={{ display: 'grid', gap: '1rem', marginTop: '0.5rem' }}>
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', fontWeight: 600 }}>
+                  <div className="payment-mode-stats">
+                    <div className="payment-mode-item">
+                      <div className="payment-mode-header">
                         <span>Bank / UPI / Card</span>
                         <span>{formatInr(paymentMode.bank)} ({paymentMode.bankPercentage}%)</span>
                       </div>
-                      <div className="breakdown-track" style={{ height: '8px', background: 'var(--color-surface-subtle)', borderRadius: '4px', overflow: 'hidden', marginTop: '0.35rem' }}>
-                        <span style={{ display: 'block', height: '100%', width: `${paymentMode.bankPercentage}%`, background: '#2563eb' }} />
+                      <div className="breakdown-track">
+                        <span className="payment-bar-bank" style={{ width: `${paymentMode.bankPercentage}%` }} />
                       </div>
                     </div>
 
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', fontWeight: 600 }}>
+                    <div className="payment-mode-item">
+                      <div className="payment-mode-header">
                         <span>Liquid Cash in Hand</span>
                         <span>{formatInr(paymentMode.cash)} ({paymentMode.cashPercentage}%)</span>
                       </div>
-                      <div className="breakdown-track" style={{ height: '8px', background: 'var(--color-surface-subtle)', borderRadius: '4px', overflow: 'hidden', marginTop: '0.35rem' }}>
-                        <span style={{ display: 'block', height: '100%', width: `${paymentMode.cashPercentage}%`, background: '#059669' }} />
+                      <div className="breakdown-track">
+                        <span className="payment-bar-cash" style={{ width: `${paymentMode.cashPercentage}%` }} />
                       </div>
                     </div>
                   </div>

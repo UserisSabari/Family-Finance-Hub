@@ -1,8 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
 import {
-  IconBudgets,
-  IconGoals,
   IconHome,
   IconReports,
   IconSettings,
@@ -13,8 +11,6 @@ const mobileLinks = [
   { label: 'Overview', to: '/app', icon: IconHome },
   { label: 'Activity', to: '/app/transactions', icon: IconTransactions },
   { label: 'Reports', to: '/app/reports', icon: IconReports },
-  { label: 'Budgets', to: '/app/budgets', icon: IconBudgets },
-  { label: 'Goals', to: '/app/goals', icon: IconGoals },
   { label: 'Settings', to: '/app/settings', icon: IconSettings },
 ];
 

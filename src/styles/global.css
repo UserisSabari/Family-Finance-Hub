@@ -202,12 +202,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: var(--space-1) 0.15rem;
+  gap: 3px;
+  padding: var(--space-2) 0.5rem;
   color: var(--color-muted);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  min-width: 2.75rem;
+  min-width: 3.5rem;
   min-height: var(--min-touch-target);
   border-radius: var(--radius-sm);
   flex: 1;

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { useTheme } from '../../app/AppProviders';
 import { useAuth } from '../../hooks/useAuth';
@@ -6,6 +7,7 @@ import { useWorkspace } from '../../hooks/useWorkspace';
 import { addCategory, getCategories, removeCategory, updateProfile } from './settingsRepository';
 import { ProfileSelector } from './ProfileSelector';
 import { DEFAULT_PROFILE_ID } from '../../lib/profiles/profileConfig';
+import { IconBudgets, IconGoals } from '../../components/icons/Icons';
 import './settings.css';
 
 export function SettingsPage() {
@@ -134,6 +136,45 @@ export function SettingsPage() {
           Choose your financial stage to automatically adapt quick amounts, categories, and budgeting tools:
         </p>
         <ProfileSelector currentProfile={financialProfile} onSelect={handleSelectProfile} />
+      </section>
+
+      <section className="settings-card" aria-labelledby="planning-hub-heading">
+        <h2 id="planning-hub-heading">Financial Planning & Controls</h2>
+        <p className="muted" style={{ fontSize: '0.875rem', margin: '0 0 var(--space-4)' }}>
+          Manage your monthly budget caps, burn rates, and long-term milestone savings goals:
+        </p>
+
+        <div className="planning-hub-grid">
+          <Link to="/app/budgets" className="planning-card">
+            <div className="planning-card-icon" aria-hidden="true">
+              <IconBudgets size={22} />
+            </div>
+            <div className="planning-card-body">
+              <div className="planning-card-title-row">
+                <strong className="planning-card-title">Monthly Budgets</strong>
+                <span className="planning-card-arrow" aria-hidden="true">→</span>
+              </div>
+              <p className="planning-card-desc">
+                Set category spending limits, track burn rates, and receive overspending alerts.
+              </p>
+            </div>
+          </Link>
+
+          <Link to="/app/goals" className="planning-card">
+            <div className="planning-card-icon" aria-hidden="true">
+              <IconGoals size={22} />
+            </div>
+            <div className="planning-card-body">
+              <div className="planning-card-title-row">
+                <strong className="planning-card-title">Savings Goals</strong>
+                <span className="planning-card-arrow" aria-hidden="true">→</span>
+              </div>
+              <p className="planning-card-desc">
+                Track progress toward emergency funds, travel, big purchases, and milestones.
+              </p>
+            </div>
+          </Link>
+        </div>
       </section>
 
       <section className="settings-card" aria-labelledby="display-heading">

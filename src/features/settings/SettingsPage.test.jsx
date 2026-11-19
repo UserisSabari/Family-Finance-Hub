@@ -90,4 +90,14 @@ describe('settings page', () => {
     expect(screen.getByText(/local-first speed/i)).toBeInTheDocument();
     expect(screen.getByText(/multi-tab sync/i)).toBeInTheDocument();
   });
+
+  it('renders the Financial Planning hub with links to Budgets and Goals', () => {
+    render(<MemoryRouter><SettingsPage /></MemoryRouter>);
+
+    expect(screen.getByRole('heading', { name: /financial planning & controls/i })).toBeInTheDocument();
+    const budgetsLink = screen.getByRole('link', { name: /monthly budgets/i });
+    expect(budgetsLink).toHaveAttribute('href', '/app/budgets');
+    const goalsLink = screen.getByRole('link', { name: /savings goals/i });
+    expect(goalsLink).toHaveAttribute('href', '/app/goals');
+  });
 });
