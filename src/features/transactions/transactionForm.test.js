@@ -70,7 +70,8 @@ describe('transaction form', () => {
   });
 
   it('returns stable blank values for a new transaction', () => {
-    expect(getInitialTransactionValues(new Date('2026-11-09T00:00:00'))).toEqual({
+    const values = getInitialTransactionValues(new Date('2026-11-09T00:00:00'));
+    expect(values).toMatchObject({
       type: 'expense',
       amount: '',
       category: '',
@@ -78,5 +79,27 @@ describe('transaction form', () => {
       note: '',
       transferId: '',
     });
+    // time is included as HH:mm from the supplied date
+    expect(values.time).toMatch(/^\d{2}:\d{2}$/);
+  });
+
+  it('normalizes time field when provided and omits it when absent', () => {
+    // With time provided — preserved as-is
+    expect(normalizeTransactionInput({
+      type: 'expense',
+      amount: '100',
+      category: 'Food',
+      date: '2026-11-19',
+      time: '14:30',
+    })).toMatchObject({ time: '14:30' });
+
+    // Without time — not present in output
+    const withoutTime = normalizeTransactionInput({
+      type: 'expense',
+      amount: '100',
+      category: 'Food',
+      date: '2026-11-19',
+    });
+    expect(withoutTime).not.toHaveProperty('time');
   });
 });

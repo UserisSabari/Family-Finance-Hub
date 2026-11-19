@@ -9,6 +9,7 @@ export const FINANCIAL_PROFILES = {
       'Chai & Snacks',
       'Mess & Food',
       'Travel / Auto',
+      'Train Tickets',
       'Print & Stationery',
       'Hostel & Fees',
       'Groceries',

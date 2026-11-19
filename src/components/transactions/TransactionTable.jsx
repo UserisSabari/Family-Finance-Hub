@@ -32,7 +32,9 @@ export function TransactionTable({ transactions, onEdit, onDelete }) {
               )}
 
               <div className="tx-mobile-bottom">
-                <span className="tx-mobile-date">{displayDate}</span>
+                <span className="tx-mobile-date">
+                  {displayDate}{transaction.time ? ` · ${transaction.time}` : ''}
+                </span>
                 <div className="transaction-actions">
                   <button
                     type="button"
@@ -81,7 +83,9 @@ export function TransactionTable({ transactions, onEdit, onDelete }) {
 
             return (
               <tr key={transaction.id}>
-                <td style={{ color: 'var(--color-muted)', fontSize: '0.875rem' }}>{displayDate}</td>
+                <td style={{ color: 'var(--color-muted)', fontSize: '0.875rem' }}>
+                  {displayDate}{transaction.time ? <><br/><small>{transaction.time}</small></> : ''}
+                </td>
                 <td>
                   <span className={`transaction-type-badge badge-${transaction.type}`}>
                     {transaction.type}

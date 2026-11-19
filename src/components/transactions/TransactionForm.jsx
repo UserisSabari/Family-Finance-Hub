@@ -115,6 +115,17 @@ export function TransactionForm({ initialValues, onSubmit, onCancel, submitting 
       </label>
 
       <label>
+        Time
+        <input
+          aria-label="Time"
+          type="time"
+          value={values.time || ''}
+          onChange={update('time')}
+          disabled={submitting}
+        />
+      </label>
+
+      <label>
         Note / Description
         <input
           aria-label="Note"

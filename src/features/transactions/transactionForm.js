@@ -5,11 +5,14 @@ export function getInitialTransactionValues(today = new Date()) {
   const iso = Number.isNaN(date.getTime())
     ? new Date().toLocaleDateString('en-CA')
     : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  const src = Number.isNaN(date.getTime()) ? new Date() : date;
+  const time = `${String(src.getHours()).padStart(2, '0')}:${String(src.getMinutes()).padStart(2, '0')}`;
   return {
     type: 'expense',
     amount: '',
     category: '',
     date: iso,
+    time,
     note: '',
     transferId: '',
   };
@@ -36,6 +39,10 @@ export function normalizeTransactionInput(input = {}) {
     if (input.splitSettled !== undefined) {
       normalized.splitSettled = Boolean(input.splitSettled);
     }
+  }
+  // Preserve time (HH:mm) if provided; omitted when absent for backward compat
+  if (typeof input.time === 'string' && /^\d{2}:\d{2}$/.test(input.time.trim())) {
+    normalized.time = input.time.trim();
   }
   const result = validateTransaction(normalized);
   if (!result.valid) throw new Error(Object.values(result.errors).join(' '));

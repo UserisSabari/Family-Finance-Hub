@@ -42,7 +42,14 @@ export async function listTransactions(workspaceId, filters = {}) {
     .map(fromFirestore)
     .filter((transaction) => !search
       || [transaction.category, transaction.note, transaction.type].some((value) => String(value || '').toLowerCase().includes(search)))
-    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+    .sort((a, b) => {
+      const dateCmp = String(b.date || '').localeCompare(String(a.date || ''));
+      if (dateCmp !== 0) return dateCmp;
+      // Same day: sort by time descending, then by createdAt descending
+      const timeCmp = String(b.time || '00:00').localeCompare(String(a.time || '00:00'));
+      if (timeCmp !== 0) return timeCmp;
+      return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
+    });
 }
 
 export async function createTransaction(workspaceId, input) {

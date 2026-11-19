@@ -45,6 +45,20 @@ describe('transaction repository', () => {
     expect(firestore.where).toHaveBeenCalledWith('category', '==', 'Food');
   });
 
+  it('sorts same-day transactions by time descending, older dates last', async () => {
+    firestore.getDocs.mockResolvedValueOnce({
+      docs: [
+        { id: 'tx-morning', data: () => ({ workspace: 'w', type: 'expense', category: 'Food', date: '2026-11-19', time: '09:00' }) },
+        { id: 'tx-evening', data: () => ({ workspace: 'w', type: 'expense', category: 'Food', date: '2026-11-19', time: '18:30' }) },
+        { id: 'tx-older',   data: () => ({ workspace: 'w', type: 'expense', category: 'Food', date: '2026-11-18', time: '12:00' }) },
+      ],
+    });
+    const result = await listTransactions('w');
+    expect(result[0].id).toBe('tx-evening');  // 18:30 same day → first
+    expect(result[1].id).toBe('tx-morning');  // 09:00 same day → second
+    expect(result[2].id).toBe('tx-older');    // previous day → last
+  });
+
   it('creates positive normalized records with explicit timestamps', async () => {
     firestore.addDoc.mockResolvedValueOnce({ id: 'tx-1' });
 
