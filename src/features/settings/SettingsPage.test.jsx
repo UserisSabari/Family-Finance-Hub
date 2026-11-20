@@ -82,13 +82,14 @@ describe('settings page', () => {
     await waitFor(() => expect(mocks.signOut).toHaveBeenCalledTimes(1));
   });
 
-  it('renders the About Us section with app details and architecture highlights', async () => {
+  it('renders the About Us navigation card linking to the dedicated about page', () => {
     render(<MemoryRouter><SettingsPage /></MemoryRouter>);
 
-    expect(screen.getByRole('heading', { name: /about family finance hub/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /about application/i })).toBeInTheDocument();
+    expect(screen.getByText(/about family finance hub/i)).toBeInTheDocument();
     expect(screen.getByText(/v0\.2\.0 PWA/i)).toBeInTheDocument();
-    expect(screen.getByText(/local-first speed/i)).toBeInTheDocument();
-    expect(screen.getByText(/multi-tab sync/i)).toBeInTheDocument();
+    const aboutLink = screen.getByRole('link', { name: /open about us page/i });
+    expect(aboutLink).toHaveAttribute('href', '/app/about');
   });
 
   it('renders the Financial Planning hub with links to Budgets and Goals', () => {

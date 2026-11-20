@@ -466,36 +466,78 @@
 }
 
 /* ==========================================================================
-   About Section
+   About Navigation Tile (Settings Page)
    ========================================================================== */
-.about-us-card {
+.about-nav-card {
   position: relative;
   overflow: hidden;
 }
 
-.about-us-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-balance) 100%);
+.settings-about-nav-tile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-smooth);
+  cursor: pointer;
 }
 
-.about-header {
+.settings-about-nav-tile:hover {
+  background: var(--color-surface);
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.about-nav-tile-left {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  align-items: center;
+  gap: var(--space-4);
+  flex: 1;
+}
+
+.about-nav-tile-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.about-nav-tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.about-nav-tile-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   flex-wrap: wrap;
+}
+
+.about-nav-tile-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
 }
 
 .about-version-badge {
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.25rem 0.65rem;
+  padding: 0.2rem 0.65rem;
   border-radius: var(--radius-full);
   background: var(--color-accent-subtle);
   color: var(--color-accent);
@@ -503,77 +545,23 @@
   flex-shrink: 0;
 }
 
-.about-description {
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--color-text);
-  margin: 0 0 var(--space-4);
-}
-
-.about-highlights-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  gap: var(--space-3);
-}
-
-.about-highlight-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  transition: border-color var(--transition-fast);
-}
-
-.about-highlight-item:hover {
-  border-color: var(--color-accent);
-}
-
-.about-highlight-title {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--color-accent);
-}
-
-.about-highlight-desc {
+.about-nav-tile-sub {
   font-size: 0.8125rem;
   color: var(--color-muted);
+  margin: 0;
   line-height: 1.4;
 }
 
-.about-diagnostics-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-4);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border);
-}
-
-.diagnostic-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: 0.8125rem;
-}
-
-.diagnostic-label {
-  color: var(--color-muted);
-  font-weight: 600;
-}
-
-.diagnostic-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2rem 0.55rem;
-  border-radius: var(--radius-full);
-  background: var(--color-surface-subtle);
-  border: 1px solid var(--color-border);
-  font-size: 0.75rem;
+.about-nav-tile-arrow {
+  font-size: 1.25rem;
   font-weight: 700;
+  color: var(--color-muted);
+  transition: all var(--transition-fast);
+}
+
+.settings-about-nav-tile:hover .about-nav-tile-arrow {
   color: var(--color-accent);
+  transform: translateX(3px);
 }
 
 /* ==========================================================================

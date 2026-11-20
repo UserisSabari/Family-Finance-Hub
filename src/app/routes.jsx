@@ -12,6 +12,7 @@ import { GoalsPage } from '../features/goals/GoalsPage';
 import { ReportsPage } from '../features/reports/ReportsPage';
 import { FamilyPage } from '../features/family/FamilyPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
+import { AboutPage } from '../features/about/AboutPage';
 
 function PlaceholderPage({ title }) {
   return <main className="page-content"><h1>{title}</h1></main>;
@@ -32,6 +33,7 @@ export function AppRoutes() {
           <Route path="reports" element={<ReportsPage />} />
           <Route path="family" element={<FamilyPage />} />
           <Route path="settings" element={<SettingsPage />} />
+          <Route path="about" element={<AboutPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/app" replace />} />

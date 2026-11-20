@@ -10,6 +10,7 @@ import { DEFAULT_PROFILE_ID } from '../../lib/profiles/profileConfig';
 import {
   IconBudgets,
   IconGoals,
+  IconInfo,
   IconLogout,
   IconMoon,
   IconPlus,
@@ -332,57 +333,32 @@ export function SettingsPage() {
         </section>
       )}
 
-      {/* About Section */}
-      <section className="settings-card about-us-card" aria-labelledby="about-heading">
-        <div className="about-header">
-          <div>
-            <h2 id="about-heading" style={{ margin: 0 }}>About Family Finance Hub</h2>
-            <p className="muted" style={{ margin: '0.25rem 0 0', fontSize: '0.875rem' }}>
-              High-speed personal & family financial command center
-            </p>
-          </div>
-          <span className="about-version-badge">v0.2.0 PWA</span>
-        </div>
-
-        <div className="about-content">
-          <p className="about-description">
-            Family Finance Hub provides instant, offline-capable expense tracking and analytics designed for real-world Indian financial life — UPI pass-through payments, group bill splitting, cash-in-hand reconciliation, and adaptive lifestyle budgeting.
+      {/* About Application Navigation Card */}
+      <section className="settings-card about-nav-card" aria-labelledby="about-nav-heading">
+        <div className="settings-section-header">
+          <h2 id="about-nav-heading">About Application</h2>
+          <p className="muted">
+            View full developer details, GitHub open-source repository, release history, and system architecture.
           </p>
-
-          <div className="about-highlights-grid">
-            <div className="about-highlight-item">
-              <strong className="about-highlight-title">Local-First Speed</strong>
-              <span className="about-highlight-desc">Instant IndexedDB offline caching and background service worker sync.</span>
-            </div>
-            <div className="about-highlight-item">
-              <strong className="about-highlight-title">Multi-Tab Sync</strong>
-              <span className="about-highlight-desc">Live reactive state updates across all open windows via BroadcastChannel.</span>
-            </div>
-            <div className="about-highlight-item">
-              <strong className="about-highlight-title">Privacy Focused</strong>
-              <span className="about-highlight-desc">Zero tracking scripts, client-isolated workspace data, and encrypted sync.</span>
-            </div>
-            <div className="about-highlight-item">
-              <strong className="about-highlight-title">Tailored for India</strong>
-              <span className="about-highlight-desc">Native INR (₹) formatting, liquid cash tracking, and UPI split notes.</span>
-            </div>
-          </div>
-
-          <div className="about-diagnostics-bar" aria-label="System architecture diagnostics">
-            <div className="diagnostic-item">
-              <span className="diagnostic-label">Offline Engine</span>
-              <span className="diagnostic-badge">IndexedDB Persistent Cache</span>
-            </div>
-            <div className="diagnostic-item">
-              <span className="diagnostic-label">Sync Mode</span>
-              <span className="diagnostic-badge">Multi-Tab Reactive Sync</span>
-            </div>
-            <div className="diagnostic-item">
-              <span className="diagnostic-label">PWA Status</span>
-              <span className="diagnostic-badge">Service Worker Active</span>
-            </div>
-          </div>
         </div>
+
+        <Link to="/app/about" className="settings-about-nav-tile" aria-label="Open About Us page">
+          <div className="about-nav-tile-left">
+            <div className="about-nav-tile-icon" aria-hidden="true">
+              <IconInfo size={22} />
+            </div>
+            <div className="about-nav-tile-text">
+              <div className="about-nav-tile-title-row">
+                <span className="about-nav-tile-title">About Family Finance Hub</span>
+                <span className="about-version-badge">v0.2.0 PWA</span>
+              </div>
+              <p className="about-nav-tile-sub">
+                Developer profile (@UserisSabari), GitHub links, version specs, and architecture overview
+              </p>
+            </div>
+          </div>
+          <span className="about-nav-tile-arrow" aria-hidden="true">→</span>
+        </Link>
       </section>
 
       {/* Account / Session Card */}
