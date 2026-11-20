@@ -186,7 +186,7 @@
 }
 
 /* ==========================================================================
-   Daily Spend Pace Bento Card with Neon Glow Bar
+   Daily Spend Pace Bento Card
    ========================================================================== */
 .daily-pace-card {
   background: var(--color-surface);
@@ -245,7 +245,7 @@
   background: linear-gradient(90deg, #00f2fe 0%, #10b981 100%);
   border-radius: inherit;
   transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.7), 0 0 4px #00f2fe;
+  box-shadow: none;
 }
 
 /* ==========================================================================
@@ -298,7 +298,7 @@
 .quick-action-btn-item:hover .quick-action-circle {
   border-color: var(--color-accent);
   color: var(--color-accent);
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-sm);
 }
 
 .quick-action-btn-item:active .quick-action-circle {

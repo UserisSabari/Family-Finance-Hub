@@ -69,7 +69,7 @@
   place-items: center;
   font-size: 1.5rem;
   font-weight: 700;
-  box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4);
+  box-shadow: var(--shadow-md);
 }
 
 .profile-hero-info {
@@ -333,7 +333,7 @@
 .theme-option.selected {
   border-color: var(--color-accent);
   background: var(--color-accent-subtle);
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
+  box-shadow: var(--shadow-sm);
 }
 
 .theme-option-content {

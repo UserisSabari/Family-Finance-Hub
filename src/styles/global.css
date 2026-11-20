@@ -75,7 +75,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   place-items: center;
   font-weight: 800;
   font-size: 1.1rem;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);
+  box-shadow: var(--shadow-sm);
   flex-shrink: 0;
 }
 
@@ -108,7 +108,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   height: 0.5rem;
   border-radius: var(--radius-full);
   background: var(--color-accent);
-  box-shadow: 0 0 6px var(--color-accent);
 }
 
 /* Nav section grouping */
@@ -299,7 +298,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   place-items: center;
   font-weight: 700;
   font-size: 0.85rem;
-  box-shadow: 0 0 0 2px var(--color-surface), 0 0 12px rgba(16, 185, 129, 0.45);
+  box-shadow: 0 0 0 2px var(--color-surface), var(--shadow-sm);
 }
 
 /* ==========================================================================
@@ -421,7 +420,7 @@ p {
 }
 
 .btn-primary:hover {
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 

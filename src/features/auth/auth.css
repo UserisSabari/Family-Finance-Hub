@@ -135,7 +135,6 @@
   height: 8px;
   border-radius: 50%;
   background: var(--color-income);
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
 }
 
 .auth-preview-amount {
@@ -262,7 +261,7 @@
 }
 
 .auth-form button:hover:not(:disabled) {
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 

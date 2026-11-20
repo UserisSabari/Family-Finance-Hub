@@ -104,7 +104,7 @@
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
   border: 1px solid rgba(16, 185, 129, 0.3);
   color: var(--color-accent);
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-sm);
 }
 
 .family-workspace-hero h2 {
@@ -283,7 +283,6 @@
   height: 7px;
   border-radius: 50%;
   background-color: var(--color-income);
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
 }
 
 .family-status-text {
