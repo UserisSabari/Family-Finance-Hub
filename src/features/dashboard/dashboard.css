@@ -10,6 +10,7 @@
 .dashboard-title-group h1 {
   margin: var(--space-1) 0;
   font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  letter-spacing: -0.04em;
 }
 
 .dashboard-actions {
@@ -20,7 +21,11 @@
 
 /* Hero Liquidity Bento Card */
 .dashboard-hero-bento {
-  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-subtle) 100%);
+  background: linear-gradient(135deg,
+    var(--color-surface) 0%,
+    var(--color-surface-subtle) 60%,
+    var(--color-surface-2) 100%
+  );
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   padding: var(--space-6) var(--space-8);
@@ -28,39 +33,60 @@
   box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-smooth);
+}
+
+[data-theme='dark'] .dashboard-hero-bento {
+  background: linear-gradient(135deg,
+    var(--color-surface) 0%,
+    rgba(26, 34, 53, 0.9) 60%,
+    rgba(36, 46, 69, 0.8) 100%
+  );
 }
 
 .dashboard-hero-bento::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 180px;
-  height: 180px;
+  top: -40px;
+  right: -40px;
+  width: 220px;
+  height: 220px;
   background: radial-gradient(circle, var(--color-accent-subtle) 0%, transparent 70%);
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 0.9;
+}
+
+.dashboard-hero-bento::before {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  right: 60px;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.07) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 .hero-balance-content {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  position: relative;
+  z-index: 1;
 }
 
 .hero-balance-label {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--color-muted);
 }
 
 .hero-balance-amount {
   display: flex;
   align-items: baseline;
-  gap: 0.25rem;
+  gap: 0.3rem;
   margin: var(--space-1) 0;
 }
 
@@ -68,15 +94,16 @@
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-accent);
+  letter-spacing: -0.02em;
 }
 
 .hero-balance-number {
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  font-weight: 850;
-  letter-spacing: -0.03em;
+  font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
   color: var(--color-text);
   font-variant-numeric: tabular-nums;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .hero-accounts-row {
@@ -92,12 +119,19 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.9rem;
   border-radius: var(--radius-full);
   font-size: 0.8125rem;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.hero-account-chip:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .hero-account-chip span {
@@ -112,8 +146,8 @@
 }
 
 .hero-chip-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -153,30 +187,32 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 4px;
+  width: 3px;
   height: 100%;
   background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-balance) 100%);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 .daily-pulse-item {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.3rem;
+  padding-left: var(--space-3);
 }
 
 .daily-pulse-label {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: var(--color-muted);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.07em;
 }
 
 .daily-pulse-value {
   font-size: 1.35rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--color-text);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -202,58 +238,68 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  overflow: hidden;
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+.metric-card:nth-child(1) { animation-delay: 0.05s; }
+.metric-card:nth-child(2) { animation-delay: 0.10s; }
+.metric-card:nth-child(3) { animation-delay: 0.15s; }
+.metric-card:nth-child(4) { animation-delay: 0.20s; }
 
 .metric-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .metric-card p {
   margin: 0 0 var(--space-2);
   color: var(--color-muted);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .metric-card strong {
   font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   color: var(--color-text);
   font-variant-numeric: tabular-nums;
 }
 
-.metric-card.metric-income {
-  border-left: 4px solid var(--color-income);
-}
-.metric-card.metric-income strong {
-  color: var(--color-income);
-}
-
-.metric-card.metric-expense {
-  border-left: 4px solid var(--color-expense);
-}
-.metric-card.metric-expense strong {
-  color: var(--color-expense);
+/* Colored accent strip at top of each metric card */
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
-.metric-card.metric-balance {
-  border-left: 4px solid var(--color-balance);
+.metric-card.metric-income::before {
+  background: linear-gradient(90deg, var(--color-income), #34d399);
 }
-.metric-card.metric-balance strong {
-  color: var(--color-balance);
-}
+.metric-card.metric-income strong { color: var(--color-income); }
 
-.metric-card.metric-savings {
-  border-left: 4px solid var(--color-savings);
+.metric-card.metric-expense::before {
+  background: linear-gradient(90deg, var(--color-expense), #f43f5e);
 }
-.metric-card.metric-savings strong {
-  color: var(--color-savings);
+.metric-card.metric-expense strong { color: var(--color-expense); }
+
+.metric-card.metric-balance::before {
+  background: linear-gradient(90deg, var(--color-balance), #38bdf8);
 }
+.metric-card.metric-balance strong { color: var(--color-balance); }
+
+.metric-card.metric-savings::before {
+  background: linear-gradient(90deg, var(--color-savings), #a78bfa);
+}
+.metric-card.metric-savings strong { color: var(--color-savings); }
 
 /* Dashboard Panels (Bento Bottom Grid) */
 .dashboard-grid {
@@ -268,6 +314,11 @@
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast);
+}
+
+.dashboard-panel:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .dashboard-panel-header {
@@ -280,9 +331,10 @@
 }
 
 .dashboard-panel h2 {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
   margin: 0;
+  letter-spacing: -0.015em;
 }
 
 .progress-block + .progress-block {
@@ -295,7 +347,7 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4rem;
 }
 
 .progress-heading span {
@@ -310,7 +362,7 @@
 }
 
 .progress-track {
-  height: 0.65rem;
+  height: 0.5rem;
   background: var(--color-surface-subtle);
   border-radius: var(--radius-full);
   overflow: hidden;
@@ -322,7 +374,7 @@
   height: 100%;
   background: linear-gradient(90deg, var(--color-accent), #34d399);
   border-radius: inherit;
-  transition: width 0.4s ease;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .transaction-list {
@@ -330,14 +382,14 @@
   padding: 0;
   margin: 0;
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .transaction-preview {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.65rem 0.85rem;
+  padding: 0.6rem 0.9rem;
   border-radius: var(--radius-md);
   background: var(--color-surface-subtle);
   border: 1px solid var(--color-border);
@@ -348,12 +400,13 @@
 .transaction-preview:hover {
   background: var(--color-surface);
   border-color: var(--color-accent);
-  transform: translateX(2px);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-sm);
 }
 
 .transaction-preview-details {
   display: grid;
-  gap: 2px;
+  gap: 1px;
 }
 
 .transaction-preview-title {
@@ -418,5 +471,8 @@
   }
   .daily-pulse-card {
     grid-template-columns: 1fr;
+  }
+  .hero-balance-number {
+    font-size: 2.25rem;
   }
 }
