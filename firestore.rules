@@ -46,7 +46,8 @@ service cloud.firestore {
       allow create: if signedIn()
         && request.resource.data.owner == request.auth.uid
         && request.resource.data.kind in ['family', 'personal'];
-      allow update: if isAdmin(workspaceId);
+      allow update: if isAdmin(workspaceId)
+        && request.resource.data.owner == resource.data.owner;
       allow delete: if isOwner(workspaceId);
     }
 
@@ -57,7 +58,8 @@ service cloud.firestore {
             || (resource != null && isAdmin(resource.data.workspace)));
       allow create: if signedIn()
         && request.resource.data.user == request.auth.uid
-        && (request.resource.data.role == 'owner' || isPersonalWorkspace(request.resource.data.workspace));
+        && (isPersonalWorkspace(request.resource.data.workspace) ||
+            get(/databases/$(database)/documents/workspaces/$(request.resource.data.workspace)).data.owner == request.auth.uid);
       allow update: if isOwner(resource.data.workspace)
         && request.resource.data.workspace == resource.data.workspace
         && request.resource.data.user == resource.data.user

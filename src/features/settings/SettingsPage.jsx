@@ -30,6 +30,15 @@ export function SettingsPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (profile?.displayName !== undefined) {
+      setDisplayName(profile.displayName || '');
+    }
+    if (profile?.financialProfile) {
+      setFinancialProfile(profile.financialProfile);
+    }
+  }, [profile?.displayName, profile?.financialProfile]);
+
+  useEffect(() => {
     let active = true;
     if (!workspace?.id) return () => { active = false; };
     getCategories(workspace.id)
