@@ -128,7 +128,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.45rem 1rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   font-size: 0.8125rem;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
@@ -136,6 +136,11 @@
   box-shadow: var(--shadow-sm);
   min-width: 12.5rem;
   justify-content: space-between;
+}
+
+[data-theme='dark'] .hero-account-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .hero-account-chip:hover {

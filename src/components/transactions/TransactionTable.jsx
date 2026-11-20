@@ -1,41 +1,74 @@
 import { formatInr } from '../../lib/format/currency';
 import { normalizeDateString } from '../../lib/format/dates';
-import { IconEdit, IconTrash } from '../icons/Icons';
+import {
+  IconArrowDownLeft,
+  IconArrowUpRight,
+  IconEdit,
+  IconPassthrough,
+  IconTransfer,
+  IconTrash,
+} from '../icons/Icons';
 
 export function TransactionTable({ transactions, onEdit, onDelete }) {
   return (
     <div className="transaction-table-wrap">
-      {/* Mobile Card List (shown on mobile screens) */}
+      {/* Mobile Card List (Mobile Banking Feed Style) */}
       <div className="transaction-mobile-list" role="feed" aria-label="Transactions mobile list">
         {transactions.map((transaction) => {
           const isIncome = transaction.type === 'income';
           const isExpense = transaction.type === 'expense';
+          const isTransfer = transaction.type === 'transfer';
+          const isPassThrough = transaction.type === 'pass_through';
           const displayDate = typeof transaction.date === 'string' ? transaction.date : normalizeDateString(transaction.date);
 
           return (
-            <article key={transaction.id} className="transaction-mobile-card">
-              <div className="tx-mobile-top">
-                <div className="tx-mobile-info">
-                  <span className={`transaction-type-badge badge-${transaction.type}`}>
-                    {transaction.type === 'pass_through' ? 'Pass-through' : transaction.type}
-                  </span>
-                  <span className="tx-mobile-category">{transaction.category || 'General'}</span>
-                  {transaction.account === 'cash' && (
-                    <span className="badge-account">Cash</span>
-                  )}
-                  {transaction.type === 'transfer' && (transaction.fromAccount || transaction.toAccount) && (
-                    <span className="badge-account">{transaction.fromAccount || 'Bank'} → {transaction.toAccount || 'Cash'}</span>
-                  )}
+            <article key={transaction.id} className={`transaction-mobile-card tx-feed-${transaction.type}`}>
+              <div className="tx-mobile-header-row">
+                <div className="tx-mobile-left-col">
+                  <div className={`tx-feed-squircle tx-squircle-${transaction.type}`} aria-hidden="true">
+                    {isIncome ? (
+                      <IconArrowUpRight size={18} />
+                    ) : isTransfer ? (
+                      <IconTransfer size={18} />
+                    ) : isPassThrough ? (
+                      <IconPassthrough size={18} />
+                    ) : (
+                      <IconArrowDownLeft size={18} />
+                    )}
+                  </div>
+                  <div className="tx-mobile-title-block">
+                    <span className="tx-mobile-category">
+                      {transaction.note || transaction.category || 'Transaction'}
+                    </span>
+                    <div className="tx-mobile-meta-tags">
+                      <span className="tx-meta-date">{displayDate}</span>
+                      {transaction.category && transaction.note && (
+                        <span className="tx-meta-badge">{transaction.category}</span>
+                      )}
+                      {transaction.account === 'cash' && (
+                        <span className="badge-account">Cash</span>
+                      )}
+                      {isTransfer && (transaction.fromAccount || transaction.toAccount) && (
+                        <span className="badge-account">{transaction.fromAccount || 'Bank'} → {transaction.toAccount || 'Cash'}</span>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <span className={`tx-mobile-amount ${isIncome ? 'amount-income' : isExpense ? 'amount-expense' : ''}`}>
-                  {isIncome ? '+' : isExpense ? '-' : ''}
-                  {formatInr(transaction.amount)}
-                </span>
+
+                <div className="tx-mobile-right-col">
+                  <span className={`tx-mobile-amount ${isIncome ? 'amount-income' : isExpense ? 'amount-expense' : ''}`}>
+                    {isIncome ? '+' : isExpense ? '-' : ''}
+                    {formatInr(transaction.amount)}
+                  </span>
+                  <small className="tx-feed-type-sub">
+                    {isIncome ? 'Credit' : isTransfer ? 'Transfer' : isPassThrough ? 'Pass-through' : 'Debit'}
+                  </small>
+                </div>
               </div>
 
-              {transaction.type === 'pass_through' && (
-                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', marginTop: '0.2rem', fontSize: '0.8rem' }}>
-                  {transaction.passThroughFor && <span style={{ color: 'var(--color-muted)' }}>For: {transaction.passThroughFor}</span>}
+              {isPassThrough && (
+                <div className="tx-mobile-detail-pill">
+                  {transaction.passThroughFor && <span>For: {transaction.passThroughFor}</span>}
                   <span className={`badge-account ${transaction.isSettled ? 'badge-settled' : 'badge-pending'}`}>
                     {transaction.isSettled ? '✓ Reimbursed' : '⏳ Pending return'}
                   </span>
@@ -43,19 +76,15 @@ export function TransactionTable({ transactions, onEdit, onDelete }) {
               )}
 
               {transaction.splitNote?.isGroup && (
-                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', marginTop: '0.2rem', fontSize: '0.8rem', color: 'var(--color-muted)' }}>
-                  <span>👥 Split: {formatInr(transaction.splitNote.myShare)} (my share) / {formatInr(transaction.amount)} total</span>
+                <div className="tx-mobile-detail-pill">
+                  <span>👥 Split: {formatInr(transaction.splitNote.myShare)} (my share) of {formatInr(transaction.amount)}</span>
                 </div>
               )}
 
-              {transaction.note && (
-                <p className="tx-mobile-note">{transaction.note}</p>
-              )}
-
-              <div className="tx-mobile-bottom">
-                <span className="tx-mobile-date">
-                  {displayDate}{transaction.time ? ` · ${transaction.time}` : ''}
-                </span>
+              <div className="tx-mobile-actions-bar">
+                <div className="tx-mobile-time">
+                  {transaction.time && <span>{transaction.time}</span>}
+                </div>
                 <div className="transaction-actions">
                   <button
                     type="button"

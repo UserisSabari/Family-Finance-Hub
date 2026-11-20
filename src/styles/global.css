@@ -1,5 +1,11 @@
 @import './tokens.css';
 
+html {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  scroll-behavior: smooth;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -14,6 +20,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
   letter-spacing: -0.005em;
+  overscroll-behavior-y: none;
 }
 
 strong, .tabular-num {
@@ -212,11 +219,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   width: 100%;
 }
 
+/* ==========================================================================
+   Mobile Header (iOS App Style)
+   ========================================================================== */
 .mobile-header {
   display: none;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-5);
+  padding: 0.75rem 1rem;
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -224,13 +234,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   position: sticky;
   top: 0;
   z-index: 20;
-  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 16px rgba(0, 0, 0, 0.12);
 }
 
 .mobile-header-brand-wrap {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .mobile-header-title {
@@ -239,7 +249,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   font-weight: 700;
   letter-spacing: -0.025em;
   color: var(--color-text);
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .mobile-workspace-pill {
@@ -251,7 +261,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: var(--color-accent);
   padding: 0.15rem 0.55rem;
   border-radius: var(--radius-full);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   width: fit-content;
 }
@@ -259,7 +269,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .mobile-header-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .mobile-theme-btn {
@@ -275,9 +285,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   transition: all var(--transition-fast);
 }
 
-.mobile-theme-btn:hover {
-  background: var(--color-surface-subtle);
-  color: var(--color-text);
+.mobile-theme-btn:active {
+  transform: scale(0.92);
 }
 
 .mobile-user-avatar {
@@ -290,26 +299,28 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   place-items: center;
   font-weight: 700;
   font-size: 0.85rem;
-  box-shadow: 0 0 0 2px var(--color-surface), 0 0 8px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 0 2px var(--color-surface), 0 0 12px rgba(16, 185, 129, 0.45);
 }
 
-/* Mobile Floating Island Bottom Navigation */
+/* ==========================================================================
+   Mobile Floating Island Bottom Dock Navigation
+   ========================================================================== */
 .bottom-nav {
   display: none;
   position: fixed;
-  bottom: 0.75rem;
+  bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
   left: 1rem;
   right: 1rem;
-  max-width: 25rem;
+  max-width: 24rem;
   margin: 0 auto;
   background: var(--glass-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
   padding: 0.35rem var(--space-2);
   z-index: 30;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .bottom-nav-inner {
@@ -325,7 +336,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   align-items: center;
   justify-content: center;
   gap: 3px;
-  padding: 0.45rem 0.6rem;
+  padding: 0.4rem 0.6rem;
   color: var(--color-muted);
   font-size: 0.6875rem;
   font-weight: 600;
@@ -334,7 +345,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border-radius: var(--radius-full);
   flex: 1;
   text-align: center;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-smooth);
   position: relative;
 }
 
@@ -345,7 +356,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .bottom-nav a:active {
-  transform: scale(0.93);
+  transform: scale(0.92);
 }
 
 /* Standard Typography & Components */
@@ -383,7 +394,7 @@ p {
   font-size: 0.9375rem;
 }
 
-/* Buttons */
+/* Buttons with tactile tap feel */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -400,6 +411,7 @@ p {
   text-align: center;
   font-family: var(--font-body);
   letter-spacing: -0.01em;
+  user-select: none;
 }
 
 .btn-primary {
@@ -415,7 +427,7 @@ p {
 
 .btn-primary:active,
 .btn-secondary:active {
-  transform: scale(0.98);
+  transform: scale(0.96);
 }
 
 .btn-secondary {
@@ -501,12 +513,13 @@ p {
   box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-/* Modal Dialog */
+/* Modal Dialog (iOS Drawer on Mobile) */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: grid;
   place-items: center;
   padding: var(--space-4);
@@ -516,7 +529,7 @@ p {
 .modal-content {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
   width: min(100%, 32rem);
   max-height: 90vh;
@@ -524,7 +537,7 @@ p {
   padding: var(--space-6);
 }
 
-/* Responsive */
+/* Responsive & Mobile Drawer Architecture */
 @media (max-width: 48rem) {
   .modal-overlay {
     display: flex;
@@ -532,13 +545,28 @@ p {
     padding: 0;
   }
   .modal-content,
-  .transaction-dialog {
+  .transaction-dialog,
+  .family-dialog {
     width: 100% !important;
     max-width: 100% !important;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
-    max-height: 92vh !important;
-    padding: var(--space-5) !important;
-    animation: slideUpMobile 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 28px 28px 0 0 !important;
+    max-height: 90vh !important;
+    padding: var(--space-5) var(--space-5) calc(var(--space-6) + env(safe-area-inset-bottom, 0px)) !important;
+    animation: slideUpMobile 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    border-bottom: none !important;
+    position: relative;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5) !important;
+  }
+  .modal-content::before,
+  .transaction-dialog::before,
+  .family-dialog::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: var(--color-border-subtle);
+    border-radius: 9999px;
+    margin: 0 auto var(--space-4);
   }
   .sidebar {
     display: none;
@@ -550,7 +578,10 @@ p {
     display: block;
   }
   .page-content {
-    padding-bottom: 5.5rem; /* space for bottom nav */
+    padding-top: var(--space-4);
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
   }
 }
 
@@ -634,8 +665,14 @@ p {
 }
 
 @keyframes slideUpMobile {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
+  from {
+    transform: translateY(100%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes spin {

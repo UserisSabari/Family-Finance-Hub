@@ -5,7 +5,7 @@
 .settings-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: var(--space-6);
   margin-bottom: var(--space-5);
   box-shadow: var(--shadow-sm);
@@ -71,6 +71,7 @@
   transition: all var(--transition-smooth);
   min-height: var(--min-touch-target);
   font-family: var(--font-body);
+  user-select: none;
 }
 
 .settings-card button:hover {
@@ -78,7 +79,13 @@
   transform: translateY(-1px);
 }
 
-/* Financial Planning Hub */
+.settings-card button:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   Financial Planning Hub
+   ========================================================================== */
 .planning-hub-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
@@ -161,6 +168,9 @@
   line-height: 1.4;
 }
 
+/* ==========================================================================
+   Profile Card Header (Avatar + Role Pill)
+   ========================================================================== */
 .profile-card-header {
   display: flex;
   align-items: center;
@@ -169,10 +179,10 @@
 }
 
 .user-avatar-circle {
-  width: 3rem;
-  height: 3rem;
+  width: 3.25rem;
+  height: 3.25rem;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary, #3b82f6) 100%);
   color: #fff;
   display: flex;
   align-items: center;
@@ -180,7 +190,7 @@
   font-size: 1.25rem;
   font-weight: 700;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.35);
 }
 
 .profile-header-text {
@@ -259,6 +269,7 @@
   transition: all var(--transition-smooth);
   font-size: 0.9375rem;
   font-weight: 600;
+  user-select: none;
 }
 
 .theme-option:hover {
@@ -487,7 +498,9 @@
   border-left-color: var(--color-expense);
 }
 
-/* Financial Profiles Grid */
+/* ==========================================================================
+   Financial Profiles Grid
+   ========================================================================== */
 .profile-selector-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -507,7 +520,7 @@
   text-align: left;
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: var(--space-5);
   cursor: pointer;
   transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth), transform var(--transition-smooth);
@@ -515,12 +528,17 @@
   width: 100% !important;
   box-shadow: var(--shadow-sm);
   position: relative;
+  user-select: none;
 }
 
 .profile-card:hover:not(:disabled) {
   border-color: var(--color-border-subtle);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
+}
+
+.profile-card:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .profile-card.selected {
