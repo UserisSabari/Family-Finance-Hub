@@ -2,6 +2,357 @@
   margin-bottom: var(--space-5);
 }
 
+.feature-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.feature-create-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Executive Summary Bento (Budgets & Goals) */
+.budget-hero-bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-subtle) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme='dark'] .budget-hero-bento {
+  background: linear-gradient(135deg, #0e172a 0%, #080d19 100%);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+@media (min-width: 50rem) {
+  .budget-hero-bento {
+    grid-template-columns: 1.6fr 1fr;
+    padding: var(--space-6);
+  }
+}
+
+.budget-hero-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.budget-hero-label-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.budget-hero-icon-pill {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--color-accent);
+}
+
+.goal-icon-pill {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+}
+
+.budget-hero-eyebrow {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.budget-hero-total {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-hero-progress-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.budget-hero-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.budget-hero-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  align-items: stretch;
+}
+
+.budget-hero-stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.budget-hero-stat-card .stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.budget-hero-stat-card .stat-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.budget-hero-stat-card .stat-subtext {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+/* Feature Form Header & Close */
+.feature-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.feature-form-header h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.feature-form-close-btn {
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  font-size: 1.125rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast);
+}
+
+.feature-form-close-btn:hover {
+  color: var(--color-text);
+}
+
+/* Input with prefix adornment */
+.input-with-adornment {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-adornment-prefix {
+  position: absolute;
+  left: 0.85rem;
+  font-weight: 700;
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+.input-with-adornment input {
+  padding-left: 2rem !important;
+}
+
+/* Card Improvements */
+.budget-card-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.budget-category-squircle {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.goal-squircle-active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #3b82f6;
+}
+
+.goal-squircle-done {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.08) 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: var(--color-income);
+}
+
+.budget-amount-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.budget-actual-spend {
+  font-size: 1.375rem !important;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-target-spend {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.budget-status-line {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin: 0;
+}
+
+.budget-safe-spend-pill {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  font-size: 0.8125rem;
+  margin-top: 0.25rem;
+}
+
+.budget-safe-spend-pill strong {
+  font-size: 0.8125rem !important;
+  color: var(--color-text);
+}
+
+/* Badges */
+.badge-healthy {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--color-income-subtle);
+  color: var(--color-income);
+}
+
+.badge-warning {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+/* Goal Card Specifics */
+.goal-card-achieved {
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 0 20px -8px rgba(16, 185, 129, 0.3);
+}
+
+.goal-chip-btn {
+  font-size: 0.8125rem;
+  padding: 0.35rem 0.65rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-fast);
+}
+
+.goal-chip-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-surface-subtle);
+}
+
+/* Empty States */
+.feature-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  background: var(--color-surface);
+  border: 1.5px dashed var(--color-border);
+  border-radius: var(--radius-2xl);
+  margin-top: var(--space-4);
+}
+
+.feature-empty-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radius-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.goal-empty-icon {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border-color: rgba(59, 130, 246, 0.25);
+  color: #3b82f6;
+}
+
+.feature-empty-state h3 {
+  margin: 0 0 var(--space-1);
+  font-size: 1.125rem;
+}
+
+.feature-empty-state p {
+  margin: 0;
+  max-width: 24rem;
+}
+
 .feature-grid {
   display: grid;
   gap: var(--space-4);
