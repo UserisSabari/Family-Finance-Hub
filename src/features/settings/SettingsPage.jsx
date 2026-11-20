@@ -7,7 +7,15 @@ import { useWorkspace } from '../../hooks/useWorkspace';
 import { addCategory, getCategories, removeCategory, updateProfile } from './settingsRepository';
 import { ProfileSelector } from './ProfileSelector';
 import { DEFAULT_PROFILE_ID } from '../../lib/profiles/profileConfig';
-import { IconBudgets, IconGoals } from '../../components/icons/Icons';
+import {
+  IconBudgets,
+  IconGoals,
+  IconLogout,
+  IconMoon,
+  IconPlus,
+  IconSun,
+  IconTrash,
+} from '../../components/icons/Icons';
 import './settings.css';
 
 export function SettingsPage() {
@@ -89,60 +97,86 @@ export function SettingsPage() {
     }
   }
 
+  const userInitial = displayName
+    ? displayName.charAt(0).toUpperCase()
+    : (user?.email ? user.email.charAt(0).toUpperCase() : 'U');
+
   return (
     <main className="page-content settings-page">
-      <header className="page-header">
-        <div>
-          <p className="eyebrow">Preferences & App Info</p>
-          <h1>Settings</h1>
-        </div>
+      <header className="settings-header">
+        <p className="eyebrow">Preferences & App Info</p>
+        <h1>Settings</h1>
+        <p className="muted">Manage your profile, lifestyle presets, visual theme, and system options.</p>
       </header>
+
       {error && <div className="settings-message settings-error" role="alert">{error}</div>}
       {message && <div className="settings-message" role="status">{message}</div>}
 
-      <section className="settings-card" aria-labelledby="profile-heading">
-        <div className="profile-card-header">
-          <div className="user-avatar-circle" aria-hidden="true">
-            {displayName ? displayName.charAt(0).toUpperCase() : (user?.email ? user.email.charAt(0).toUpperCase() : 'U')}
+      {/* Profile & Account Card */}
+      <section className="settings-card profile-hero-card" aria-labelledby="profile-heading">
+        <div className="profile-hero-top">
+          <div className="profile-hero-avatar-wrap">
+            <div className="user-avatar-circle" aria-hidden="true">
+              {userInitial}
+            </div>
           </div>
-          <div className="profile-header-text">
+          <div className="profile-hero-info">
             <h2 id="profile-heading" style={{ margin: 0 }}>Profile</h2>
-            <p className="muted" style={{ margin: '0.15rem 0 0', fontSize: '0.8125rem' }}>
-              Manage your personal display name and account details
-            </p>
+            <span className="profile-hero-email">{user?.email ?? 'No email associated'}</span>
+            <div className="profile-hero-badges">
+              {workspace?.role && (
+                <span className="workspace-role-pill">Role: {workspace.role}</span>
+              )}
+              <span className="workspace-kind-pill">
+                {workspace?.kind === 'family' ? 'Family Workspace' : 'Personal Workspace'}
+              </span>
+            </div>
           </div>
-          {workspace?.role && (
-            <span className="workspace-role-pill">{workspace.role}</span>
-          )}
         </div>
 
-        <form onSubmit={saveProfile} style={{ marginTop: 'var(--space-4)' }}>
-          <label htmlFor="settings-display-name">Display name</label>
-          <input
-            id="settings-display-name"
-            value={displayName}
-            onChange={(event) => setDisplayName(event.target.value)}
-            placeholder="Your name"
-          />
-          <label htmlFor="settings-email">Email</label>
-          <input id="settings-email" value={user?.email ?? ''} readOnly />
-          <button type="submit">Save profile</button>
+        <form onSubmit={saveProfile} className="settings-form-grid" style={{ marginTop: 'var(--space-5)' }}>
+          <div className="settings-form-row">
+            <label htmlFor="settings-display-name">
+              <span>Display name</span>
+              <input
+                id="settings-display-name"
+                value={displayName}
+                onChange={(event) => setDisplayName(event.target.value)}
+                placeholder="Your name"
+              />
+            </label>
+
+            <label htmlFor="settings-email">
+              <span>Email</span>
+              <input id="settings-email" value={user?.email ?? ''} readOnly />
+            </label>
+          </div>
+
+          <button type="submit" className="btn btn-primary" style={{ alignSelf: 'start', marginTop: 'var(--space-2)' }}>
+            Save profile
+          </button>
         </form>
       </section>
 
+      {/* Financial Profile & Lifestyle Presets */}
       <section className="settings-card" aria-labelledby="lifestyle-heading">
-        <h2 id="lifestyle-heading">Financial Profile & Lifestyle</h2>
-        <p className="muted" style={{ fontSize: '0.875rem', margin: '0 0 var(--space-2)' }}>
-          Choose your financial stage to automatically adapt quick amounts, categories, and budgeting tools:
-        </p>
+        <div className="settings-section-header">
+          <h2 id="lifestyle-heading">Financial Profile & Lifestyle</h2>
+          <p className="muted">
+            Choose your financial stage to automatically adapt quick amounts, categories, and budgeting tools:
+          </p>
+        </div>
         <ProfileSelector currentProfile={financialProfile} onSelect={handleSelectProfile} />
       </section>
 
+      {/* Financial Planning & Controls Hub */}
       <section className="settings-card" aria-labelledby="planning-hub-heading">
-        <h2 id="planning-hub-heading">Financial Planning & Controls</h2>
-        <p className="muted" style={{ fontSize: '0.875rem', margin: '0 0 var(--space-4)' }}>
-          Manage your monthly budget caps, burn rates, and long-term milestone savings goals:
-        </p>
+        <div className="settings-section-header">
+          <h2 id="planning-hub-heading">Financial Planning & Controls</h2>
+          <p className="muted">
+            Manage your monthly budget caps, burn rates, and long-term milestone savings goals:
+          </p>
+        </div>
 
         <div className="planning-hub-grid">
           <Link to="/app/budgets" className="planning-card">
@@ -177,12 +211,23 @@ export function SettingsPage() {
         </div>
       </section>
 
+      {/* Display & Preferences */}
       <section className="settings-card" aria-labelledby="display-heading">
-        <h2 id="display-heading">Display & Preferences</h2>
+        <div className="settings-section-header">
+          <h2 id="display-heading">Display & Preferences</h2>
+          <p className="muted">Configure appearance and accounting units.</p>
+        </div>
+
         <div className="display-setting-row">
-          <span className="display-setting-label">Active Currency</span>
+          <div className="display-setting-text">
+            <span className="display-setting-label">Active Currency</span>
+            <small className="muted" style={{ display: 'block', fontSize: '0.78rem' }}>
+              Standardized across all workspaces and calculation engines
+            </small>
+          </div>
           <span className="currency-badge">Indian rupee (INR) ₹</span>
         </div>
+
         <fieldset className="theme-fieldset">
           <legend>Theme</legend>
           <div className="theme-options-grid">
@@ -193,9 +238,19 @@ export function SettingsPage() {
                 value="light"
                 checked={theme === 'light'}
                 onChange={() => setTheme('light')}
+                className="theme-radio-input"
               />
-              <span>Light Mode</span>
+              <div className="theme-option-content">
+                <div className="theme-icon-box theme-icon-sun">
+                  <IconSun size={20} />
+                </div>
+                <div className="theme-text-group">
+                  <span className="theme-title">Light Mode</span>
+                  <small className="theme-sub">Crisp contrast</small>
+                </div>
+              </div>
             </label>
+
             <label className={`theme-option ${theme === 'dark' ? 'selected' : ''}`}>
               <input
                 type="radio"
@@ -203,21 +258,34 @@ export function SettingsPage() {
                 value="dark"
                 checked={theme === 'dark'}
                 onChange={() => setTheme('dark')}
+                className="theme-radio-input"
               />
-              <span>Dark Mode</span>
+              <div className="theme-option-content">
+                <div className="theme-icon-box theme-icon-moon">
+                  <IconMoon size={20} />
+                </div>
+                <div className="theme-text-group">
+                  <span className="theme-title">Dark Mode</span>
+                  <small className="theme-sub">OLED optimized</small>
+                </div>
+              </div>
             </label>
           </div>
         </fieldset>
       </section>
 
+      {/* Custom Categories */}
       {canManageCategories && (
         <section className="settings-card" aria-labelledby="categories-heading">
-          <h2 id="categories-heading">Custom Categories</h2>
-          <p className="muted" style={{ margin: '0 0 var(--space-3)', fontSize: '0.875rem' }}>
-            Customize your transaction categories for tailored spending classification.
-          </p>
+          <div className="settings-section-header">
+            <h2 id="categories-heading">Custom Categories</h2>
+            <p className="muted">
+              Customize your transaction categories for tailored spending classification.
+            </p>
+          </div>
+
           <form onSubmit={createCategory} className="new-category-form">
-            <label htmlFor="new-category">New category</label>
+            <label htmlFor="new-category" className="sr-only">New category</label>
             <div className="inline-category-row">
               <input
                 id="new-category"
@@ -225,20 +293,29 @@ export function SettingsPage() {
                 onChange={(event) => setCategory(event.target.value)}
                 placeholder="e.g. Travel, Electronics, Bills"
               />
-              <button type="submit">Add category</button>
+              <button type="submit" className="btn btn-primary btn-sm">
+                <IconPlus size={16} />
+                <span>Add category</span>
+              </button>
             </div>
           </form>
+
           <ul className="category-list">
             {categories.map((value) => (
               <li key={value} className="category-item">
-                <span className="category-name">{value}</span>
+                <div className="category-item-info">
+                  <span className="category-color-dot" />
+                  <span className="category-name">{value}</span>
+                </div>
                 <button
                   type="button"
                   className="btn-remove-category"
                   onClick={() => deleteCategory(value)}
                   aria-label={`Remove ${value}`}
+                  title={`Remove ${value}`}
                 >
-                  Remove
+                  <IconTrash size={14} />
+                  <span>Remove</span>
                 </button>
               </li>
             ))}
@@ -246,6 +323,7 @@ export function SettingsPage() {
         </section>
       )}
 
+      {/* About Section */}
       <section className="settings-card about-us-card" aria-labelledby="about-heading">
         <div className="about-header">
           <div>
@@ -298,12 +376,16 @@ export function SettingsPage() {
         </div>
       </section>
 
+      {/* Account / Session Card */}
       <section className="settings-card settings-danger" aria-labelledby="account-heading">
         <h2 id="account-heading">Account</h2>
-        <p className="muted" style={{ margin: '0 0 var(--space-3)', fontSize: '0.875rem' }}>
+        <p className="muted" style={{ margin: '0 0 var(--space-4)', fontSize: '0.875rem' }}>
           Sign out of your session on this device.
         </p>
-        <button type="button" onClick={signOut}>Sign out</button>
+        <button type="button" onClick={signOut} className="btn-sign-out">
+          <IconLogout size={16} />
+          <span>Sign out</span>
+        </button>
       </section>
     </main>
   );
