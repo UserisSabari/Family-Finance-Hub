@@ -64,6 +64,10 @@ export function TransactionsPage() {
 
   const accountBalances = calculateAccountBalances(transactions);
 
+  const handleFilterChange = useCallback((next) => {
+    setFilters((current) => ({ ...current, ...next }));
+  }, []);
+
   const save = async (input) => {
     if (submitting) return;
     setSubmitting(true);
@@ -174,7 +178,7 @@ export function TransactionsPage() {
       {!workspaceLoading && !workspaceError && (
         <TransactionFilters
           filters={filters}
-          onChange={(next) => setFilters((current) => ({ ...current, ...next }))}
+          onChange={handleFilterChange}
         />
       )}
 

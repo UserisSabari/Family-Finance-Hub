@@ -280,6 +280,21 @@ export function SettingsPage() {
               <span className="about-highlight-desc">Native INR (₹) formatting, liquid cash tracking, and UPI split notes.</span>
             </div>
           </div>
+
+          <div className="about-diagnostics-bar" aria-label="System architecture diagnostics">
+            <div className="diagnostic-item">
+              <span className="diagnostic-label">Offline Engine</span>
+              <span className="diagnostic-badge">IndexedDB Persistent Cache</span>
+            </div>
+            <div className="diagnostic-item">
+              <span className="diagnostic-label">Sync Mode</span>
+              <span className="diagnostic-badge">Multi-Tab Reactive Sync</span>
+            </div>
+            <div className="diagnostic-item">
+              <span className="diagnostic-label">PWA Status</span>
+              <span className="diagnostic-badge">Service Worker Active</span>
+            </div>
+          </div>
         </div>
       </section>
 
